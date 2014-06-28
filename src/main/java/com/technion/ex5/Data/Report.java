@@ -2,62 +2,37 @@ package com.technion.ex5.Data;
 
 import java.util.Date;
 
-public class Report {
-	private long id;
-	private User user;
-	private Shape shape;
-	private String Title;
-	private String content;
-	private Date expireOn;
-	private Picture pic;
-
-	/**
-	 * @return the id
-	 */
-	public synchronized final long getId() {
-		return id;
-	}
+public interface Report
+{
 
 	/**
 	 * @return the user
 	 */
-	public synchronized final User getUser() {
-		return user;
-	}
+	public User getUser();
 
 	/**
 	 * @return the shape
 	 */
-	public synchronized final Shape getShape() {
-		return shape;
-	}
+	public Shape getShape();
 
 	/**
 	 * @return the title
 	 */
-	public synchronized final String getTitle() {
-		return Title;
-	}
+	public String getTitle();
 
 	/**
 	 * @return the content
 	 */
-	public synchronized final String getContent() {
-		return content;
-	}
+	public String getContent();
 
 	/**
 	 * @return the expireOn
 	 */
-	public synchronized final Date getExpireOn() {
-		return expireOn;
-	}
+	public Date getExpireOn();
 
 	/**
 	 * @return the pic
 	 */
-	public synchronized final Picture getPic() {
-		return pic;
-	}
+	public Picture getPic();
 
 }

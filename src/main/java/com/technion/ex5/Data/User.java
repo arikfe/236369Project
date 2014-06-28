@@ -1,40 +1,39 @@
 package com.technion.ex5.Data;
 
-public class User {
+import com.technion.ex5.Data.UserImpl.UserType;
 
-	public enum UserType {
-		Regular, Admin;
-	}
+public interface User
+{
 
-	private String name;
-	private String password;
-	private String username;
-	private String address;
-	private UserType type;
+	public int getId();
 
-	public UserType getType() {
-		return type;
-	}
+	/**
+	 * @return the name
+	 */
+	public abstract String getName();
 
-	public String getName() {
-		return name;
-	}
+	/**
+	 * @return the password
+	 */
+	public abstract String getPassword();
 
-	public String getPassword() {
-		return password;
-	}
+	/**
+	 * @return the username
+	 */
+	public abstract String getUsername();
 
-	public String getUsername() {
-		return username;
-	}
+	/**
+	 * @return the address
+	 */
+	public abstract String getAddress();
 
-	public String getAddress() {
-		return address;
-	}
+	/**
+	 * @return the type
+	 */
+	public abstract UserType getType();
 
-	public User() {
-		super();
+	public void setPassword(String password);
 
-	}
+	public void setRegistered(boolean b);
 
 }
