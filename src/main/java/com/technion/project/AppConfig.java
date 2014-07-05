@@ -11,7 +11,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -22,8 +25,25 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableTransactionManagement
 @Import(
 { UserSecurityConfig.class })
-public class AppConfig
+public class AppConfig extends WebMvcConfigurerAdapter
 {
+
+	@Override
+	public void addResourceHandlers(final ResourceHandlerRegistry registry)
+	{
+		// super.addResourceHandlers(registry);
+		registry.addResourceHandler("/CSS/**").addResourceLocations("/CSS/");
+		registry.addResourceHandler("/JS/**").addResourceLocations("/JS/");
+		registry.addResourceHandler("/css/**").addResourceLocations("/CSS/");
+		registry.addResourceHandler("/js/**").addResourceLocations("/JS/");
+	}
+
+	@Override
+	public void configureDefaultServletHandling(
+			final DefaultServletHandlerConfigurer configurer)
+	{
+		configurer.enable();
+	}
 
 	@Bean
 	public SessionFactory sessionFactory()

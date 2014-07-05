@@ -6,27 +6,50 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 5.00 Transitional//EN" "http://www.w3.org/TR/html5/loose.dtd">
 <html>
 <head>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/table.css"/>"></link>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Reports</title>
 </head>
 <body>
 
-	<c:choose>
-		<c:when test="${pageContext.request.userPrincipal.name!=null}">
-			<h2>
-				User : ${pageContext.request.userPrincipal.name} | <a
-					href="javascript:formSubmit()"> Logout</a> | <a href="addReport">add
-					report</a>
-			</h2>
+	<nav>
+	<ul>
+		<c:choose>
+			<c:when test="${pageContext.request.userPrincipal.name!=null}">
+				<sec:authorize access="hasRole('ROLE_USER')">
+					<c:url value="/logout" var="logoutUrl" />
+					<form action="${logoutUrl}" method="post" id="logoutForm">
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
+					</form>
+					<script>
+						function formSubmit() {
+							document.getElementById("logoutForm").submit();
+						}
+					</script>
+					<li><a href="#">${pageContext.request.userPrincipal.name}</a>
 
-		</c:when>
+						<ul>
+							<a href="javascript:formSubmit()"> Logout</a>
+						</ul></li>
+					<li><a href="addReport">add report</a></li>
+				</sec:authorize>
 
-		<c:otherwise>
-			<a href="../login">Login</a>
-		</c:otherwise>
-	</c:choose>
+			</c:when>
 
-	<table border=1>
+			<c:otherwise>
+				<li><a href="../login">Login</a></li>
+
+			</c:otherwise>
+		</c:choose>
+	</ul>
+	</nav>
+
+
+	<table class="zebra">
 		<tr>
 			<th>Title</th>
 			<th>content</th>
