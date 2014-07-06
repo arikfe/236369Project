@@ -32,7 +32,7 @@
 		var k = document.getElementById("password");
 		var j = document.getElementById("cpass");
 		var un = setMissing("username");
-		var name = setMissing("name");
+		var name = setMissing("fname");
 		var pass = setMissing("password");
 		return k.value==j.value && un && name && pass ;  
 
@@ -104,8 +104,13 @@
 					</td>
 				</tr>
 				<tr>
-					<td><div id="name_miss"></div>Name:</td>
-					<td><input type='text' name='name' id='name'>
+					<td><div id="name_miss"></div>First name:</td>
+					<td><input type='text' name='fname' id='fname'>
+					</td>
+				</tr>
+				<tr>
+					<td><div id="name_miss"></div>Last name:</td>
+					<td><input type='text' name='lname' id='lname'>
 					</td>
 				</tr>
 				<tr>

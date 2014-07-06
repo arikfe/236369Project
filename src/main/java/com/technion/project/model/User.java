@@ -20,26 +20,48 @@ public class User
 	private String username;
 	private String password;
 	private boolean enabled;
+	private String fname;
+	private String lname;
+
 	private Set<UserRole> userRole = new HashSet<UserRole>(0);
 
 	public User()
 	{
 	}
 
-	public User(final String username, final String password, final boolean enabled)
-	{
-		this.username = username;
-		this.password = password;
-		this.enabled = enabled;
-	}
-
-	public User(final String username, final String password, final boolean enabled,
+	public User(final String username, final String password,
+			final boolean enabled, final String fname, final String lname,
 			final Set<UserRole> userRole)
 	{
+		super();
 		this.username = username;
 		this.password = password;
 		this.enabled = enabled;
+		this.fname = fname;
+		this.lname = lname;
 		this.userRole = userRole;
+	}
+
+	@Column(name = "fname", nullable = false, length = 60)
+	public String getFname()
+	{
+		return fname;
+	}
+
+	public void setFname(final String fname)
+	{
+		this.fname = fname;
+	}
+
+	@Column(name = "lname", nullable = false, length = 60)
+	public String getLname()
+	{
+		return lname;
+	}
+
+	public void setLname(final String lname)
+	{
+		this.lname = lname;
 	}
 
 	@Id

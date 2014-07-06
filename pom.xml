@@ -16,6 +16,7 @@
 		<hibernate.version>4.2.11.Final</hibernate.version>
 		<dbcp.version>1.4</dbcp.version>
 		<servletapi.version>2.5</servletapi.version>
+		<jackson.version>1.9.10</jackson.version>
 	</properties>
 
 	<dependencies>
@@ -133,7 +134,11 @@
 			<version>${servletapi.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

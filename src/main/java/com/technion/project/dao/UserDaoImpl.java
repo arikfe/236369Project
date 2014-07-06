@@ -27,10 +27,27 @@ public class UserDaoImpl implements UserDao
 
 		List<User> users = Lists.newArrayList();
 
-		users = sessionFactory.getCurrentSession()
-				.createQuery("from User where username=?")
+		final Session session = sessionFactory.getCurrentSession();
+		users = session.createQuery("from User where username=?")
 				.setParameter(0, username).list();
+		if (users.size() > 0)
+			return users.get(0);
+		else
+			return null;
 
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public User findByUserNameLocalThread(final String username)
+	{
+
+		List<User> users = Lists.newArrayList();
+
+		final Session session = sessionFactory.openSession();
+		users = session.createQuery("from User where username=?")
+				.setParameter(0, username).list();
+		session.close();
 		if (users.size() > 0)
 			return users.get(0);
 		else

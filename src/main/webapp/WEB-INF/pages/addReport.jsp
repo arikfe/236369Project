@@ -6,13 +6,34 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+<style>
+html, body, #map-canvas {
+	height: 100%;
+	margin: 0px;
+	padding: 0px
+}
+</style>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
 <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/table.css"/>"></link>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
+
+<script>
+	function formSubmit() {
+		document.getElementById("logoutForm").submit();
+	}
+</script>
+
 <title>Add report</title>
 </head>
-<body onload="javascript:getLocation()">
+<body>
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
 			<c:url value="/logout" var="logoutUrl" />
@@ -20,21 +41,22 @@
 				<input type="hidden" name="${_csrf.parameterName}"
 					value="${_csrf.token}" />
 			</form>
-			<script>
-				function formSubmit() {
-					document.getElementById("logoutForm").submit();
-				}
-			</script>
-			<h2>
-				User : ${pageContext.request.userPrincipal.name} | <a
-					href="javascript:formSubmit()"> Logout</a>
-			</h2>
+			<nav>
+				<ul>
+					<li><a href="#">${fname} ${lname}</a>
+
+						<ul>
+							<a href="javascript:formSubmit()"> Logout</a>
+						</ul></li>
+				</ul>
+			</nav>
+
 			<form name='add' action="<c:url value='add' />" method="get">
 				<input type='hidden' name='username'
 					value=${pageContext.request.userPrincipal.name}> <input
 					name='geolng' type='hidden' id='lon'> <input name='geolat'
 					type='hidden' id='lat'>
-				<table>
+				<table align="left">
 					<tr>
 						<td>Title:</td>
 						<td><input type='text' name='title'></td>
@@ -51,6 +73,7 @@
 				</table>
 			</form>
 			<div id="status">locating Geo location</div>
+			<div id="map-canvas"></div>
 
 		</c:if>
 	</sec:authorize>

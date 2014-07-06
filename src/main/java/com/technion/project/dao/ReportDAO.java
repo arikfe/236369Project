@@ -12,9 +12,9 @@ public interface ReportDAO
 
 	public List<Report> getReportsForUser(User user);
 
-	public Report getReportByID(int id);
+	public Report getReportByID(Long id);
 
-	public void removeReport(int id);
+	public void removeReport(Long id);
 
 	public void removeReport(Report report);
 

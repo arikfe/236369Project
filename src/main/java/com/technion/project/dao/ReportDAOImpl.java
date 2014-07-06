@@ -59,7 +59,7 @@ public class ReportDAOImpl implements ReportDAO
 	 * @see com.technion.project.dao.ReportDAO#getReportByID(int)
 	 */
 	@Override
-	public Report getReportByID(final int id)
+	public Report getReportByID(final Long id)
 	{
 		final Session session = sessionFactory.openSession();
 		final Report report = (Report) session.get(Report.class, id);
@@ -73,7 +73,7 @@ public class ReportDAOImpl implements ReportDAO
 	 * @see com.technion.project.dao.ReportDAO#removeReport(int)
 	 */
 	@Override
-	public void removeReport(final int id)
+	public void removeReport(final Long id)
 	{
 		final Session session = sessionFactory.openSession();
 		final Report report = (Report) session.get(Report.class, id);
