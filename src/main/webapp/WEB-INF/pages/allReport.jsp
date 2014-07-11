@@ -7,8 +7,7 @@
 <html>
 <head>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-<meta charset="utf-8">
-
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
@@ -36,8 +35,32 @@ html, body, #map-canvas {
 <script>
 	var map;
 	var markers = [];
-
+	var evacuations = [];
+	var image;
+	function registerToEvent(_id) {
+		$.ajax({
+			type : "GET",
+			url : "/project/evacuation/join",
+			data : {
+				id : _id
+			}
+		}).done(function(msg) {
+			//alert("Data Saved: " + msg);
+		}).fail(function(err) {
+			alert(err);
+		});
+	}
 	function initialize() {
+
+		image = {
+			url : 'IMG/car.png',
+			// This marker is 20 pixels wide by 32 pixels tall.
+			size : new google.maps.Size(37, 32),
+			// The origin for this image is 0,0.
+			origin : new google.maps.Point(0, 0),
+			// The anchor for this image is the base of the flagpole at 0,32.
+			anchor : new google.maps.Point(18, 32)
+		};
 
 		var haightAshbury = new google.maps.LatLng("${midLat}", "${midLng}");
 		var mapOptions = {
@@ -48,17 +71,24 @@ html, body, #map-canvas {
 				mapOptions);
 
 		// This event listener will call addMarker() when the map is clicked.
-		
 
 		// Adds a marker at the center of the map.
 		<c:forEach var="r" items="${reports}">
 		addMarker(new google.maps.LatLng(<c:out value="${r.geolat}"/>,
-				<c:out value="${r.geolng}"/>),"${r.title}");
+				<c:out value="${r.geolng}"/>), "${r.title}");
+		</c:forEach>
+
+		<c:forEach var="e" items="${events}">
+		var totalcapacity = parseInt("${e.capacity}")
+				- parseInt("${e.registeredUsers.size()}");
+		addEvacuation(new google.maps.LatLng(<c:out value="${e.geolat}"/>,
+				<c:out value="${e.geolng}"/>), "${e.id}", totalcapacity,
+				"${e.estimated}");
 		</c:forEach>
 	}
 
 	// Add a marker to the map and push to the array.
-	function addMarker(location,title) {
+	function addMarker(location, title) {
 		var marker = new google.maps.Marker({
 			position : location,
 			map : map,
@@ -66,7 +96,27 @@ html, body, #map-canvas {
 		});
 		markers.push(marker);
 	}
+	function addEvacuation(location, id, capacity, time) {
 
+		var contentStr = '<button onclick="registerToEvent(' + id
+				+ ')">register</button>' + '<p>capacity left: ' + capacity
+				+ '</p>' + '<p>evacuation time: ' + time + '</p>';
+
+		var infowindow = new google.maps.InfoWindow({
+			content : contentStr
+		});
+
+		var marker = new google.maps.Marker({
+			position : location,
+			map : map,
+			title : 'event'
+		//icon : image
+		});
+		google.maps.event.addListener(marker, 'click', function() {
+			infowindow.open(map, marker);
+		});
+		markers.push(marker);
+	}
 	// Sets the map on all markers in the array.
 	function setAllMap(map) {
 		for (var i = 0; i < markers.length; i++) {
@@ -113,7 +163,6 @@ html, body, #map-canvas {
 						}
 					</script>
 					<li><a href="#">${fname} ${lname}</a>
-
 						<ul>
 							<a href="javascript:formSubmit()"> Logout</a>
 						</ul></li>
@@ -136,7 +185,7 @@ html, body, #map-canvas {
 			<th>Title</th>
 			<th>content</th>
 			<th>user name</th>
-			
+
 			<th>exipre on</th>
 		</tr>
 		<c:forEach var="r" items="${reports}">
@@ -149,12 +198,6 @@ html, body, #map-canvas {
 		</c:forEach>
 	</table>
 	<div id="map-canvas" align="right"></div>
-
-	<!-- <div id="panel">
-		<input onclick="clearMarkers();" type=button value="Hide Markers">
-		<input onclick="showMarkers();" type=button value="Show All Markers">
-		<input onclick="deleteMarkers();" type=button value="Delete Markers">
-	</div> -->
 
 
 </body>

@@ -17,8 +17,7 @@ html, body, #map-canvas {
 </style>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>

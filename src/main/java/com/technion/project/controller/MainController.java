@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class MainController {
+public class MainController
+{
 
-	@RequestMapping(value = { "/", "/welcome**" }, method = RequestMethod.GET)
-	public ModelAndView defaultPage() {
+	@RequestMapping(value =
+	{ "/", "/welcome**" }, method = RequestMethod.GET)
+	public ModelAndView defaultPage()
+	{
 
-		ModelAndView model = new ModelAndView();
+		final ModelAndView model = new ModelAndView();
 		model.addObject("title", "Spring Security + Hibernate Example");
 		model.addObject("message", "This is default page!");
 		model.setViewName("hello");
@@ -29,11 +32,11 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
-	public ModelAndView adminPage() {
+	public ModelAndView adminPage()
+	{
 
-		ModelAndView model = new ModelAndView();
-		model.addObject("title", "Spring Security + Hibernate Example");
-		model.addObject("message", "This page is for ROLE_ADMIN only!");
+		final ModelAndView model = new ModelAndView();
+		model.addObject("fname", "admin");
 		model.setViewName("admin");
 
 		return model;
@@ -41,17 +44,19 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
-			@RequestParam(value = "logout", required = false) String logout, HttpServletRequest request) {
+	public ModelAndView login(
+			@RequestParam(value = "error", required = false) final String error,
+			@RequestParam(value = "logout", required = false) final String logout,
+			final HttpServletRequest request)
+	{
 
-		ModelAndView model = new ModelAndView();
-		if (error != null) {
-			model.addObject("error", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
-		}
+		final ModelAndView model = new ModelAndView();
+		if (error != null)
+			model.addObject("error",
+					getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
 
-		if (logout != null) {
+		if (logout != null)
 			model.addObject("msg", "You've been logged out successfully.");
-		}
 		model.setViewName("login");
 
 		return model;
@@ -59,32 +64,37 @@ public class MainController {
 	}
 
 	// customize the error message
-	private String getErrorMessage(HttpServletRequest request, String key) {
+	private String getErrorMessage(final HttpServletRequest request,
+			final String key)
+	{
 
-		Exception exception = (Exception) request.getSession().getAttribute(key);
+		final Exception exception = (Exception) request.getSession()
+				.getAttribute(key);
 
 		String error = "";
-		if (exception instanceof BadCredentialsException) {
+		if (exception instanceof BadCredentialsException)
 			error = "Invalid username and password!";
-		} else if (exception instanceof LockedException) {
+		else if (exception instanceof LockedException)
 			error = exception.getMessage();
-		} else {
+		else
 			error = "Invalid username and password!";
-		}
 
 		return error;
 	}
 
 	// for 403 access denied page
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
-	public ModelAndView accesssDenied() {
+	public ModelAndView accesssDenied()
+	{
 
-		ModelAndView model = new ModelAndView();
+		final ModelAndView model = new ModelAndView();
 
 		// check if user is login
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken))
+		{
+			final UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			System.out.println(userDetail);
 
 			model.addObject("username", userDetail.getUsername());
@@ -95,15 +105,19 @@ public class MainController {
 		return model;
 
 	}
-	@RequestMapping(value = "/register", method = RequestMethod.GET)
-	public ModelAndView register() {
 
-		ModelAndView model = new ModelAndView();
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	public ModelAndView register()
+	{
+
+		final ModelAndView model = new ModelAndView();
 
 		// check if user is login
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken))
+		{
+			final UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			System.out.println(userDetail);
 
 			model.addObject("username", userDetail.getUsername());
@@ -113,5 +127,13 @@ public class MainController {
 		model.setViewName("register");
 		return model;
 
+	}
+
+	@RequestMapping(value = "/admin/addEventView", method = RequestMethod.GET)
+	public ModelAndView addEvacuation()
+	{
+		final ModelAndView model = new ModelAndView();
+		model.setViewName("addEventView");
+		return model;
 	}
 }

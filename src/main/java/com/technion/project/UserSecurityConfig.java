@@ -27,6 +27,9 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter
 	{
 		roleByPath.put("/admin/**", ROLE_ADMIN);
 		roleByPath.put("/reports/addReport", ROLE_USER);
+		roleByPath.put("/evacuation/add", ROLE_ADMIN);
+		roleByPath.put("/evacuation/join", ROLE_USER);
+
 	}
 	@Autowired
 	@Qualifier("userDetailsService")

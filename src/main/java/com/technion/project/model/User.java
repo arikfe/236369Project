@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,7 +23,8 @@ public class User
 	private boolean enabled;
 	private String fname;
 	private String lname;
-
+	@ManyToOne
+	private EvacuationEvent event;
 	private Set<UserRole> userRole = new HashSet<UserRole>(0);
 
 	public User()

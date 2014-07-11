@@ -1,10 +1,16 @@
+drop table if exists  `project`.`report`;
+drop table if exists `project`.`user_roles`;
+drop table if exists `project`.`users`;
+drop table if exists `project`.`evacuation`;
+drop table if exists `project`.`evacuation_user`;
 CREATE  TABLE users (
   username VARCHAR(45) NOT NULL ,
   password VARCHAR(60) NOT NULL ,
   fname varchar(40),
   lname varchar(40),
   enabled TINYINT NOT NULL DEFAULT 1 ,
-  PRIMARY KEY (username));
+  PRIMARY KEY (username)
+  );
 
 
 
@@ -36,3 +42,16 @@ CREATE TABLE report (
   geolng decimal(10,6) default NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (username) REFERENCES users (username));
+
+CREATE TABLE evacuation (
+ id int(11) NOT NULL AUTO_INCREMENT,
+ estimated datetime NOT NULL,
+ capacity INT default 0,
+ means varchar(45) NOT NULL,
+ geolat decimal(10,6) default NULL,
+ geolng decimal(10,6) default NULL,
+ primary key (id));
+ 
+ create table evacuation_user (
+ id bigint(11) references evacuation(id),
+username varchar(45) references users(username),primary key(id,username));

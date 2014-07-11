@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.technion.project.dao.EvacuationDAO;
 import com.technion.project.dao.ReportDAOImpl;
 import com.technion.project.dao.UserDao;
 import com.technion.project.model.Report;
@@ -26,6 +27,9 @@ public class ReportsController
 	private ReportDAOImpl reportDao;
 	@Autowired
 	private UserDao userDAO;
+
+	@Autowired
+	private EvacuationDAO evacuationDAO;
 
 	@RequestMapping(value =
 	{ "" }, method = RequestMethod.GET)
@@ -44,6 +48,7 @@ public class ReportsController
 		model.addObject("midLat", middleLat / allReports.size());
 		model.addObject("midLng", middleLng / allReports.size());
 		model.addObject("reports", allReports);
+		model.addObject("events", evacuationDAO.getAll());
 		model.setViewName("allReport");
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
@@ -52,7 +57,7 @@ public class ReportsController
 			model.addObject("fname",
 					userDAO.findByUserNameLocalThread(auth.getName())
 							.getFname());
-			model.addObject("nname",
+			model.addObject("lname",
 					userDAO.findByUserNameLocalThread(auth.getName())
 							.getLname());
 		}
