@@ -131,14 +131,17 @@ html, body {
 					+ ')" ' + userRegistered + '>'+actionName+'</button>'
 					+ '<p>capacity left: ' + totalcapacity + '</p>'
 					+ '<p>evacuation time: ' + "${e.estimated}" + '</p>';
-			setTimeout(function() {
-			addEvacuation(new google.maps.LatLng(<c:out value="${e.geolat}"/>,
-					<c:out value="${e.geolng}"/>), contentStr);
-					 }, 500 + (i++ * 200));
+			setTimeout(updateEvent(contentStr,'${e.geolat}','${e.geolng}'), 500 + (i++ * 200));
+
 		</c:forEach>
 
 	}
-
+	function updateEvent(contentStr,lat,lon)
+	{
+			addEvacuation(new google.maps.LatLng(lat,
+					lon), contentStr);
+		
+	}
 	// Add a marker to the map and push to the array.
 	function addMarker(location, title,id) {
 		var marker = new google.maps.Marker({
