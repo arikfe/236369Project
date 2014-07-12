@@ -13,7 +13,12 @@
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <style>
-html, body, #map-canvas {
+#map-canvas {
+	width: 600px;
+	height: 600px;
+}
+
+html, body {
 	height: 100%;
 	margin: 0px;
 	padding: 0px
@@ -37,6 +42,27 @@ html, body, #map-canvas {
 	var markers = [];
 	var evacuations = [];
 	var image;
+	function bounceMarker(marker)
+	{
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+	}
+	function stopBounce(marker)
+	{
+		marker.setAnimation(null);
+	}
+	function unregisterToEvent(_id) {
+		$.ajax({
+			type : "GET",
+			url : "/project/evacuation/leave",
+			data : {
+				id : _id
+			}
+		}).done(function(msg) {
+			//alert("Data Saved: " + msg);
+		}).fail(function(err) {
+			alert(err);
+		});
+	}
 	function registerToEvent(_id) {
 		$.ajax({
 			type : "GET",
@@ -53,9 +79,9 @@ html, body, #map-canvas {
 	function initialize() {
 
 		image = {
-			url : 'IMG/car.png',
+			url : '/project/IMG/car.png',
 			// This marker is 20 pixels wide by 32 pixels tall.
-			size : new google.maps.Size(37, 32),
+			size : new google.maps.Size(32, 37),
 			// The origin for this image is 0,0.
 			origin : new google.maps.Point(0, 0),
 			// The anchor for this image is the base of the flagpole at 0,32.
@@ -64,53 +90,83 @@ html, body, #map-canvas {
 
 		var haightAshbury = new google.maps.LatLng("${midLat}", "${midLng}");
 		var mapOptions = {
-			zoom : 12,
+			zoom : 11,
 			center : haightAshbury
 		};
 		map = new google.maps.Map(document.getElementById('map-canvas'),
 				mapOptions);
 
-		// This event listener will call addMarker() when the map is clicked.
-
-		// Adds a marker at the center of the map.
+		
+		
+		var i=0;
+		var body = $("#table_body");
 		<c:forEach var="r" items="${reports}">
-		addMarker(new google.maps.LatLng(<c:out value="${r.geolat}"/>,
-				<c:out value="${r.geolng}"/>), "${r.title}");
+			 setTimeout(function() {
+				  addMarker(new google.maps.LatLng(<c:out value="${r.geolat}"/>,
+							<c:out value="${r.geolng}"/>), "${r.title}",'${r.id}');
+			    }, 500 + (i++ * 200));
+			 body.after("<tr id='row${r.id}'><td>${r.title}</td><td>${r.content}</td><td>${r.username}</td><td>${r.expiration}</td></tr>");
+		 </c:forEach>
+		
+		
+		<c:forEach var="e" items="${events}">
+			var userRegistered = "";
+			var functionName = "registerToEvent";
+			var actionName = "register";
+			<c:if test="${not empty user.event}">
+			userRegistered = "disabled";
+			</c:if>
+			
+			var id = "${e.id}";
+			var userEventId = "${user.event.id}";
+			if(id==userEventId)
+			{
+				functionName = "un"+functionName;
+				userRegistered = "";
+				actionName = "unregister";
+			}
+			var totalcapacity = ${e.capacity}
+					-${e.registeredUsers.size()};
+			var contentStr = '<button onclick="'+functionName+'(' + "${e.id}"
+					+ ')" ' + userRegistered + '>'+actionName+'</button>'
+					+ '<p>capacity left: ' + totalcapacity + '</p>'
+					+ '<p>evacuation time: ' + "${e.estimated}" + '</p>';
+			setTimeout(function() {
+			addEvacuation(new google.maps.LatLng(<c:out value="${e.geolat}"/>,
+					<c:out value="${e.geolng}"/>), contentStr);
+					 }, 500 + (i++ * 200));
 		</c:forEach>
 
-		<c:forEach var="e" items="${events}">
-		var totalcapacity = parseInt("${e.capacity}")
-				- parseInt("${e.registeredUsers.size()}");
-		addEvacuation(new google.maps.LatLng(<c:out value="${e.geolat}"/>,
-				<c:out value="${e.geolng}"/>), "${e.id}", totalcapacity,
-				"${e.estimated}");
-		</c:forEach>
 	}
 
 	// Add a marker to the map and push to the array.
-	function addMarker(location, title) {
+	function addMarker(location, title,id) {
 		var marker = new google.maps.Marker({
 			position : location,
 			map : map,
-			title : title
+			title : title,
+			animation : google.maps.Animation.DROP
 		});
 		markers.push(marker);
+		var row = $("#row"+id);
+		row.hover(function(){
+			bounceMarker(marker);
+			},function(){
+				stopBounce(marker);
+				});
 	}
-	function addEvacuation(location, id, capacity, time) {
 
-		var contentStr = '<button onclick="registerToEvent(' + id
-				+ ')">register</button>' + '<p>capacity left: ' + capacity
-				+ '</p>' + '<p>evacuation time: ' + time + '</p>';
+	function addEvacuation(location, contentStr) {
 
 		var infowindow = new google.maps.InfoWindow({
 			content : contentStr
 		});
-
 		var marker = new google.maps.Marker({
 			position : location,
 			map : map,
-			title : 'event'
-		//icon : image
+			title : 'event',
+			icon : image,
+			animation : google.maps.Animation.DROP
 		});
 		google.maps.event.addListener(marker, 'click', function() {
 			infowindow.open(map, marker);
@@ -140,7 +196,10 @@ html, body, #map-canvas {
 		markers = [];
 	}
 
-	google.maps.event.addDomListener(window, 'load', initialize);
+	$(document).ready(function(){
+		google.maps.event.addDomListener(window, 'load', initialize);
+	
+	});
 </script>
 
 <title>Reports</title>
@@ -162,7 +221,7 @@ html, body, #map-canvas {
 							document.getElementById("logoutForm").submit();
 						}
 					</script>
-					<li><a href="#">${fname} ${lname}</a>
+					<li><a href="#">${user.fname} ${user.lname}</a>
 						<ul>
 							<a href="javascript:formSubmit()"> Logout</a>
 						</ul></li>
@@ -181,21 +240,16 @@ html, body, #map-canvas {
 
 
 	<table class="zebra" align="left">
-		<tr>
-			<th>Title</th>
-			<th>content</th>
-			<th>user name</th>
 
-			<th>exipre on</th>
-		</tr>
-		<c:forEach var="r" items="${reports}">
+		<tbody id='table_body'>
 			<tr>
-				<td>${r.title}</td>
-				<td>${r.content}</td>
-				<td>${r.username}</td>
-				<td>${r.expiration}</td>
+				<th>Title</th>
+				<th>content</th>
+				<th>user name</th>
+
+				<th>expire on</th>
 			</tr>
-		</c:forEach>
+		</tbody>
 	</table>
 	<div id="map-canvas" align="right"></div>
 

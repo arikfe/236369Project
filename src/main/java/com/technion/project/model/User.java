@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,7 +25,7 @@ public class User
 	private boolean enabled;
 	private String fname;
 	private String lname;
-	@ManyToOne
+
 	private EvacuationEvent event;
 	private Set<UserRole> userRole = new HashSet<UserRole>(0);
 
@@ -42,6 +44,35 @@ public class User
 		this.fname = fname;
 		this.lname = lname;
 		this.userRole = userRole;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		final User other = (User) obj;
+		if (username == null)
+		{
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
 	}
 
 	@Column(name = "fname", nullable = false, length = 60)
@@ -109,6 +140,20 @@ public class User
 	public void setUserRole(final Set<UserRole> userRole)
 	{
 		this.userRole = userRole;
+	}
+
+	@ManyToOne
+	@JoinTable(name = "evacuation_user", joinColumns =
+	{ @JoinColumn(name = "username") }, inverseJoinColumns =
+	{ @JoinColumn(name = "id") })
+	public EvacuationEvent getEvent()
+	{
+		return event;
+	}
+
+	public void setEvent(final EvacuationEvent event)
+	{
+		this.event = event;
 	}
 
 }

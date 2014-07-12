@@ -36,8 +36,6 @@ public class ReportsController
 	public ModelAndView defualtView()
 	{
 		final ModelAndView model = new ModelAndView();
-		model.addObject("title", "Spring Security + Hibernate Example");
-		model.addObject("message", "This is default page!");
 		final List<Report> allReports = reportDao.getAllReports();
 		float middleLat = 0, middleLng = 0;
 		for (final Report report : allReports)
@@ -53,14 +51,8 @@ public class ReportsController
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		if (!"anonymousUser".equals(auth.getName()))
-		{
-			model.addObject("fname",
-					userDAO.findByUserNameLocalThread(auth.getName())
-							.getFname());
-			model.addObject("lname",
-					userDAO.findByUserNameLocalThread(auth.getName())
-							.getLname());
-		}
+			model.addObject("user",
+					userDAO.findByUserNameLocalThread(auth.getName()));
 		return model;
 	}
 
