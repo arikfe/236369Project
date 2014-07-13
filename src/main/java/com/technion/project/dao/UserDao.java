@@ -1,5 +1,7 @@
 package com.technion.project.dao;
 
+import java.util.List;
+
 import com.technion.project.model.User;
 
 public interface UserDao
@@ -11,4 +13,9 @@ public interface UserDao
 
 	User findByUserNameLocalThread(String username);
 
+	List<User> getAll();
+
+	void delete(User user);
+
+	void toggleEnabled(User user);
 }

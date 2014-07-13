@@ -2,6 +2,7 @@ package com.technion.project.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -14,9 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.technion.project.dao.UserDao;
+
 @Controller
 public class MainController
 {
+	@Autowired
+	private UserDao userDao;
 
 	@RequestMapping(value =
 	{ "/", "/welcome**" }, method = RequestMethod.GET)
@@ -136,4 +141,13 @@ public class MainController
 		model.setViewName("addEventView");
 		return model;
 	}
+
+	@RequestMapping(value = "/admin/admin_menu", method = RequestMethod.GET)
+	public ModelAndView adminMenu()
+	{
+		final ModelAndView model = new ModelAndView();
+		model.setViewName("admin_menu");
+		return model;
+	}
+
 }

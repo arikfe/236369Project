@@ -22,4 +22,11 @@ public interface ReportDAO
 
 	public void addReport(Report report);
 
+	/**
+	 * use only in created Session - session is committed
+	 * 
+	 * @param user
+	 */
+	public void delete(User user);
+
 }

@@ -31,12 +31,30 @@ public class ReportsController
 	@Autowired
 	private EvacuationDAO evacuationDAO;
 
+	@RequestMapping(value = "{username}", method = RequestMethod.GET)
+	public ModelAndView getReportsForUser(@PathVariable final String username)
+	{
+
+		return getAllReportsForUser(username);
+
+	}
+
 	@RequestMapping(value =
 	{ "" }, method = RequestMethod.GET)
 	public ModelAndView defualtView()
 	{
+		return getAllReportsForUser("");
+	}
+
+	private ModelAndView getAllReportsForUser(final String username)
+	{
 		final ModelAndView model = new ModelAndView();
-		final List<Report> allReports = reportDao.getAllReports();
+		List<Report> allReports = null;
+		if (username.isEmpty())
+			allReports = reportDao.getAllReports();
+		else
+			allReports = reportDao.getReportsForUser(userDAO
+					.findByUserNameLocalThread(username));
 		float middleLat = 0, middleLng = 0;
 		for (final Report report : allReports)
 		{

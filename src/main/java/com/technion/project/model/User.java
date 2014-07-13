@@ -3,6 +3,7 @@ package com.technion.project.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -131,7 +132,7 @@ public class User
 		this.enabled = enabled;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
 	public Set<UserRole> getUserRole()
 	{
 		return this.userRole;
@@ -156,4 +157,11 @@ public class User
 		this.event = event;
 	}
 
+	public boolean hasAdminPrevilige()
+	{
+		for (final UserRole userRole2 : userRole)
+			if (userRole2.getRole().equalsIgnoreCase("ROLE_ADMIN"))
+				return true;
+		return false;
+	}
 }

@@ -3,6 +3,9 @@
 <%@taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="java.util.List"%>
+<%@ page import="java.util.Iterator"%>
+<%@ page import="com.technion.project.model.User"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 5.00 Transitional//EN" "http://www.w3.org/TR/html5/loose.dtd">
 <html>
 <head>
@@ -105,7 +108,7 @@ html, body {
 				  addMarker(new google.maps.LatLng(<c:out value="${r.geolat}"/>,
 							<c:out value="${r.geolng}"/>), "${r.title}",'${r.id}');
 			    }, 500 + (i++ * 200));
-			 body.after("<tr id='row${r.id}'><td>${r.title}</td><td>${r.content}</td><td>${r.username}</td><td>${r.expiration}</td></tr>");
+			 body.after("<tr id='row${r.id}'><td>${r.title}</td><td>${r.content}</td><td><a href='${r.username}'>${r.username}</a></td><td>${r.expiration}</td></tr>");
 		 </c:forEach>
 		
 		
@@ -157,8 +160,13 @@ html, body {
 			},function(){
 				stopBounce(marker);
 				});
+		row.click(function(){
+			panTo(marker);
+			});
 	}
-
+	function panTo(marker){
+		map.panTo(marker.position);
+	}
 	function addEvacuation(location, contentStr) {
 
 		var infowindow = new google.maps.InfoWindow({
@@ -235,6 +243,7 @@ html, body {
 
 			<c:otherwise>
 				<li><a href="../login">Login</a></li>
+				<li><a href="../register">register</a></li>
 
 			</c:otherwise>
 		</c:choose>
@@ -244,8 +253,8 @@ html, body {
 
 	<table class="zebra" align="left">
 
-		<tbody id='table_body'>
-			<tr>
+		<tbody >
+			<tr id='table_body'>
 				<th>Title</th>
 				<th>content</th>
 				<th>user name</th>

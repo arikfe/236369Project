@@ -41,7 +41,8 @@ CREATE TABLE report (
   geolat decimal(10,6) default NULL,
   geolng decimal(10,6) default NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (username) REFERENCES users (username));
+  INDEX `FK_USERNAME` (`username`),
+    CONSTRAINT `FK_USERNAME`  FOREIGN KEY (username) REFERENCES users (username));
 
 CREATE TABLE evacuation (
  id int(11) NOT NULL AUTO_INCREMENT,

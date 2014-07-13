@@ -126,4 +126,20 @@ public class ReportDAOImpl implements ReportDAO
 		session.flush();
 		session.close();
 	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * com.technion.project.dao.ReportDAO#delete(com.technion.project.model.
+	 * User)
+	 */
+	@Override
+	public void delete(final User user)
+	{
+		final Session session = sessionFactory.getCurrentSession();
+		for (final Report report : getReportsForUser(user))
+			session.delete(report);
+
+	}
 }
