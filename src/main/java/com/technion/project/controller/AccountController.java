@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.technion.project.dao.UserDao;
@@ -25,7 +26,7 @@ public class AccountController
 
 	@RequestMapping(value =
 	{ "add" }, method = RequestMethod.POST)
-	public String add(final User user)
+	public String add(final User user, final MultipartFile file)
 	{
 
 		final HashSet<UserRole> hashSet = new HashSet<UserRole>();
@@ -43,8 +44,13 @@ public class AccountController
 		model.addObject("users", userDao.getAll());
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
-		model.addObject("user",
-				userDao.findByUserNameLocalThread(auth.getName()));
+
+		final User currentUser = userDao.findByUserNameLocalThread(auth
+				.getName());
+		model.addObject("adminRight",
+				Boolean.valueOf(currentUser.hasAdminPrevilige()));
+		model.addObject("user", currentUser);
+
 		model.setViewName("users");
 		return model;
 	}
@@ -85,4 +91,16 @@ public class AccountController
 		return model;
 	}
 
+	@RequestMapping(value = "deleteself", method = RequestMethod.GET)
+	public ModelAndView deleteSelf()
+	{
+
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		final ModelAndView model = new ModelAndView();
+		final User user = userDao.findByUserNameLocalThread(auth.getName());
+		userDao.delete(user);
+		model.setViewName("redirect:../");
+		return model;
+	}
 }

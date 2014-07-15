@@ -17,7 +17,7 @@
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <style>
 #map-canvas {
-	width: 600px;
+	width: 50%;
 	height: 600px;
 }
 
@@ -26,7 +26,6 @@ html, body {
 	margin: 0px;
 	padding: 0px
 }
-
 #panel {
 	position: absolute;
 	top: 5px;
@@ -45,6 +44,28 @@ html, body {
 	var markers = [];
 	var evacuations = [];
 	var image;
+	function deleteAccount(){
+		$.ajax("../accounts/deleteself").always(function() {
+			document.getElementById("logoutForm").submit();
+		});
+	}
+	function deletePost(_id)
+	{
+		$.ajax({
+			type : "GET",
+			url : "delete",
+			data : {
+				id : _id
+			}
+		}).done(function(msg) {
+			$("#row"+msg).remove();
+		}).fail(function(err) {
+			alert(err);
+		});
+	}
+	function formSubmit() {
+		document.getElementById("logoutForm").submit();
+	}
 	function bounceMarker(marker)
 	{
 		marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -103,12 +124,17 @@ html, body {
 		
 		var i=0;
 		var body = $("#table_body");
+		var msg;
 		<c:forEach var="r" items="${reports}">
 			 setTimeout(function() {
 				  addMarker(new google.maps.LatLng(<c:out value="${r.geolat}"/>,
 							<c:out value="${r.geolng}"/>), "${r.title}",'${r.id}');
 			    }, 500 + (i++ * 200));
-			 body.after("<tr id='row${r.id}'><td>${r.title}</td><td>${r.content}</td><td><a href='${r.username}'>${r.username}</a></td><td>${r.expiration}</td></tr>");
+			 msg = "<tr id='row${r.id}'><td>${r.title}</td><td>${r.content}</td><td><a href='${r.username}'>${r.username}</a></td><td>${r.expiration}</td>";
+			 if('${pageContext.request.userPrincipal.name}'=='${r.username}')
+				 msg += "<td><input type='button' value='Delete' onclick='deletePost(${r.id})'></td>";
+			 msg +="</tr>";
+			 body.after(msg);
 		 </c:forEach>
 		
 		
@@ -227,16 +253,26 @@ html, body {
 						<input type="hidden" name="${_csrf.parameterName}"
 							value="${_csrf.token}" />
 					</form>
-					<script type="text/javascript">
-						function formSubmit() {
-							document.getElementById("logoutForm").submit();
-						}
-					</script>
+					
 					<li><a href="#">${user.fname} ${user.lname}</a>
 						<ul>
+						<li>
 							<a href="javascript:formSubmit()"> Logout</a>
-						</ul></li>
-					<li><a href="addReport">add report</a></li>
+							</li>
+							<li>
+							<a href="javascript:deleteAccount()"> Delete Account</a>
+							</li>
+						</ul>
+						
+					</li>
+					<li>
+						<a>Reports</a>
+						<ul>
+							<li><a href="addReport">add report</a></li>
+							<li><a href="${user.username}">My reports</a></li>
+						</ul>
+					</li>
+					<li><a href="../accounts/users">Show all Users</a></li>
 				</sec:authorize>
 
 			</c:when>

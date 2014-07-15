@@ -2,6 +2,7 @@ package com.technion.project.controller;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -9,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.technion.project.dao.EvacuationDAO;
 import com.technion.project.dao.UserDao;
@@ -57,4 +59,12 @@ public class EvacuationController
 		evacuationDAO.removeUserToEvent(user, id);
 		return "redirect:../login";
 	}
+
+	@RequestMapping(value =
+	{ "list" }, method = RequestMethod.GET)
+	public @ResponseBody Set<User> list(final long id)
+	{
+		return evacuationDAO.getByID(id).getRegisteredUsers();
+	}
+
 }

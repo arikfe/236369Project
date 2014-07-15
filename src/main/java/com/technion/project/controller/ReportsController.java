@@ -114,4 +114,11 @@ public class ReportsController
 		return report;
 
 	}
+
+	@RequestMapping(value = "delete", method = RequestMethod.GET)
+	public @ResponseBody String delete(final long id)
+	{
+		reportDao.removeReport(id);
+		return String.valueOf(id);
+	}
 }

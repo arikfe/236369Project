@@ -120,7 +120,6 @@ public class EvacuationEvent
 	public EvacuationEvent()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public void addUser(final User user)
@@ -130,8 +129,7 @@ public class EvacuationEvent
 
 	public void removeUser(final User user)
 	{
-		final boolean removed = registeredUsers.remove(user);
-
+		registeredUsers.remove(user);
 	}
 
 	@Transient

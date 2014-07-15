@@ -78,6 +78,7 @@ public class ReportDAOImpl implements ReportDAO
 		final Session session = sessionFactory.openSession();
 		final Report report = (Report) session.get(Report.class, id);
 		session.delete(report);
+		session.flush();
 		session.close();
 	}
 
@@ -93,6 +94,7 @@ public class ReportDAOImpl implements ReportDAO
 	{
 		final Session session = sessionFactory.openSession();
 		session.delete(report);
+		session.flush();
 		session.close();
 	}
 

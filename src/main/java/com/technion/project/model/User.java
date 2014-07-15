@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.technion.project.Constants;
 
 @Entity
@@ -22,12 +24,14 @@ public class User
 {
 
 	private String username;
+	@JsonIgnore
 	private String password;
 	private boolean enabled;
 	private String fname;
 	private String lname;
-
+	@JsonIgnore
 	private EvacuationEvent event;
+	@JsonIgnore
 	private Set<UserRole> userRole = new HashSet<UserRole>(0);
 
 	public User()

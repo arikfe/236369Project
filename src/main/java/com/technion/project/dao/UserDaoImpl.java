@@ -93,10 +93,11 @@ public class UserDaoImpl implements UserDao
 	@Override
 	public void delete(final User user)
 	{
+		// TODO add locks
+		reportDao.removeReport(user);
 		final Session session = sessionFactory.openSession();
 		final Transaction transaction = session.getTransaction();
 		transaction.begin();
-		reportDao.removeReport(user);
 		session.delete(user);
 		transaction.commit();
 		session.flush();

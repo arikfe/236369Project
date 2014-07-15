@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@page session="true"%>
 <html>
 <head>
@@ -94,8 +95,8 @@
 			<div class="msg">${msg}</div>
 		</c:if>
 
-		<form name='loginForm' action="<c:url value='/accounts/add' />"
-			onsubmit="return validateForm()" method='POST'>
+		<form name='loginForm'  action='/accounts/add'  
+			onsubmit='return validateForm()' method='POST'>
 
 			<table>
 				<tr>
@@ -121,6 +122,10 @@
 				<tr>
 					<td>Confirm password:</td>
 					<td><input type='password' id='cpass' /></td>
+				</tr>
+				<tr>
+					<td>choose picture:</td>
+					<td><input type="file" name='file' id='file' /></td>
 				</tr>
 				<tr>
 					<td colspan='2'><input name="submit" type="submit"

@@ -52,13 +52,22 @@
 			<li><a onclick='showEvac()'>Add evacuation</a></li>
 		</ul>
 	</nav>
+	<%	Boolean isAdmin =  (Boolean)request.getAttribute("adminRight"); %>
 	<table class="zebra">
 	<tr><th>name</th>
 	<th>user name</th>
-	<th>enabled</th>
 	<th>reports</th>
-	<th>delete</th></tr>
+	<% if(isAdmin)
+		{
+	%>
+			<th>enabled</th>
+			<th>delete</th>
 	<%
+		}
+	%>
+	</tr>		
+	<%
+	
 		List<User> users = (List<User>) request.getAttribute("users");
 		;
 		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
@@ -67,9 +76,15 @@
 		<tr id='<%=user.getUsername() %>'>
 		<td><%=user.getFname()%></td>
 		<td><%=user.getUsername() %></td>
-		<td><input type="checkbox" <%=user.isEnabled()?"checked":"" %> onchange="toggleEnabled('<%=user.getUsername() %>')"></td>
 		<td><a href='/project/reports/<%=user.getUsername() %>'>reports</a></td>
-		<td><input type="button" value="delete" onclick="deleteUser('<%=user.getUsername() %>')"></td>
+		<% if(isAdmin)
+		{
+			%>
+				<td><input type="checkbox" <%=user.isEnabled()?"checked":"" %> onchange="toggleEnabled('<%=user.getUsername() %>')"></td>
+				<td><input type="button" value="delete" onclick="deleteUser('<%=user.getUsername() %>')"></td>
+			<%
+		}
+			%>
 		</tr>
 	<%
 		}
