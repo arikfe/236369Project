@@ -123,10 +123,10 @@ public class UserDaoImpl implements UserDao
 	public void add(final User user, final MultipartFile file)
 	{
 		final Session currentSession = sessionFactory.openSession();
-		user.setImageId(documentDao.save(file));
+		if (!file.isEmpty())
+			user.setImageId(documentDao.save(file));
 		addUserForSession(user, currentSession);
 		currentSession.flush();
 		currentSession.close();
 	}
-
 }
