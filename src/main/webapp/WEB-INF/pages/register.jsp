@@ -115,7 +115,7 @@
 					<td><input type='text' name='lname' id='lname'></td>
 				</tr>
 				<tr>
-
+ 
 					<td><div id="password_miss"></div>Password:</td>
 					<td><input type='password' name='password' id='password' /></td>
 				</tr>
