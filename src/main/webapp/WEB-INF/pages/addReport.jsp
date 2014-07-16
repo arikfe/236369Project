@@ -23,32 +23,21 @@ html, body, #map-canvas {
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
+<script src="/project/JS/menu.js"></script>
 
 <script>
-	function formSubmit() {
-		document.getElementById("logoutForm").submit();
-	}
+$.ajax("../accounts/menu").done(function(result) {
+	$("#menu").html(result);
+}).error(function(res){
+	alert(res);
+});
 </script>
-
 <title>Add report</title>
 </head>
 <body>
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
-			<c:url value="/logout" var="logoutUrl" />
-			<form action="${logoutUrl}" method="post" id="logoutForm">
-				<input type="hidden" name="${_csrf.parameterName}"
-					value="${_csrf.token}" />
-			</form>
-			<nav>
-				<ul>
-					<li><a href="#">${fname} ${lname}</a>
-
-						<ul>
-							<a href="javascript:formSubmit()"> Logout</a>
-						</ul></li>
-				</ul>
-			</nav>
+			<div id="menu"></div>
 
 			<form name='add' action="<c:url value='add' />" method="get">
 				<input type='hidden' name='username'

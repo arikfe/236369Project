@@ -37,24 +37,22 @@
 			//alert("complete");
 		});
 	}
+	$.ajax("../accounts/menu").done(function(result) {
+		$("#results").html(result);
+	}).error(function(res){
+		alert(res);
+	});
 </script>
 </head>
 <body>
 
-	<nav>
-		<ul>
-			<li><a href="#"><font color="#000000">${user.fname} </font></a>
-
-				<ul>
-					<a href="javascript:formSubmit()"> Logout</a>
-				</ul></li>
-			<li><a href="" onclick='show_more_menu()'>Users management</a></li>
-			<li><a onclick='showEvac()'>Add evacuation</a></li>
-		</ul>
-	</nav>
+	
+	<div id="menu"></div>
 	<%	Boolean isAdmin =  (Boolean)request.getAttribute("adminRight"); %>
 	<table class="zebra">
-	<tr><th>name</th>
+	<tr>
+	<th>image</th>
+	<th>name</th>
 	<th>user name</th>
 	<th>reports</th>
 	<% if(isAdmin)
@@ -69,11 +67,12 @@
 	<%
 	
 		List<User> users = (List<User>) request.getAttribute("users");
-		;
+
 		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
 			User user = iterator.next();
 	%>
 		<tr id='<%=user.getUsername() %>'>
+		<td><img src="<%= user.hasContainImage()? "/project/download/" + user.getImageId():"/project/IMG/images.jpg"%>" height="42" width="42"> </td>
 		<td><%=user.getFname()%></td>
 		<td><%=user.getUsername() %></td>
 		<td><a href='/project/reports/<%=user.getUsername() %>'>reports</a></td>

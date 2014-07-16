@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 import com.technion.project.UserSecurityConfig;
@@ -21,6 +22,8 @@ public class UserDaoImpl implements UserDao
 	private SessionFactory sessionFactory;
 	@Autowired
 	private ReportDAO reportDao;
+	@Autowired
+	DocumentDAO documentDao;
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -60,19 +63,19 @@ public class UserDaoImpl implements UserDao
 	@Override
 	public void add(final User user)
 	{
-		final UserSecurityConfig sc = new UserSecurityConfig();
-		user.setEnabled(true);
-		final PasswordEncoder encoder = sc.passwordEncoder();
 		final Session currentSession = sessionFactory.openSession();
-		user.setPassword(encoder.encode(user.getPassword()));
-		currentSession.saveOrUpdate(user);
-		// for (final UserRole userRole : user.getUserRole())
-		// {
-		// userRole.setUser(user);
-		// currentSession.saveOrUpdate(userRole);
-		// }
+		addUserForSession(user, currentSession);
 		currentSession.flush();
 		currentSession.close();
+	}
+
+	private void addUserForSession(final User user, final Session currentSession)
+	{
+		final UserSecurityConfig sc = new UserSecurityConfig();
+		final PasswordEncoder encoder = sc.passwordEncoder();
+		user.setEnabled(true);
+		user.setPassword(encoder.encode(user.getPassword()));
+		currentSession.saveOrUpdate(user);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -89,11 +92,10 @@ public class UserDaoImpl implements UserDao
 
 	}
 
-	// TODO add lockes here
+	// TODO add locks here
 	@Override
 	public void delete(final User user)
 	{
-		// TODO add locks
 		reportDao.removeReport(user);
 		final Session session = sessionFactory.openSession();
 		final Transaction transaction = session.getTransaction();
@@ -115,6 +117,16 @@ public class UserDaoImpl implements UserDao
 		session.update(user);
 		transaction.commit();
 		session.close();
+	}
+
+	@Override
+	public void add(final User user, final MultipartFile file)
+	{
+		final Session currentSession = sessionFactory.openSession();
+		user.setImageId(documentDao.save(file));
+		addUserForSession(user, currentSession);
+		currentSession.flush();
+		currentSession.close();
 	}
 
 }

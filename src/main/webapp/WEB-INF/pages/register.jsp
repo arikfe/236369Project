@@ -1,8 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@page session="true"%>
 <html>
 <head>
+
+
 <title>Register Page</title>
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
@@ -35,16 +38,15 @@
 		var un = setMissing("username");
 		var name = setMissing("fname");
 		var pass = setMissing("password");
-		return k.value==j.value && un && name && pass ;  
+		return k.value == j.value && un && name && pass;
 
 	}
-	function setMissing(id)
-	{
-		var field =$("#"+id)[0]; 
+	function setMissing(id) {
+		var field = $("#" + id)[0];
 		if (field.value == "")
-			$("#"+id+"_miss")[0].innerHTML = "<font color='ff0000'>*</font>";
+			$("#" + id + "_miss")[0].innerHTML = "<font color='ff0000'>*</font>";
 		else
-			$("#"+id+"_miss")[0].innerHTML = "";
+			$("#" + id + "_miss")[0].innerHTML = "";
 		return field.value != "";
 	}
 </script>
@@ -95,9 +97,9 @@
 			<div class="msg">${msg}</div>
 		</c:if>
 
-		<form name='loginForm'  action='/accounts/add'  
-			onsubmit='return validateForm()' method='POST'>
 
+		<form:form method="post" action="accounts/add?${_csrf.parameterName}=${_csrf.token}"
+			enctype="multipart/form-data">
 			<table>
 				<tr>
 					<td><div id="username_miss"></div>User:</td>
@@ -106,13 +108,11 @@
 				</tr>
 				<tr>
 					<td><div id="name_miss"></div>First name:</td>
-					<td><input type='text' name='fname' id='fname'>
-					</td>
+					<td><input type='text' name='fname' id='fname'></td>
 				</tr>
 				<tr>
 					<td><div id="name_miss"></div>Last name:</td>
-					<td><input type='text' name='lname' id='lname'>
-					</td>
+					<td><input type='text' name='lname' id='lname'></td>
 				</tr>
 				<tr>
 
@@ -128,15 +128,12 @@
 					<td><input type="file" name='file' id='file' /></td>
 				</tr>
 				<tr>
-					<td colspan='2'><input name="submit" type="submit"
-						 /></td>
+					<td colspan='2'><input name="submit" type="submit" /></td>
 				</tr>
 			</table>
+		<div id="pwerror"></div>
 
-			<input type="hidden" name="${_csrf.parameterName}"
-				value="${_csrf.token}" />
-			<div id="pwerror"></div>
-		</form>
+		</form:form>
 	</div>
 
 </body>

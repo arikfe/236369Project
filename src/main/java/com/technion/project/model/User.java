@@ -29,6 +29,23 @@ public class User
 	private boolean enabled;
 	private String fname;
 	private String lname;
+	private Long imageId;
+
+	public boolean hasContainImage()
+	{
+		return imageId != null;
+	}
+
+	public Long getImageId()
+	{
+		return imageId;
+	}
+
+	public void setImageId(final Long imageId)
+	{
+		this.imageId = imageId;
+	}
+
 	@JsonIgnore
 	private EvacuationEvent event;
 	@JsonIgnore
@@ -168,4 +185,5 @@ public class User
 				return true;
 		return false;
 	}
+
 }

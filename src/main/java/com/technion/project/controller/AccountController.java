@@ -2,13 +2,17 @@ package com.technion.project.controller;
 
 import java.util.HashSet;
 
+import javax.servlet.annotation.MultipartConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,6 +22,9 @@ import com.technion.project.model.UserRole;
 
 @Controller
 @RequestMapping("/accounts/*")
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+maxFileSize = 1024 * 1024 * 10, // 10MB
+maxRequestSize = 1024 * 1024 * 50)
 public class AccountController
 {
 
@@ -26,14 +33,16 @@ public class AccountController
 
 	@RequestMapping(value =
 	{ "add" }, method = RequestMethod.POST)
-	public String add(final User user, final MultipartFile file)
+	public String add(@ModelAttribute("User") final User user,
+			@RequestParam("file") final MultipartFile file)
 	{
-
 		final HashSet<UserRole> hashSet = new HashSet<UserRole>();
 		hashSet.add(new UserRole(user, "ROLE_USER"));
 		user.setUserRole(hashSet);
 		user.setEnabled(true);
-		userDao.add(user);
+
+		userDao.add(user, file);
+
 		return "redirect:../login";
 	}
 
@@ -102,5 +111,17 @@ public class AccountController
 		userDao.delete(user);
 		model.setViewName("redirect:../");
 		return model;
+	}
+
+	@RequestMapping(value = "menu", method = RequestMethod.GET)
+	public ModelAndView getMenu()
+	{
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		final ModelAndView view = new ModelAndView();
+		final User user = userDao.findByUserNameLocalThread(auth.getName());
+		view.setViewName("menu");
+		view.addObject("user", user);
+		return view;
 	}
 }

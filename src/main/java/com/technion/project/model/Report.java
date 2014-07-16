@@ -3,6 +3,7 @@ package com.technion.project.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -13,6 +14,7 @@ import com.technion.project.Constants;
 public class Report
 {
 	@Id
+	@GeneratedValue
 	private long id;
 	private String username;
 	private String title;

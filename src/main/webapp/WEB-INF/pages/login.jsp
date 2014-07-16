@@ -72,6 +72,7 @@
 				value="${_csrf.token}" />
 
 		</form>
+	<a href="/project/register">Register</a>
 	</div>
 
 </body>

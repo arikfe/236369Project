@@ -117,18 +117,6 @@ public class MainController
 
 		final ModelAndView model = new ModelAndView();
 
-		// check if user is login
-		final Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		if (!(auth instanceof AnonymousAuthenticationToken))
-		{
-			final UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			System.out.println(userDetail);
-
-			model.addObject("username", userDetail.getUsername());
-
-		}
-
 		model.setViewName("register");
 		return model;
 

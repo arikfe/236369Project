@@ -3,13 +3,23 @@ drop table if exists `project`.`user_roles`;
 drop table if exists `project`.`users`;
 drop table if exists `project`.`evacuation`;
 drop table if exists `project`.`evacuation_user`;
+drop table if exists  `project`.`document`;
+create table document(
+	id int(11) NOT NULL AUTO_INCREMENT,
+	contentType varchar(20) not null,
+	file mediumblob not null,
+	filename varchar(100) not null,
+	primary key(id)	
+);
 CREATE  TABLE users (
   username VARCHAR(45) NOT NULL ,
   password VARCHAR(60) NOT NULL ,
   fname varchar(40),
   lname varchar(40),
+  imageId int(11),
   enabled TINYINT NOT NULL DEFAULT 1 ,
-  PRIMARY KEY (username)
+  PRIMARY KEY (username),
+  foreign key (imageId) references document(id)
   );
 
 
@@ -41,8 +51,7 @@ CREATE TABLE report (
   geolat decimal(10,6) default NULL,
   geolng decimal(10,6) default NULL,
   PRIMARY KEY (id),
-  INDEX `FK_USERNAME` (`username`),
-    CONSTRAINT `FK_USERNAME`  FOREIGN KEY (username) REFERENCES users (username));
+  FOREIGN KEY (username) REFERENCES users (username));
 
 CREATE TABLE evacuation (
  id int(11) NOT NULL AUTO_INCREMENT,

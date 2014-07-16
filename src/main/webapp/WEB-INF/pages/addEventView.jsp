@@ -6,9 +6,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-<script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <meta charset="utf-8">
@@ -19,8 +16,25 @@ html, body, #map-canvas {
 	padding: 0px
 }
 </style>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/table.css"/>"></link>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
+<script src="/project/JS/menu.js"></script>
+<script>
+$.ajax("../accounts/menu").done(function(result) {
+	$("#menu").html(result);
+}).error(function(res){
+	alert(res);
+});
+</script>
 </head>
 <body>
+<div id="menu"></div>
 	<form action="../evacuation/add" method="get">
 		<input name='geolng' type='hidden' id='lon'> <input
 			name='geolat' type='hidden' id='lat'>
