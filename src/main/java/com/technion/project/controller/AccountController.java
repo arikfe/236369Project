@@ -124,4 +124,52 @@ public class AccountController
 		view.addObject("user", user);
 		return view;
 	}
+
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+	public String updateUserDetails(final User user)
+	{
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		final User userFromDB = userDao.findByUserNameLocalThread(auth
+				.getName());
+		user.setPassword(userFromDB.getPassword());
+		user.setImageId(userFromDB.getImageId());
+		user.setEnabled(true);
+		user.setEvent(userFromDB.getEvent());
+		user.setUserRole(userFromDB.getUserRole());
+		user.setUsername(userFromDB.getUsername());
+		userDao.update(user);
+
+		return "redirect:///236369project//reports";
+	}
+
+	@RequestMapping(value = "own", method = RequestMethod.GET)
+	public ModelAndView userDetails()
+	{
+		final ModelAndView view = new ModelAndView();
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		final User userFromDB = userDao.findByUserNameLocalThread(auth
+				.getName());
+		view.setViewName("own");
+		view.addObject("user", userFromDB);
+		return view;
+	}
+
+	@RequestMapping(value = "reset", method = RequestMethod.POST)
+	public ModelAndView resetPassword(@RequestParam final String oldpass,
+			@RequestParam final String password)
+	{
+		final ModelAndView view = new ModelAndView();
+		final User userFromDB = userDao
+				.findByUserNameLocalThread(SecurityContextHolder.getContext()
+						.getAuthentication().getName());
+		view.setViewName("own");
+		view.addObject("user", userFromDB);
+		if (userDao.resetPassword(oldpass, password, userFromDB))
+			view.addObject("result", "password updated");
+		else
+			view.addObject("result", "old password do not match");
+		return view;
+	}
 }

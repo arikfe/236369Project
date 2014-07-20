@@ -34,33 +34,30 @@
 			</form>
 
 			<li><img
-				src="<%=user.hasContainImage() ? "/project/download/"
-							+ user.getImageId() : "/project/IMG/images.jpg"%>"
+				src="<%=user.hasContainImage() ? "/236369Project/download/"
+							+ user.getImageId() : "/236369Project/IMG/images.jpg"%>"
 				align="middle" height="64" width="64"></li>
 			<li><a href="#">${user.fname} ${user.lname}</a>
 				<ul>
 					<li><a href="javascript:formSubmit()"> Logout</a></li>
-					<%
-						if (!user.hasAdminPrevilige()) {
-					%>
-					<li><a href="javascript:deleteAccount()"> Delete Account</a></li>
-					<%
-						}
-					%>
+					<li><a href="/236369Project/accounts/own"> My Account</a></li>
+					
 				</ul></li>
 			<li><a>Reports</a>
 				<ul>
+					<li><a href="../">All reports</a></li>
 					<li><a href="addReport">add report</a></li>
 					<li><a href="<%=user.getUsername()%>">My reports</a></li>
 				</ul></li>
-			<li><a href="/project/accounts/users">Show all Users</a></li>
+			<li><a href="/236369Project/accounts/users">Show all Users</a></li>
 			<%
 				if (user.hasAdminPrevilige()) {
 			%>
-			<li><a href='/project/admin/addEventView'>Add evacuation</a></li>
+			<li><a href='/236369Project/admin/addEventView'>Add evacuation</a></li>
 			<%
 				}
 			%>
+			<li> <input type="text" id="strField" name="str" onKeyUp="search(this)"/></li>
 		</sec:authorize>
 
 		<%

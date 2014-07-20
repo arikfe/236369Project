@@ -11,8 +11,8 @@
 <head>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="/project/JS/menu.js"></script>
-<script src="/project/JS/allReports.js"></script>
+<script src="/236369Project/JS/menu.js"></script>
+<script src="/236369Project/JS/allReports.js"></script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
@@ -28,6 +28,7 @@ html, body {
 	margin: 0px;
 	padding: 0px
 }
+
 #panel {
 	position: absolute;
 	top: 5px;
@@ -44,14 +45,14 @@ html, body {
 <script>
 function initialize() {
 	
-	$.ajax("../accounts/menu").done(function(result) {
+	$.ajax("/236369Project/accounts/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res){
 		alert(res);
 	});
 
 image = {
-	url : '/project/IMG/car.png',
+	url : '/236369Project/IMG/car.png',
 	// This marker is 20 pixels wide by 32 pixels tall.
 	size : new google.maps.Size(32, 37),
 	// The origin for this image is 0,0.
@@ -73,17 +74,18 @@ map = new google.maps.Map(document.getElementById('map-canvas'),
 var i=0;
 var body = $("#table_body");
 var msg;
-<c:forEach var="r" items="${reports}">
-	 setTimeout(function() {
-		  addMarker(new google.maps.LatLng(<c:out value="${r.geolat}"/>,
-					<c:out value="${r.geolng}"/>), "${r.title}",'${r.id}');
-	    }, 500 + (i++ * 200));
-	 msg = "<tr id='row${r.id}'><td>${r.title}</td><td>${r.content}</td><td><a href='${r.username}'>${r.username}</a></td><td>${r.expiration}</td>";
-	 if('${pageContext.request.userPrincipal.name}'=='${r.username}' || '${pageContext.request.userPrincipal.name}'=='admin')
-		 msg += "<td><input type='button' value='Delete' onclick='deletePost(${r.id})'></td>";
-	 msg +="</tr>";
-	 body.after(msg);
- </c:forEach>
+
+$.ajax({
+	type : "GET",
+	url : "/236369Project/reports/json",
+}).done(function(reports) {
+	
+	for ( var i in reports) {
+		handleReportCreation(reports[i],'${pageContext.request.userPrincipal.name}',i);
+	}
+}).fail(function(err) {
+	alert(err);
+});
 
 
 <c:forEach var="e" items="${events}">
@@ -91,12 +93,10 @@ var msg;
 	var functionName = "registerToEvent";
 	var actionName = "register";
 	<c:if test="${not empty user.event}">
-	userRegistered = "disabled";
+		userRegistered = "disabled";
 	</c:if>
 	
-	var id = "${e.id}";
-	var userEventId = "${user.event.id}";
-	if(id==userEventId)
+	if("${e.id}"=="${user.event.id}")
 	{
 		functionName = "un"+functionName;
 		userRegistered = "";
@@ -104,11 +104,12 @@ var msg;
 	}
 	var totalcapacity = ${e.capacity}
 			-${e.registeredUsers.size()};
-	var contentStr = '<button onclick="'+functionName+'(' + "${e.id}"
-			+ ')" ' + userRegistered + '>'+actionName+'</button>'
+	var contentStr = '<div id="friend${e.id}"><input type="button" class="styledButton" onclick="'+functionName+'(' + "${e.id}"
+			+ ')" ' + userRegistered + 'value="'+actionName+'" />'
+			+ '<input type="button" class="styledButton" value="show users" onclick="displayEventUsers(${e.id})"/>'
 			+ '<p>capacity left: ' + totalcapacity + '</p>'
 			+ '<p>evacuation time: ' + "${e.estimated}" + '</p>';
-	setTimeout(updateEvent(contentStr,'${e.geolat}','${e.geolng}'), 500 + (i++ * 200));
+	setTimeout(updateEvent(contentStr,'${e.geolat}','${e.geolng}','${e.id}'), 500 + (i++ * 200));
 
 </c:forEach>
 
@@ -122,7 +123,30 @@ var msg;
 
 	<div id="menu"></div>
 
-	<table class="zebra" align="left">
+	<c:if test="${not empty desiredUser}">
+
+		<table>
+			<tr>
+				<th>Profile Pic</th>
+				<td><img src="/236369Project/download/${desiredUser.imageId}"
+					align="middle" height="64" width="64"></td>
+			</tr>
+			<tr>
+				<th>User name</th>
+				<td>${desiredUser.username}</td>
+			</tr>
+			<tr>
+				<th>First name</th>
+				<td>${desiredUser.fname}</td>
+			</tr>
+			<tr>
+				<th>Last name</th>
+				<td>${desiredUser.lname}</td>
+			</tr>
+		</table>
+		<br />
+	</c:if>
+	<table id='reportsTbody' class="zebra" align="left">
 
 		<tbody >
 			<tr id='table_body'>

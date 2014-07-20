@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.technion</groupId>
-	<artifactId>project</artifactId>
+	<artifactId>236369project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<properties>
@@ -147,7 +147,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>project</finalName>
+		<finalName>236369project</finalName>
 		<plugins>
 
 			<plugin>

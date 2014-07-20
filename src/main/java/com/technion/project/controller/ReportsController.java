@@ -10,11 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.technion.project.dao.EvacuationDAO;
-import com.technion.project.dao.ReportDAOImpl;
+import com.technion.project.dao.ReportDAO;
 import com.technion.project.dao.UserDao;
 import com.technion.project.model.Report;
 
@@ -24,19 +26,18 @@ public class ReportsController
 {
 
 	@Autowired
-	private ReportDAOImpl reportDao;
+	private ReportDAO reportDao;
 	@Autowired
 	private UserDao userDAO;
 
 	@Autowired
 	private EvacuationDAO evacuationDAO;
 
-	@RequestMapping(value = "{username}", method = RequestMethod.GET)
+	@RequestMapping(value = "user/{username}", method = RequestMethod.GET)
 	public ModelAndView getReportsForUser(@PathVariable final String username)
 	{
-
-		return getAllReportsForUser(username);
-
+		return getAllReportsForUser(username).addObject("desiredUser",
+				userDAO.findByUserNameLocalThread(username));
 	}
 
 	@RequestMapping(value =
@@ -97,21 +98,36 @@ public class ReportsController
 	}
 
 	@RequestMapping(value =
-	{ "add" }, method = RequestMethod.GET)
-	public String addReportToDB(final Report report)
+	{ "add" }, method = RequestMethod.POST)
+	public String addReportToDB(final Report report,
+			@RequestParam("file") final MultipartFile file)
 	{
 		report.setExpiration(new Date(
 				System.currentTimeMillis() + 1000 * 60 * 60));
-		reportDao.addReport(report);
+		reportDao.addReport(report, file);
 		return "redirect:";
 	}
 
-	@RequestMapping(value = "/json/{name}", method = RequestMethod.GET)
-	public @ResponseBody Report getShopInJSON(@PathVariable final String name)
+	@RequestMapping(value = "json/id/{name}", method = RequestMethod.GET)
+	public @ResponseBody Report getReportInJSON(@PathVariable final String name)
 	{
-
 		final Report report = reportDao.getReportByID(Long.valueOf(name));
 		return report;
+
+	}
+
+	@RequestMapping(value = "json/{str}", method = RequestMethod.GET)
+	public @ResponseBody List<Report> getReportsInJSON(
+			@PathVariable final String str)
+	{
+		return reportDao.getAllReports(str);
+
+	}
+
+	@RequestMapping(value = "json", method = RequestMethod.GET)
+	public @ResponseBody List<Report> getReportsInJSON()
+	{
+		return reportDao.getAllReports();
 
 	}
 

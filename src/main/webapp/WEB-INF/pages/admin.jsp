@@ -35,8 +35,8 @@
 				<ul>
 					<a href="javascript:formSubmit()"> Logout</a>
 				</ul></li>
-			<li><a href="/project/accounts/users" >Users management</a></li>
-			<li><a href="/project/admin/addEventView">Add evacuation</a></li>
+			<li><a href="/236369Project/accounts/users" >Users management</a></li>
+			<li><a href="/236369Project/admin/addEventView">Add evacuation</a></li>
 		</ul>
 	</nav>
 	<div id='result'></div>

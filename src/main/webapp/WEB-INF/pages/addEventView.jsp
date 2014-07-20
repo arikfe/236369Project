@@ -24,7 +24,7 @@ html, body, #map-canvas {
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
-<script src="/project/JS/menu.js"></script>
+<script src="/236369Project/JS/menu.js"></script>
 <script>
 $.ajax("../accounts/menu").done(function(result) {
 	$("#menu").html(result);

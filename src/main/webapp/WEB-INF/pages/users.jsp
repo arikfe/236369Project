@@ -6,9 +6,8 @@
 <%@page session="true"%>
 <html>
 <head>
-
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-
+<script src="/236369Project/JS/menu.js"></script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
@@ -37,8 +36,8 @@
 			//alert("complete");
 		});
 	}
-	$.ajax("../accounts/menu").done(function(result) {
-		$("#results").html(result);
+	$.ajax("/236369Project/accounts/menu").done(function(result) {
+		$("#menu").html(result);
 	}).error(function(res){
 		alert(res);
 	});
@@ -72,15 +71,15 @@
 			User user = iterator.next();
 	%>
 		<tr id='<%=user.getUsername() %>'>
-		<td><img src="<%= user.hasContainImage()? "/project/download/" + user.getImageId():"/project/IMG/images.jpg"%>" height="42" width="42"> </td>
+		<td><img src="<%= user.hasContainImage()? "/236369Project/download/" + user.getImageId():"/236369Project/IMG/images.jpg"%>" height="42" width="42"> </td>
 		<td><%=user.getFname()%></td>
 		<td><%=user.getUsername() %></td>
-		<td><a href='/project/reports/<%=user.getUsername() %>'>reports</a></td>
+		<td><a href='/236369Project/reports/<%=user.getUsername() %>'>reports</a></td>
 		<% if(isAdmin)
 		{
 			%>
 				<td><input type="checkbox" <%=user.isEnabled()?"checked":"" %> onchange="toggleEnabled('<%=user.getUsername() %>')"></td>
-				<td><input type="button" value="delete" onclick="deleteUser('<%=user.getUsername() %>')"></td>
+				<td><input type="button" class="styledButton" value="delete" onclick="deleteUser('<%=user.getUsername() %>')"></td>
 			<%
 		}
 			%>

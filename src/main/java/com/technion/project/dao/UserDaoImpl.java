@@ -129,4 +129,29 @@ public class UserDaoImpl implements UserDao
 		currentSession.flush();
 		currentSession.close();
 	}
+
+	@Override
+	public void update(final User user)
+	{
+		final Session currentSession = sessionFactory.openSession();
+		currentSession.update(user);
+		currentSession.flush();
+		currentSession.close();
+
+	}
+
+	@Override
+	public boolean resetPassword(final String oldpass, final String password,
+			final User user)
+	{
+		final UserSecurityConfig sc = new UserSecurityConfig();
+		final PasswordEncoder encoder = sc.passwordEncoder();
+
+		if (!encoder.matches(oldpass, user.getPassword()))
+			return false;
+		user.setPassword(encoder.encode(password));
+		update(user);
+		return true;
+
+	}
 }

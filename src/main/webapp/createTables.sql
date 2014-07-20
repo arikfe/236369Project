@@ -50,6 +50,8 @@ CREATE TABLE report (
   expiration datetime NOT NULL,
   geolat decimal(10,6) default NULL,
   geolng decimal(10,6) default NULL,
+  imageId int(11),
+  foreign key(imageId) references document(id),
   PRIMARY KEY (id),
   FOREIGN KEY (username) REFERENCES users (username));
 

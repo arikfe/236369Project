@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 import com.technion.project.model.Report;
@@ -16,10 +17,12 @@ public class ReportDAOImpl implements ReportDAO
 {
 	@Autowired
 	private SessionFactory sessionFactory;
+	@Autowired
+	DocumentDAO documentDao;
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.technion.project.dao.ReportDAO#getAllReports()
 	 */
 	@SuppressWarnings("unchecked")
@@ -35,7 +38,7 @@ public class ReportDAOImpl implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.ReportDAO#getReportsForUser(com.technion.project
 	 * .model.User)
@@ -55,7 +58,7 @@ public class ReportDAOImpl implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.technion.project.dao.ReportDAO#getReportByID(int)
 	 */
 	@Override
@@ -69,7 +72,7 @@ public class ReportDAOImpl implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.technion.project.dao.ReportDAO#removeReport(int)
 	 */
 	@Override
@@ -84,7 +87,7 @@ public class ReportDAOImpl implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.ReportDAO#removeReport(com.technion.project.
 	 * model.Report)
@@ -100,7 +103,7 @@ public class ReportDAOImpl implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.ReportDAO#removeReport(com.technion.project.
 	 * model.User)
@@ -115,15 +118,17 @@ public class ReportDAOImpl implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.ReportDAO#addReport(com.technion.project.model
 	 * .Report)
 	 */
 	@Override
-	public void addReport(final Report report)
+	public void addReport(final Report report, final MultipartFile file)
 	{
 		final Session session = sessionFactory.openSession();
+		if (!file.isEmpty())
+			report.setImageId(documentDao.save(file));
 		session.saveOrUpdate(report);
 		session.flush();
 		session.close();
@@ -131,7 +136,7 @@ public class ReportDAOImpl implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.ReportDAO#delete(com.technion.project.model.
 	 * User)
@@ -143,5 +148,22 @@ public class ReportDAOImpl implements ReportDAO
 		for (final Report report : getReportsForUser(user))
 			session.delete(report);
 
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Report> getAllReports(final String condition)
+	{
+		if (condition.isEmpty())
+			return getAllReports();
+		List<Report> reports = Lists.newArrayList();
+		final Session session = sessionFactory.openSession();
+		reports = session
+				.createQuery(
+						"from Report r where str(r.content) like :condition or lower(str(r.title)) like :condition ")
+				.setParameter("condition", "%" + condition.toLowerCase() + "%")
+				.list();
+		session.close();
+		return reports;
 	}
 }

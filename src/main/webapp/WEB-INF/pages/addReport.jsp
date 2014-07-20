@@ -23,14 +23,14 @@ html, body, #map-canvas {
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
-<script src="/project/JS/menu.js"></script>
+<script src="/236369Project/JS/menu.js"></script>
 
 <script>
-$.ajax("../accounts/menu").done(function(result) {
-	$("#menu").html(result);
-}).error(function(res){
-	alert(res);
-});
+	$.ajax("../accounts/menu").done(function(result) {
+		$("#menu").html(result);
+	}).error(function(res) {
+		alert(res);
+	});
 </script>
 <title>Add report</title>
 </head>
@@ -39,7 +39,8 @@ $.ajax("../accounts/menu").done(function(result) {
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
 			<div id="menu"></div>
 
-			<form name='add' action="<c:url value='add' />" method="get">
+			<form name='add' action="add?${_csrf.parameterName}=${_csrf.token}"
+				method="POST" enctype="multipart/form-data">
 				<input type='hidden' name='username'
 					value=${pageContext.request.userPrincipal.name}> <input
 					name='geolng' type='hidden' id='lon'> <input name='geolat'
@@ -54,10 +55,13 @@ $.ajax("../accounts/menu").done(function(result) {
 						<td><textarea rows="4" cols="50" name="content"></textarea></td>
 					</tr>
 					<tr>
+						<td>choose picture:</td>
+						<td><input type="file" name='file' id='file' /></td>
+					</tr>
+					<tr>
 						<td colspan='2'><input name="submit" type="submit"
 							value="submit" disabled="disabled" id='submit' /></td>
 					</tr>
-
 				</table>
 			</form>
 			<div id="status">locating Geo location</div>

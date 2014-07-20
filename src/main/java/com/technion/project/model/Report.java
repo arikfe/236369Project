@@ -22,6 +22,17 @@ public class Report
 	private Date expiration;
 	private float geolat;
 	private float geolng;
+	private Long imageId;
+
+	public Long getImageId()
+	{
+		return imageId;
+	}
+
+	public void setImageId(final Long imageId)
+	{
+		this.imageId = imageId;
+	}
 
 	public float getGeolat()
 	{

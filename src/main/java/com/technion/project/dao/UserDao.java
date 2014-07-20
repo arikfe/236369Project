@@ -22,4 +22,8 @@ public interface UserDao
 	void toggleEnabled(User user);
 
 	void add(User user, MultipartFile file);
+
+	void update(User user);
+
+	boolean resetPassword(String oldpass, String password, User userFromDB);
 }
