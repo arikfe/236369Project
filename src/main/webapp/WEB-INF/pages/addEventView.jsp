@@ -24,7 +24,11 @@ html, body, #map-canvas {
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
-<script src="/236369Project/JS/menu.js"></script>
+<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
+<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
+<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/> 
+<script src="${baseURL}/JS/menu.js"></script>
 <script>
 $.ajax("../accounts/menu").done(function(result) {
 	$("#menu").html(result);

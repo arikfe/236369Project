@@ -15,7 +15,10 @@
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
-
+<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
+<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
+<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
 </head>
 <body>
 
@@ -34,26 +37,26 @@
 			</form>
 
 			<li><img
-				src="<%=user.hasContainImage() ? "/236369Project/download/"
-							+ user.getImageId() : "/236369Project/IMG/images.jpg"%>"
+				src="<%=user.hasContainImage() ? request.getContextPath()+"/download/"
+							+ user.getImageId() : request.getContextPath()+"/IMG/images.jpg"%>"
 				align="middle" height="64" width="64"></li>
 			<li><a href="#">${user.fname} ${user.lname}</a>
 				<ul>
 					<li><a href="javascript:formSubmit()"> Logout</a></li>
-					<li><a href="/236369Project/accounts/own"> My Account</a></li>
+					<li><a href="${accountURL}/own"> My Account</a></li>
 					
 				</ul></li>
 			<li><a>Reports</a>
 				<ul>
-					<li><a href="../">All reports</a></li>
-					<li><a href="addReport">add report</a></li>
-					<li><a href="<%=user.getUsername()%>">My reports</a></li>
+					<li><a href="${reportURL}/">All reports</a></li>
+					<li><a href="${reportURL}/addReport">add report</a></li>
+					<li><a href="${reportURL}/<%=user.getUsername()%>">My reports</a></li>
 				</ul></li>
-			<li><a href="/236369Project/accounts/users">Show all Users</a></li>
+			<li><a href="${accountURL}/users">Show all Users</a></li>
 			<%
 				if (user.hasAdminPrevilige()) {
 			%>
-			<li><a href='/236369Project/admin/addEventView'>Add evacuation</a></li>
+			<li><a href='${adminURL}/addEventView'>Add evacuation</a></li>
 			<%
 				}
 			%>
@@ -66,8 +69,8 @@
 
 
 
-		<li><a href="../login">Login</a></li>
-		<li><a href="../register">register</a></li>
+		<li><a href="${baseURL}/login">Login</a></li>
+		<li><a href="${baseURL}/register">register</a></li>
 		<%
 			}
 		%>

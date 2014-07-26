@@ -9,10 +9,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 5.00 Transitional//EN" "http://www.w3.org/TR/html5/loose.dtd">
 <html>
 <head>
+<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
+<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
+<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="/236369Project/JS/menu.js"></script>
-<script src="/236369Project/JS/allReports.js"></script>
+<script src="${baseURL}/JS/menu.js"></script>
+<script src="${baseURL}/JS/allReports.js"></script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
@@ -45,14 +49,14 @@ html, body {
 <script>
 function initialize() {
 	
-	$.ajax("/236369Project/accounts/menu").done(function(result) {
+	$.ajax("${accountURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res){
 		alert(res);
 	});
 
 image = {
-	url : '/236369Project/IMG/car.png',
+	url : '${baseURL}/IMG/car.png',
 	// This marker is 20 pixels wide by 32 pixels tall.
 	size : new google.maps.Size(32, 37),
 	// The origin for this image is 0,0.
@@ -77,7 +81,7 @@ var msg;
 
 $.ajax({
 	type : "GET",
-	url : "/236369Project/reports/json",
+	url : "${reportURL}/json",
 }).done(function(reports) {
 	
 	for ( var i in reports) {
@@ -122,13 +126,15 @@ $.ajax({
 <body>
 
 	<div id="menu"></div>
-
+	<button id="showClose" onclick="bounceClosest()" disabled>show closest evacuation event</button>
+	<button onclick="stopEventBounce()">Stop bounce</button>
+	<button onclick="bounceMine()">Find my Event</button>
 	<c:if test="${not empty desiredUser}">
 
 		<table>
 			<tr>
 				<th>Profile Pic</th>
-				<td><img src="/236369Project/download/${desiredUser.imageId}"
+				<td><img src="${baseURL}/download/${desiredUser.imageId}"
 					align="middle" height="64" width="64"></td>
 			</tr>
 			<tr>

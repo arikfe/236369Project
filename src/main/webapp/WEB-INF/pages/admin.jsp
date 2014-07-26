@@ -10,7 +10,10 @@
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 
-
+<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
+<c:set var="reportURL" value="${pageContext.request.contextPath}/reports/"/> 
+<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts/"/> 
 <script>
 	function formSubmit() {
 		document.getElementById("logoutForm").submit();

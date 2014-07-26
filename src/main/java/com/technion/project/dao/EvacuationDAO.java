@@ -20,4 +20,6 @@ public interface EvacuationDAO
 
 	public List<EvacuationEvent> getAll();
 
+	public EvacuationEvent getClosest(float lat, float lng);
+
 }

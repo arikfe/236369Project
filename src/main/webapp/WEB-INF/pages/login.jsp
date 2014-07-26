@@ -72,7 +72,7 @@
 				value="${_csrf.token}" />
 
 		</form>
-	<a href="/236369Project/register">Register</a>
+	<a href="${pageContext.request.contextPath}/register">Register</a>
 	</div>
 
 </body>

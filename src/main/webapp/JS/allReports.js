@@ -4,16 +4,65 @@
 var map;
 var markers = {};
 var evacuations = [];
+var selectedEvent;
 var image;
+var pos;
 
+if (navigator.geolocation) {
+	navigator.geolocation.getCurrentPosition(function(position) {
+		pos = new google.maps.LatLng(position.coords.latitude,
+				position.coords.longitude);
+		document.getElementById("showClose").disabled = false;
+	}, function() {
+		handleNoGeolocation(true);
+	});
+} else {
+	// Browser doesn't support Geolocation
+	handleNoGeolocation(false);
+}
 
+function bounceClosest() {
+	$.ajax({
+		type : "GET",
+		url : "/236369Project/evacuation/closestEvent",
+		data : {
+			lat : pos.lat(),
+			lng : pos.lng()
+		}
+	}).done(function(data) {
+		stopEventBounce(selectedEvent);
+		selectedEvent = markers["e" + data.id];
+		selectedEvent.setAnimation(google.maps.Animation.BOUNCE);
+	}).fail(function(err) {
+		alert(err);
+	});
+}
+function bounceMine() {
+	$.ajax({
+		type : "GET",
+		url : "/236369Project/evacuation/registeredEvent"
+	}).done(function(data) {
+		if (data != "") {
+			stopEventBounce(selectedEvent);
+			selectedEvent = markers["e" + data.id];
+			selectedEvent.setAnimation(google.maps.Animation.BOUNCE);
+		}
+	}).fail(function(err) {
+		alert(err);
+	});
+}
+function stopEventBounce() {
+	if (!(selectedEvent === undefined))
+		selectedEvent.setAnimation(null);
+
+}
 function deletePost(_id) {
 	if (confirm("Are you sure!") == true) {
 
 		markers[_id].setMap(null);
 		$.ajax({
 			type : "GET",
-			url : "delete",
+			url : "/236369Project/accounts/delete",
 			data : {
 				id : _id
 			}
@@ -163,7 +212,7 @@ function displayEventUsers(_id) {
 function listReports(_str) {
 	$.ajax({
 		type : "GET",
-		url : "/236369Project/reports/json/" + _str,
+		url : "$/236369Project/reports/json/" + _str,
 
 	}).done(function(reports) {
 

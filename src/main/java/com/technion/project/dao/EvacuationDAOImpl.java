@@ -1,5 +1,7 @@
 package com.technion.project.dao;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -14,6 +16,34 @@ import com.technion.project.model.User;
 @Repository
 public class EvacuationDAOImpl implements EvacuationDAO
 {
+	private final class DistanceComperator implements
+			Comparator<EvacuationEvent>
+	{
+		private final float lat;
+		private final float lng;
+
+		private DistanceComperator(final float lat, final float lng)
+		{
+			this.lat = lat;
+			this.lng = lng;
+		}
+
+		@Override
+		public int compare(final EvacuationEvent o1, final EvacuationEvent o2)
+		{
+			return new Double(getDistanceToEvent(lat, lng, o1))
+					.compareTo(getDistanceToEvent(lat, lng, o2));
+
+		}
+
+		private double getDistanceToEvent(final float lat, final float lng,
+				final EvacuationEvent o1)
+		{
+			return Math.sqrt(Math.pow(lat - o1.getGeolat(), 2)
+					+ Math.pow(lng - o1.getGeolng(), 2));
+		}
+	}
+
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -93,4 +123,13 @@ public class EvacuationDAOImpl implements EvacuationDAO
 		session.close();
 
 	}
+
+	@Override
+	public EvacuationEvent getClosest(final float lat, final float lng)
+	{
+		final List<EvacuationEvent> allEvents = getAll();
+		Collections.sort(allEvents, new DistanceComperator(lat, lng));
+		return allEvents.isEmpty() ? null : allEvents.get(0);
+	}
+
 }

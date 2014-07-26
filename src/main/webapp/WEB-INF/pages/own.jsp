@@ -1,8 +1,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="com.technion.project.model.User"%>
 <%@page session="true"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <%
@@ -10,10 +11,15 @@
 	String result = (String) request.getAttribute("result");
 %>
 <head>
+
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="/236369Project/JS/menu.js"></script>
 <link type="text/css" rel="stylesheet" href="/CSS/table.css"></link>
 <link type="text/css" rel="stylesheet" href="/CSS/dropDownMenu.css"></link>
+<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
+<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
+<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/> 
 <script type="text/javascript">
 	function validateForm() {
 		var k = document.getElementById("password");
@@ -26,13 +32,13 @@
 	}
 	function deleteAccount() {
 		if (confirm("Are you sure!") == true) {
-			$.ajax("/236369Project/accounts/deleteself").always(function() {
+			$.ajax("${accountURL}/deleteself").always(function() {
 				document.getElementById("logoutForm").submit();
 			});
 		}
 	}
 
-	$.ajax("/236369Project/accounts/menu").done(function(result) {
+	$.ajax("${accountURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res) {
 		alert(res);
@@ -44,7 +50,7 @@
 <body>
 	<div id="menu"></div>
 	<form
-		action="/236369Project/accounts/update?${_csrf.parameterName}=${_csrf.token}"
+		action="${accountURL}/update?${_csrf.parameterName}=${_csrf.token}"
 		method="POST">
 		<table>
 			<tbody>
@@ -71,7 +77,7 @@
 		<input type="submit" value="update" />
 	</form>
 	<form
-		action="/236369Project/accounts/reset?${_csrf.parameterName}=${_csrf.token}"
+		action="${accountURL}/reset?${_csrf.parameterName}=${_csrf.token}"
 		method="POST">
 		<table>
 			<tbody>

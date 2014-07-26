@@ -25,15 +25,10 @@ public class MainController
 
 	@RequestMapping(value =
 	{ "/", "/welcome**" }, method = RequestMethod.GET)
-	public ModelAndView defaultPage()
+	public String defaultPage()
 	{
 
-		final ModelAndView model = new ModelAndView();
-		model.addObject("title", "Spring Security + Hibernate Example");
-		model.addObject("message", "This is default page!");
-		model.setViewName("hello");
-		return model;
-
+		return "redirect:/reports/";
 	}
 
 	@RequestMapping(value = "/admin**", method = RequestMethod.GET)

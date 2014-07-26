@@ -6,7 +6,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="com.technion.project.model.User"%>
-<%@ page import="com.technion.project.model.User"%>
+<%@ page import="com.technion.project.model.EvacuationEvent"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 5.00 Transitional//EN" "http://www.w3.org/TR/html5/loose.dtd">
 
 <%@page session="true"%>
@@ -22,30 +22,8 @@
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
-
-
 <script>
-	function toggleEnabled(username){
-		$.ajax("${accountURL}/disable/"+username).done(function(data) {
-		});
-		}
-	function deleteUser(username){
-		$.ajax("${accountURL}/delete/"+username).always(function(data) {
-			$("#"+username).remove();
-		});
-		}
-	function formSubmit() {
-		document.getElementById("logoutForm").submit();
-	}
-	function showEvac() {
-		$.ajax("admin/addEventView").done(function(data) {
-			$("#result").html(data);
-		}).fail(function(data) {
-			$("#result").html(data.responseText);
-		}).always(function() {
-			//alert("complete");
-		});
-	}
+	
 	$.ajax("${accountURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res){
@@ -63,15 +41,7 @@
 	<th>image</th>
 	<th>name</th>
 	<th>user name</th>
-	<th>reports</th>
-	<% if(isAdmin)
-		{
-	%>
-			<th>enabled</th>
-			<th>delete</th>
-	<%
-		}
-	%>
+	<th>Evacuation</th>
 	</tr>		
 	<%
 	
