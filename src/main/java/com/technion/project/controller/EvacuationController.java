@@ -43,7 +43,7 @@ public class EvacuationController extends BaseController
 	}
 
 	@RequestMapping(value = "joinUser", method = RequestMethod.GET)
-	public String join(final long id, final String username)
+	public String joinUser(final long id, final String username)
 	{
 		evacuationDAO.addUserToEvent(
 				userDao.findByUserNameLocalThread(username), id);
@@ -60,7 +60,7 @@ public class EvacuationController extends BaseController
 
 	@RequestMapping(value =
 	{ "leaveUser" }, method = RequestMethod.GET)
-	public String leave(final long id, final String username)
+	public String leaveUser(final long id, final String username)
 	{
 		evacuationDAO.removeUserToEvent(
 				userDao.findByUserNameLocalThread(username), id);
@@ -93,6 +93,8 @@ public class EvacuationController extends BaseController
 		final ModelAndView view = new ModelAndView();
 		view.addObject("evacuation", evacuationDAO.getByID(id));
 		view.setViewName("evacuation");
+		view.addObject("id", id);
+		view.addObject("users", userDao.getUserWithNoEvent());
 		return view;
 	}
 }

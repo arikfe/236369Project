@@ -1,5 +1,6 @@
 package com.technion.project.dao;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -10,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.technion.project.UserSecurityConfig;
 import com.technion.project.model.User;
@@ -153,5 +156,20 @@ public class UserDaoImpl implements UserDao
 		update(user);
 		return true;
 
+	}
+
+	@Override
+	public Collection<User> getUserWithNoEvent()
+	{
+		final List<User> allUsers = getAll();
+		return Collections2.filter(allUsers, new Predicate<User>()
+		{
+
+			@Override
+			public boolean apply(final User u)
+			{
+				return u.getEvent() == null;
+			}
+		});
 	}
 }

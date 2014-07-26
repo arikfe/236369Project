@@ -1,5 +1,6 @@
 package com.technion.project.dao;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -26,4 +27,6 @@ public interface UserDao
 	void update(User user);
 
 	boolean resetPassword(String oldpass, String password, User userFromDB);
+
+	Collection<User> getUserWithNoEvent();
 }

@@ -13,6 +13,7 @@
 <c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
 <c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
 <c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
+<c:set var="evacuationURL" value="${pageContext.request.contextPath}/evacuation"/>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="${baseURL}/JS/menu.js"></script>
@@ -112,7 +113,7 @@ $.ajax({
 			+ ')" ' + userRegistered + 'value="'+actionName+'" />'
 			+ '<input type="button" class="styledButton" value="show users" onclick="displayEventUsers(${e.id})"/>'
 			+ '<p>capacity left: ' + totalcapacity + '</p>'
-			+ '<p>evacuation time: ' + "${e.estimated}" + '</p>';
+			+ '<p>evacuation time: ' + "${e.estimated}" +'<p><a href="${evacuationURL}/id/${e.id}">show Event</a>'+ '</p>';
 	setTimeout(updateEvent(contentStr,'${e.geolat}','${e.geolng}','${e.id}'), 500 + (i++ * 200));
 
 </c:forEach>

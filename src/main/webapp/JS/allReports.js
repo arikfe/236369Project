@@ -217,11 +217,9 @@ function listReports(_str) {
 	}).done(function(reports) {
 
 		for ( var i in reports) {
-
 			var id = reports[i].id;
 			var title = reports[i].title;
 		}
-
 	}).fail(function(err) {
 		alert(err);
 	});
