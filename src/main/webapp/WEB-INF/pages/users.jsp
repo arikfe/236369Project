@@ -85,7 +85,7 @@
 							+ user.getImageId() : request.getContextPath()+"/IMG/images.jpg"%>" height="42" width="42"> </td>
 		<td><%=user.getFname()%></td>
 		<td><%=user.getUsername() %></td>
-		<td><a href='${reportURL}/<%=user.getUsername() %>'>reports</a></td>
+		<td><a href='${accountURL}/<%=user.getUsername() %>/reports'>reports</a></td>
 		<% if(isAdmin)
 		{
 			%>

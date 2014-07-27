@@ -1,6 +1,7 @@
 package com.technion.project.controller;
 
 import java.util.HashSet;
+import java.util.List;
 
 import javax.servlet.annotation.MultipartConfig;
 
@@ -13,10 +14,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.technion.project.dao.EvacuationDAO;
+import com.technion.project.dao.ReportDAO;
 import com.technion.project.dao.UserDao;
+import com.technion.project.model.Report;
 import com.technion.project.model.User;
 import com.technion.project.model.UserRole;
 
@@ -27,9 +32,13 @@ maxFileSize = 1024 * 1024 * 10, // 10MB
 maxRequestSize = 1024 * 1024 * 50)
 public class AccountController
 {
+	@Autowired
+	private ReportDAO reportDao;
+	@Autowired
+	private UserDao userDAO;
 
 	@Autowired
-	private UserDao userDao;
+	private EvacuationDAO evacuationDAO;
 
 	@RequestMapping(value =
 	{ "add" }, method = RequestMethod.POST)
@@ -41,7 +50,7 @@ public class AccountController
 		user.setUserRole(hashSet);
 		user.setEnabled(true);
 
-		userDao.add(user, file);
+		userDAO.add(user, file);
 
 		return "redirect:../login";
 	}
@@ -50,11 +59,11 @@ public class AccountController
 	public ModelAndView users()
 	{
 		final ModelAndView model = new ModelAndView();
-		model.addObject("users", userDao.getAll());
+		model.addObject("users", userDAO.getAll());
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 
-		final User currentUser = userDao.findByUserNameLocalThread(auth
+		final User currentUser = userDAO.findByUserNameLocalThread(auth
 				.getName());
 		model.addObject("adminRight",
 				Boolean.valueOf(currentUser.hasAdminPrevilige()));
@@ -71,13 +80,13 @@ public class AccountController
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		final ModelAndView model = new ModelAndView();
-		final User user = userDao.findByUserNameLocalThread(auth.getName());
+		final User user = userDAO.findByUserNameLocalThread(auth.getName());
 		if (!user.hasAdminPrevilige())
 		{
 			model.setViewName("403");
 			return model;
 		}
-		userDao.toggleEnabled(userDao.findByUserNameLocalThread(username));
+		userDAO.toggleEnabled(userDAO.findByUserNameLocalThread(username));
 		model.setViewName("redirect:../");
 		return model;
 	}
@@ -89,13 +98,13 @@ public class AccountController
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		final ModelAndView model = new ModelAndView();
-		final User user = userDao.findByUserNameLocalThread(auth.getName());
+		final User user = userDAO.findByUserNameLocalThread(auth.getName());
 		if (!user.hasAdminPrevilige())
 		{
 			model.setViewName("403");
 			return model;
 		}
-		userDao.delete(userDao.findByUserNameLocalThread(username));
+		userDAO.delete(userDAO.findByUserNameLocalThread(username));
 		model.setViewName("redirect:../");
 		return model;
 	}
@@ -107,8 +116,8 @@ public class AccountController
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		final ModelAndView model = new ModelAndView();
-		final User user = userDao.findByUserNameLocalThread(auth.getName());
-		userDao.delete(user);
+		final User user = userDAO.findByUserNameLocalThread(auth.getName());
+		userDAO.delete(user);
 		model.setViewName("redirect:../");
 		return model;
 	}
@@ -119,7 +128,7 @@ public class AccountController
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		final ModelAndView view = new ModelAndView();
-		final User user = userDao.findByUserNameLocalThread(auth.getName());
+		final User user = userDAO.findByUserNameLocalThread(auth.getName());
 		view.setViewName("menu");
 		view.addObject("user", user);
 		return view;
@@ -130,7 +139,7 @@ public class AccountController
 	{
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
-		final User userFromDB = userDao.findByUserNameLocalThread(auth
+		final User userFromDB = userDAO.findByUserNameLocalThread(auth
 				.getName());
 		user.setPassword(userFromDB.getPassword());
 		user.setImageId(userFromDB.getImageId());
@@ -138,7 +147,7 @@ public class AccountController
 		user.setEvent(userFromDB.getEvent());
 		user.setUserRole(userFromDB.getUserRole());
 		user.setUsername(userFromDB.getUsername());
-		userDao.update(user);
+		userDAO.update(user);
 
 		return "redirect:///236369project//reports";
 	}
@@ -149,7 +158,7 @@ public class AccountController
 		final ModelAndView view = new ModelAndView();
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
-		final User userFromDB = userDao.findByUserNameLocalThread(auth
+		final User userFromDB = userDAO.findByUserNameLocalThread(auth
 				.getName());
 		view.setViewName("own");
 		view.addObject("user", userFromDB);
@@ -161,15 +170,54 @@ public class AccountController
 			@RequestParam final String password)
 	{
 		final ModelAndView view = new ModelAndView();
-		final User userFromDB = userDao
+		final User userFromDB = userDAO
 				.findByUserNameLocalThread(SecurityContextHolder.getContext()
 						.getAuthentication().getName());
 		view.setViewName("own");
 		view.addObject("user", userFromDB);
-		if (userDao.resetPassword(oldpass, password, userFromDB))
+		if (userDAO.resetPassword(oldpass, password, userFromDB))
 			view.addObject("result", "password updated");
 		else
 			view.addObject("result", "old password do not match");
 		return view;
 	}
+
+	@RequestMapping(value = "{username}/reports")
+	public ModelAndView getReportsForUsers(@PathVariable final String username)
+	{
+		return getAllReportsForUser(username).addObject("desiredUser",
+				userDAO.findByUserNameLocalThread(username));
+	}
+
+	@RequestMapping(value = "{username}/reports", consumes = "application/json", produces = "application/json")
+	public @ResponseBody List<Report> getReportsForUser(
+			@PathVariable final String username)
+	{
+		return reportDao.getReportsForUser(userDAO
+				.findByUserNameLocalThread(username));
+	}
+
+	private ModelAndView getAllReportsForUser(final String username)
+	{
+		final ModelAndView model = new ModelAndView();
+		final List<Report> allReports = getReportsForUser(username);
+		float middleLat = 0, middleLng = 0;
+		for (final Report report : allReports)
+		{
+			middleLat += report.getGeolat();
+			middleLng += report.getGeolng();
+		}
+		model.addObject("midLat", middleLat / allReports.size());
+		model.addObject("midLng", middleLng / allReports.size());
+		model.addObject("reports", allReports);
+		model.addObject("events", evacuationDAO.getAll());
+		model.setViewName("allReport");
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!"anonymousUser".equals(auth.getName()))
+			model.addObject("user",
+					userDAO.findByUserNameLocalThread(auth.getName()));
+		return model;
+	}
+
 }

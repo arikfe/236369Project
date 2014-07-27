@@ -82,7 +82,8 @@ var msg;
 
 $.ajax({
 	type : "GET",
-	url : "${reportURL}/json",
+	url : "${reportURL}/",
+	contentType : "application/json",
 }).done(function(reports) {
 	
 	for ( var i in reports) {

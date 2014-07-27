@@ -47,6 +47,12 @@ public class ReportsController
 		return getAllReportsForUser("");
 	}
 
+	@RequestMapping(value = "", consumes = "application/json", produces = "application/json")
+	public @ResponseBody List<Report> getReportsJson()
+	{
+		return reportDao.getAllReports();
+	}
+
 	private ModelAndView getAllReportsForUser(final String username)
 	{
 		final ModelAndView model = new ModelAndView();
@@ -98,7 +104,7 @@ public class ReportsController
 	}
 
 	@RequestMapping(value =
-	{ "add" }, method = RequestMethod.POST)
+	{ "" }, method = RequestMethod.POST)
 	public String addReportToDB(final Report report,
 			@RequestParam("file") final MultipartFile file)
 	{
@@ -108,26 +114,11 @@ public class ReportsController
 		return "redirect:";
 	}
 
-	@RequestMapping(value = "json/id/{name}", method = RequestMethod.GET)
-	public @ResponseBody Report getReportInJSON(@PathVariable final String name)
-	{
-		final Report report = reportDao.getReportByID(Long.valueOf(name));
-		return report;
-
-	}
-
 	@RequestMapping(value = "json/{str}", method = RequestMethod.GET)
 	public @ResponseBody List<Report> getReportsInJSON(
 			@PathVariable final String str)
 	{
 		return reportDao.getAllReports(str);
-
-	}
-
-	@RequestMapping(value = "json", method = RequestMethod.GET)
-	public @ResponseBody List<Report> getReportsInJSON()
-	{
-		return reportDao.getAllReports();
 
 	}
 

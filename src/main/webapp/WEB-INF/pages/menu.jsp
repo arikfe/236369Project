@@ -50,7 +50,7 @@
 				<ul>
 					<li><a href="${reportURL}/">All reports</a></li>
 					<li><a href="${reportURL}/addReport">add report</a></li>
-					<li><a href="${reportURL}/<%=user.getUsername()%>">My reports</a></li>
+					<li><a href="${accountURL}/<%=user.getUsername()%>/reports">My reports</a></li>
 				</ul></li>
 			<li><a href="${accountURL}/users">Show all Users</a></li>
 			<%
