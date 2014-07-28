@@ -48,6 +48,10 @@ html, body {
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 <script>
+var ctx = "${pageContext.request.contextPath}";
+var csrfName = "${_csrf.parameterName}";
+var csrfValue = "${_csrf.token}";
+var currentUser = "${pageContext.request.userPrincipal.name}";
 function initialize() {
 	
 	$.ajax("${baseURL}/menu").done(function(result) {
@@ -128,7 +132,7 @@ $.ajax({
 <body>
 
 	<div id="menu"></div>
-	<button id="showClose" onclick="bounceClosest()" disabled>show closest evacuation event</button>
+	<button id="showClose" onclick="bounceClosest()" >show closest evacuation event</button>
 	<button onclick="stopEventBounce()">Stop bounce</button>
 	<button onclick="bounceMine()">Find my Event</button>
 	<c:if test="${not empty desiredUser}">

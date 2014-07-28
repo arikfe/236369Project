@@ -49,8 +49,7 @@ public class ReportsController
 	}
 
 	@RequestMapping(value = "", consumes = "application/json", produces = "application/json")
-	public @ResponseBody
-	List<Report> getReportsJson()
+	public @ResponseBody List<Report> getReportsJson()
 	{
 		return reportDao.getAllReports();
 	}
@@ -94,17 +93,15 @@ public class ReportsController
 		return "redirect:";
 	}
 
-	@RequestMapping(value = "json/{str}", method = RequestMethod.GET)
-	public @ResponseBody
-	List<Report> getReportsInJSON(@PathVariable final String str)
+	@RequestMapping(value = "search", method = RequestMethod.GET)
+	public @ResponseBody List<Report> getReportsInJSON(
+			@RequestParam final String q)
 	{
-		return reportDao.getAllReports(str);
-
+		return reportDao.getAllReports(q);
 	}
 
-	@RequestMapping(value = "delete", method = RequestMethod.GET)
-	public @ResponseBody
-	String delete(final long id)
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	public @ResponseBody String delete(@PathVariable final long id)
 	{
 		reportDao.removeReport(id);
 		return String.valueOf(id);

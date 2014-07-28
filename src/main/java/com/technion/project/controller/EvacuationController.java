@@ -25,7 +25,7 @@ public class EvacuationController extends BaseController
 	private EvacuationDAO evacuationDAO;
 
 	@RequestMapping(value =
-	{ "add" }, method = RequestMethod.GET)
+	{ "add" }, method = RequestMethod.POST)
 	public String add(final EvacuationEvent event)
 	{
 		final HashSet<User> hashSet = new HashSet<User>();
@@ -69,23 +69,20 @@ public class EvacuationController extends BaseController
 
 	@RequestMapping(value =
 	{ "list" }, method = RequestMethod.GET)
-	public @ResponseBody
-	Set<User> list(final long id)
+	public @ResponseBody Set<User> list(final long id)
 	{
 		return evacuationDAO.getByID(id).getRegisteredUsers();
 	}
 
 	@RequestMapping(value = "registeredEvent", method = RequestMethod.GET)
-	public @ResponseBody
-	EvacuationEvent registeredEvent()
+	public @ResponseBody EvacuationEvent registeredEvent()
 	{
 		return getCurrentUser().getEvent();
 	}
 
 	@RequestMapping(value = "closestEvent", method = RequestMethod.GET)
-	public @ResponseBody
-	EvacuationEvent getClosestEvent(@RequestParam final float lat,
-			@RequestParam final float lng)
+	public @ResponseBody EvacuationEvent getClosestEvent(
+			@RequestParam final float lat, @RequestParam final float lng)
 	{
 		return evacuationDAO.getClosest(lat, lng);
 	}

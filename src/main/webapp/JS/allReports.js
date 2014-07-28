@@ -8,34 +8,36 @@ var selectedEvent;
 var image;
 var pos;
 
-if (navigator.geolocation) {
-	navigator.geolocation.getCurrentPosition(function(position) {
-		pos = new google.maps.LatLng(position.coords.latitude,
-				position.coords.longitude);
-		document.getElementById("showClose").disabled = false;
-	}, function() {
-		handleNoGeolocation(true);
-	});
-} else {
-	// Browser doesn't support Geolocation
-	handleNoGeolocation(false);
-}
+
 
 function bounceClosest() {
-	$.ajax({
-		type : "GET",
-		url : "/236369Project/evacuation/closestEvent",
-		data : {
-			lat : pos.lat(),
-			lng : pos.lng()
-		}
-	}).done(function(data) {
-		stopEventBounce(selectedEvent);
-		selectedEvent = markers["e" + data.id];
-		selectedEvent.setAnimation(google.maps.Animation.BOUNCE);
-	}).fail(function(err) {
-		alert(err);
-	});
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			pos = new google.maps.LatLng(position.coords.latitude,
+					position.coords.longitude);
+			
+			$.ajax({
+				type : "GET",
+				url : "/236369Project/evacuation/closestEvent",
+				data : {
+					lat : pos.lat(),
+					lng : pos.lng()
+				}
+			}).done(function(data) {
+				stopEventBounce(selectedEvent);
+				selectedEvent = markers["e" + data.id];
+				selectedEvent.setAnimation(google.maps.Animation.BOUNCE);
+			}).fail(function(err) {
+				alert(err);
+			});
+		}, function() {
+			handleNoGeolocation(true);
+		});
+	} else {
+		// Browser doesn't support Geolocation
+		handleNoGeolocation(false);
+	}
+	
 }
 function bounceMine() {
 	$.ajax({
@@ -60,12 +62,10 @@ function deletePost(_id) {
 	if (confirm("Are you sure!") == true) {
 
 		markers[_id].setMap(null);
+		var path = ctx+"/reports/"+_id+"?"+csrfName+"="+csrfValue	;
 		$.ajax({
-			type : "GET",
-			url : "/236369Project/accounts/delete",
-			data : {
-				id : _id
-			}
+			type : "delete",
+			url : path			
 		}).done(function(msg) {
 			$("#row" + msg).remove();
 		}).fail(function(err) {
@@ -229,13 +229,16 @@ function search(text) {
 	clearMarkers();
 	$.ajax({
 		type : "GET",
-		url : "/236369Project/reports/json/" + text.value,
+		url : "/236369Project/reports/search/" ,
+		data:{
+			q : text.value
+		}
 	}).done(
 			function(reports) {
 
 				for ( var i in reports) {
 					handleReportCreation(reports[i],
-							'${pageContext.request.userPrincipal.name}', i,
+							currentUser, i,
 							reports.length);
 				}
 			}).fail(function(err) {
@@ -252,7 +255,7 @@ function handleReportCreation(r, loggoedOnUser, i, length) {
 	var body = $("#table_body");
 
 	var markerImg = "";
-	if ('${r.imageId}' == "")
+	if (r.imageId == "")
 		setTimeout(function() {
 			updateMarker(new google.maps.LatLng(r.geolat, r.geolng), r.title,
 					r.id, "");
