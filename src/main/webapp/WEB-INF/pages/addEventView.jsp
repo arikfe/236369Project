@@ -30,7 +30,7 @@ html, body, #map-canvas {
 <c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/> 
 <script src="${baseURL}/JS/menu.js"></script>
 <script>
-$.ajax("../accounts/menu").done(function(result) {
+$.ajax("${baseURL}/menu").done(function(result) {
 	$("#menu").html(result);
 }).error(function(res){
 	alert(res);

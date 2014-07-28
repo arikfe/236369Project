@@ -31,21 +31,18 @@
 		var path = "${accountURL}/" + username
 				+ "/disable?${_csrf.parameterName}=${_csrf.token}";
 		$.post(path, function(data) {
-
 		}).fail(function(jqXHR, textStatus, errorThrown) {
 			alert(textStatus);
 		});
 
 	}
 	function deleteUser(username) {
-		var path = "${accountURL}/" + username
-				+ "/delete?${_csrf.parameterName}=${_csrf.token}";
-		$.post(path, function(data) {
-			$("#" + username).remove();
-		}).fail(function(jqXHR, textStatus, errorThrown) {
-			alert(textStatus);
-		});
-
+		$.ajax({
+			type : "delete",
+			url : "${accountURL}/"+username+"?${_csrf.parameterName}=${_csrf.token}"}).done(function(res){
+				if(res)
+					$("#"+username).remove();
+			});
 	}
 	function formSubmit() {
 		document.getElementById("logoutForm").submit();
@@ -59,7 +56,7 @@
 			//alert("complete");
 		});
 	}
-	$.ajax("${accountURL}/menu").done(function(result) {
+	$.ajax("${baseURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res) {
 		alert(res);

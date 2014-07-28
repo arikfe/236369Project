@@ -26,7 +26,7 @@ public class UserDaoImpl implements UserDao
 	@Autowired
 	private ReportDAO reportDao;
 	@Autowired
-	DocumentDAO documentDao;
+	private DocumentDAO documentDao;
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -103,11 +103,12 @@ public class UserDaoImpl implements UserDao
 		final Session session = sessionFactory.openSession();
 		final Transaction transaction = session.getTransaction();
 		transaction.begin();
+		final Long imageId = user.getImageId();
 		session.delete(user);
 		transaction.commit();
 		session.flush();
 		session.close();
-
+		documentDao.remove(imageId);
 	}
 
 	@Override

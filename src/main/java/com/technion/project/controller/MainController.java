@@ -16,12 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.technion.project.dao.UserDao;
+import com.technion.project.model.User;
 
 @Controller
 public class MainController
 {
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private UserDao userDAO;
 
 	@RequestMapping(value =
 	{ "/", "/welcome**" }, method = RequestMethod.GET)
@@ -41,6 +45,18 @@ public class MainController
 
 		return model;
 
+	}
+
+	@RequestMapping(value = "menu", method = RequestMethod.GET)
+	public ModelAndView getMenu()
+	{
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		final ModelAndView view = new ModelAndView();
+		final User user = userDAO.findByUserNameLocalThread(auth.getName());
+		view.setViewName("menu");
+		view.addObject("user", user);
+		return view;
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)

@@ -82,36 +82,28 @@ public class AccountController extends BaseController
 	{
 
 		final ModelAndView model = new ModelAndView();
-		final User user = getCurrentUser();
-		if (!user.hasAdminPrevilige())
+		if (!canEditAccount(username))
 			return unauthorized();
 		userDAO.toggleEnabled(userDAO.findByUserNameLocalThread(username));
 		model.setViewName("redirect:../");
 		return model;
 	}
 
-	@RequestMapping(value = "{username}/delete", method = RequestMethod.POST)
-	public ModelAndView deleteUser(@PathVariable final String username)
+	@RequestMapping(value = "{username}", method = RequestMethod.DELETE)
+	public @ResponseBody
+	boolean deleteUser(@PathVariable final String username)
 	{
-		final ModelAndView model = new ModelAndView();
-		final User user = getCurrentUser();
-		if (!user.hasAdminPrevilige())
-			return unauthorized();
+		if (!canEditAccount(username))
+			return false;
 		userDAO.delete(userDAO.findByUserNameLocalThread(username));
-		model.setViewName("redirect:../");
-		return model;
+		return true;
 	}
 
-	@RequestMapping(value = "menu", method = RequestMethod.GET)
-	public ModelAndView getMenu()
+	private boolean canEditAccount(final String username)
 	{
-		final Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		final ModelAndView view = new ModelAndView();
-		final User user = userDAO.findByUserNameLocalThread(auth.getName());
-		view.setViewName("menu");
-		view.addObject("user", user);
-		return view;
+		final User currentUser = getCurrentUser();
+		return currentUser.hasAdminPrevilige()
+				|| currentUser.getUsername().equalsIgnoreCase(username);
 	}
 
 	@RequestMapping(value = "{username}", method = RequestMethod.PUT)

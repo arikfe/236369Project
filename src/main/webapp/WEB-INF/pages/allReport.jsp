@@ -50,7 +50,7 @@ html, body {
 <script>
 function initialize() {
 	
-	$.ajax("${accountURL}/menu").done(function(result) {
+	$.ajax("${baseURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res){
 		alert(res);

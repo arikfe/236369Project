@@ -32,9 +32,11 @@
 		else
 			$("#resetPassword").prop("disabled", true);
 	}
-	function deleteAccount() {
+	function deleteAccount(_username) {
 		if (confirm("Are you sure!") == true) {
-			$.ajax("${accountURL}/deleteself").always(function() {
+			$.ajax({
+				type : "delete",
+				url : "${accountURL}/"+_username.value+"?${_csrf.parameterName}=${_csrf.token}"}).always(function() {
 				document.getElementById("logoutForm").submit();
 			});
 		}
@@ -54,7 +56,7 @@
 		});
 	}
 	
-	$.ajax("${accountURL}/menu").done(function(result) {
+	$.ajax("${baseURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res) {
 		alert(res);
@@ -117,6 +119,6 @@
 			disabled />
 	</form>
 	<div id='result'><%=result%></div>
-	<input type="button" value="delete" onclick="deleteAccount()">
+	<input type="button" value="delete" onclick="deleteAccount(username)">
 </body>
 </html>

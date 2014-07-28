@@ -65,4 +65,17 @@ public class DocumentDAOImpl implements DocumentDAO
 
 	}
 
+	@Override
+	public void remove(final Long id)
+	{
+		if (id == null)
+			return;
+		final Document document = get(id);
+		final Session session = sessionFactory.openSession();
+		session.delete(document);
+		session.flush();
+		session.close();
+
+	}
+
 }
