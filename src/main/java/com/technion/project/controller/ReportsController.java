@@ -33,6 +33,7 @@ public class ReportsController
 	@Autowired
 	private EvacuationDAO evacuationDAO;
 
+	// TODO remove and check
 	@RequestMapping(value = "user/{username}", method = RequestMethod.GET)
 	public ModelAndView getReportsForUser(@PathVariable final String username)
 	{
@@ -48,7 +49,8 @@ public class ReportsController
 	}
 
 	@RequestMapping(value = "", consumes = "application/json", produces = "application/json")
-	public @ResponseBody List<Report> getReportsJson()
+	public @ResponseBody
+	List<Report> getReportsJson()
 	{
 		return reportDao.getAllReports();
 	}
@@ -82,28 +84,6 @@ public class ReportsController
 	}
 
 	@RequestMapping(value =
-	{ "addReport" }, method = RequestMethod.GET)
-	public ModelAndView addReport()
-	{
-		final Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		final ModelAndView model = new ModelAndView();
-		model.addObject("title", "Spring Security + Hibernate Example");
-		model.addObject("message", "This is default page!");
-		if (!"anonymousUser".equals(auth.getName()))
-		{
-			model.addObject("fname",
-					userDAO.findByUserNameLocalThread(auth.getName())
-							.getFname());
-			model.addObject("nname",
-					userDAO.findByUserNameLocalThread(auth.getName())
-							.getLname());
-		}
-		model.setViewName("addReport");
-		return model;
-	}
-
-	@RequestMapping(value =
 	{ "" }, method = RequestMethod.POST)
 	public String addReportToDB(final Report report,
 			@RequestParam("file") final MultipartFile file)
@@ -115,15 +95,16 @@ public class ReportsController
 	}
 
 	@RequestMapping(value = "json/{str}", method = RequestMethod.GET)
-	public @ResponseBody List<Report> getReportsInJSON(
-			@PathVariable final String str)
+	public @ResponseBody
+	List<Report> getReportsInJSON(@PathVariable final String str)
 	{
 		return reportDao.getAllReports(str);
 
 	}
 
 	@RequestMapping(value = "delete", method = RequestMethod.GET)
-	public @ResponseBody String delete(final long id)
+	public @ResponseBody
+	String delete(final long id)
 	{
 		reportDao.removeReport(id);
 		return String.valueOf(id);

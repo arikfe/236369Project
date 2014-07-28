@@ -35,6 +35,28 @@ public class MainController
 		return "redirect:/reports/";
 	}
 
+	@RequestMapping(value =
+	{ "addReport" }, method = RequestMethod.GET)
+	public ModelAndView addReport()
+	{
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		final ModelAndView model = new ModelAndView();
+		model.addObject("title", "Spring Security + Hibernate Example");
+		model.addObject("message", "This is default page!");
+		if (!"anonymousUser".equals(auth.getName()))
+		{
+			model.addObject("fname",
+					userDAO.findByUserNameLocalThread(auth.getName())
+							.getFname());
+			model.addObject("nname",
+					userDAO.findByUserNameLocalThread(auth.getName())
+							.getLname());
+		}
+		model.setViewName("addReport");
+		return model;
+	}
+
 	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
 	public ModelAndView adminPage()
 	{
