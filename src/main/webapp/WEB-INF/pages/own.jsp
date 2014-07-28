@@ -16,19 +16,21 @@
 <script src="/236369Project/JS/menu.js"></script>
 <link type="text/css" rel="stylesheet" href="/CSS/table.css"></link>
 <link type="text/css" rel="stylesheet" href="/CSS/dropDownMenu.css"></link>
-<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
-<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
-<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
-<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/> 
+<c:set var="baseURL" value="${pageContext.request.contextPath}" />
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin" />
+<c:set var="reportURL"
+	value="${pageContext.request.contextPath}/reports" />
+<c:set var="accountURL"
+	value="${pageContext.request.contextPath}/accounts" />
 <script type="text/javascript">
 	function validateForm() {
 		var k = document.getElementById("password");
 		var j = document.getElementById("cpass");
 
 		if (k.value.length >= 6 && k.value == j.value)
-			$("#resetPassword").prop( "disabled", false );
+			$("#resetPassword").prop("disabled", false);
 		else
-			$("#resetPassword").prop( "disabled", true );
+			$("#resetPassword").prop("disabled", true);
 	}
 	function deleteAccount() {
 		if (confirm("Are you sure!") == true) {
@@ -37,7 +39,21 @@
 			});
 		}
 	}
+	function update(_username, _fname, _lname) {
 
+		$.ajax({
+			type : "put",
+			url : "${accountURL}/"+_username.value+"?${_csrf.parameterName}=${_csrf.token}",
+			data : {
+				username :_username.value,
+				fname : _fname.value,
+				lname : _lname.value
+			}
+		}).error(function(err){
+			alert(err);
+		});
+	}
+	
 	$.ajax("${accountURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res) {
@@ -49,35 +65,33 @@
 </head>
 <body>
 	<div id="menu"></div>
+
+	<table>
+		<tbody>
+			<tr>
+				<th>user name</th>
+				<td><input id="username" type="text" name="username"
+					value="<%=user.getUsername()%>" disabled>
+			</tr>
+			<tr>
+				<th>First name</th>
+				<td><input id="fname" type="text" name="fname"
+					value="<%=user.getFname()%>">
+			</tr>
+			<tr>
+				<th>Last name</th>
+				<td><input id="lname" type="text" name="lname"
+					value="<%=user.getLname()%>">
+			</tr>
+
+
+
+		</tbody>
+	</table>
+	<button onclick="update(username,fname,lname)">Update</button>
+
 	<form
-		action="${accountURL}/update?${_csrf.parameterName}=${_csrf.token}"
-		method="POST">
-		<table>
-			<tbody>
-				<tr>
-					<th>user name</th>
-					<td><input type="text" name="username"
-						value="<%=user.getUsername()%>" disabled>
-				</tr>
-				<tr>
-					<th>First name</th>
-					<td><input type="text" name="fname"
-						value="<%=user.getFname()%>">
-				</tr>
-				<tr>
-					<th>Last name</th>
-					<td><input type="text" name="lname"
-						value="<%=user.getLname()%>">
-				</tr>
-
-
-
-			</tbody>
-		</table>
-		<input type="submit" value="update" />
-	</form>
-	<form
-		action="${accountURL}/reset?${_csrf.parameterName}=${_csrf.token}"
+		action="${accountURL}/<%=user.getUsername() %>/reset?${_csrf.parameterName}=${_csrf.token}"
 		method="POST">
 		<table>
 			<tbody>
@@ -87,7 +101,8 @@
 				</tr>
 				<tr>
 					<th>new password</th>
-					<td><input type="password" id='password' name="password" onkeyup="validateForm()">
+					<td><input type="password" id='password' name="password"
+						onkeyup="validateForm()">
 				</tr>
 				<tr>
 					<th>confirm password</th>
@@ -98,9 +113,10 @@
 
 			</tbody>
 		</table>
-		<input type="submit" id="resetPassword" value="Change password" disabled />
+		<input type="submit" id="resetPassword" value="Change password"
+			disabled />
 	</form>
-	<div id='result'><%=result %></div>
+	<div id='result'><%=result%></div>
 	<input type="button" value="delete" onclick="deleteAccount()">
 </body>
 </html>

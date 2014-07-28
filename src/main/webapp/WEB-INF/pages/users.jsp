@@ -12,10 +12,12 @@
 <%@page session="true"%>
 <html>
 <head>
-<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
-<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
-<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
-<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
+<c:set var="baseURL" value="${pageContext.request.contextPath}" />
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin" />
+<c:set var="reportURL"
+	value="${pageContext.request.contextPath}/reports" />
+<c:set var="accountURL"
+	value="${pageContext.request.contextPath}/accounts" />
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="${baseURL}/JS/menu.js"></script>
 <link type="text/css" rel="stylesheet"
@@ -25,15 +27,26 @@
 
 
 <script>
-	function toggleEnabled(username){
-		$.ajax("${accountURL}/disable/"+username).done(function(data) {
+	function toggleEnabled(username) {
+		var path = "${accountURL}/" + username
+				+ "/disable?${_csrf.parameterName}=${_csrf.token}";
+		$.post(path, function(data) {
+
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			alert(textStatus);
 		});
-		}
-	function deleteUser(username){
-		$.ajax("${accountURL}/delete/"+username).always(function(data) {
-			$("#"+username).remove();
+
+	}
+	function deleteUser(username) {
+		var path = "${accountURL}/" + username
+				+ "/delete?${_csrf.parameterName}=${_csrf.token}";
+		$.post(path, function(data) {
+			$("#" + username).remove();
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			alert(textStatus);
 		});
-		}
+
+	}
 	function formSubmit() {
 		document.getElementById("logoutForm").submit();
 	}
@@ -48,56 +61,63 @@
 	}
 	$.ajax("${accountURL}/menu").done(function(result) {
 		$("#menu").html(result);
-	}).error(function(res){
+	}).error(function(res) {
 		alert(res);
 	});
 </script>
 </head>
 <body>
 
-	
+
 	<div id="menu"></div>
-	<%	Boolean isAdmin =  (Boolean)request.getAttribute("adminRight"); %>
-	<table class="zebra">
-	<tr>
-	<th>image</th>
-	<th>name</th>
-	<th>user name</th>
-	<th>reports</th>
-	<% if(isAdmin)
-		{
+	<%
+		Boolean isAdmin = (Boolean) request.getAttribute("adminRight");
 	%>
+	<table class="zebra">
+		<tr>
+			<th>image</th>
+			<th>name</th>
+			<th>user name</th>
+			<th>reports</th>
+			<%
+				if (isAdmin) {
+			%>
 			<th>enabled</th>
 			<th>delete</th>
-	<%
-		}
-	%>
-	</tr>		
-	<%
-	
-		List<User> users = (List<User>) request.getAttribute("users");
-
-		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
-			User user = iterator.next();
-	%>
-		<tr id='<%=user.getUsername() %>'>
-		<td><img src="<%=user.hasContainImage() ? request.getContextPath()+"/download/"
-							+ user.getImageId() : request.getContextPath()+"/IMG/images.jpg"%>" height="42" width="42"> </td>
-		<td><%=user.getFname()%></td>
-		<td><%=user.getUsername() %></td>
-		<td><a href='${accountURL}/<%=user.getUsername() %>/reports'>reports</a></td>
-		<% if(isAdmin)
-		{
-			%>
-				<td><input type="checkbox" <%=user.isEnabled()?"checked":"" %> onchange="toggleEnabled('<%=user.getUsername() %>')"></td>
-				<td><input type="button" class="styledButton" value="delete" onclick="deleteUser('<%=user.getUsername() %>')"></td>
 			<%
-		}
+				}
 			%>
 		</tr>
-	<%
-		}
-	%>
+		<%
+			List<User> users = (List<User>) request.getAttribute("users");
+
+			for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
+				User user = iterator.next();
+		%>
+		<tr id='<%=user.getUsername()%>'>
+			<td><img
+				src="<%=user.hasContainImage() ? request.getContextPath()
+						+ "/download/" + user.getImageId() : request
+						.getContextPath() + "/IMG/images.jpg"%>"
+				height="42" width="42"></td>
+			<td><%=user.getFname()%></td>
+			<td><%=user.getUsername()%></td>
+			<td><a href='${accountURL}/<%=user.getUsername() %>/reports'>reports</a></td>
+			<%
+				if (isAdmin) {
+			%>
+			<td><input type="checkbox"
+				<%=user.isEnabled() ? "checked" : ""%>
+				onchange="toggleEnabled('<%=user.getUsername()%>')"></td>
+			<td><input type="button" class="styledButton" value="delete"
+				onclick="deleteUser('<%=user.getUsername()%>')"></td>
+			<%
+				}
+			%>
+		</tr>
+		<%
+			}
+		%>
 	</table>
 </body>
 </html>

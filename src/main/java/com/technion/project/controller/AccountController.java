@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,18 +32,17 @@ import com.technion.project.model.UserRole;
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
 maxFileSize = 1024 * 1024 * 10, // 10MB
 maxRequestSize = 1024 * 1024 * 50)
-public class AccountController
+public class AccountController extends BaseController
 {
 	@Autowired
 	private ReportDAO reportDao;
 	@Autowired
 	private UserDao userDAO;
-
 	@Autowired
 	private EvacuationDAO evacuationDAO;
 
 	@RequestMapping(value =
-	{ "add" }, method = RequestMethod.POST)
+	{ "" }, method = RequestMethod.POST)
 	public String add(@ModelAttribute("User") final User user,
 			@RequestParam("file") final MultipartFile file)
 	{
@@ -55,16 +56,19 @@ public class AccountController
 		return "redirect:../login";
 	}
 
-	@RequestMapping(value = "users", method = RequestMethod.GET)
-	public ModelAndView users()
+	@RequestMapping(value = "", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
+	public @ResponseBody
+	List<User> getUsersJson()
+	{
+		return userDAO.getAll();
+	}
+
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public ModelAndView getUsersView()
 	{
 		final ModelAndView model = new ModelAndView();
-		model.addObject("users", userDAO.getAll());
-		final Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-
-		final User currentUser = userDAO.findByUserNameLocalThread(auth
-				.getName());
+		model.addObject("users", getUsersJson());
+		final User currentUser = getCurrentUser();
 		model.addObject("adminRight",
 				Boolean.valueOf(currentUser.hasAdminPrevilige()));
 		model.addObject("user", currentUser);
@@ -73,51 +77,27 @@ public class AccountController
 		return model;
 	}
 
-	@RequestMapping(value = "disable/{username}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{username}/disable", method = RequestMethod.POST)
 	public ModelAndView toggleUser(@PathVariable final String username)
 	{
 
-		final Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
 		final ModelAndView model = new ModelAndView();
-		final User user = userDAO.findByUserNameLocalThread(auth.getName());
+		final User user = getCurrentUser();
 		if (!user.hasAdminPrevilige())
-		{
-			model.setViewName("403");
-			return model;
-		}
+			return unauthorized();
 		userDAO.toggleEnabled(userDAO.findByUserNameLocalThread(username));
 		model.setViewName("redirect:../");
 		return model;
 	}
 
-	@RequestMapping(value = "delete/{username}", method = RequestMethod.GET)
+	@RequestMapping(value = "{username}/delete", method = RequestMethod.POST)
 	public ModelAndView deleteUser(@PathVariable final String username)
 	{
-
-		final Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
 		final ModelAndView model = new ModelAndView();
-		final User user = userDAO.findByUserNameLocalThread(auth.getName());
+		final User user = getCurrentUser();
 		if (!user.hasAdminPrevilige())
-		{
-			model.setViewName("403");
-			return model;
-		}
+			return unauthorized();
 		userDAO.delete(userDAO.findByUserNameLocalThread(username));
-		model.setViewName("redirect:../");
-		return model;
-	}
-
-	@RequestMapping(value = "deleteself", method = RequestMethod.GET)
-	public ModelAndView deleteSelf()
-	{
-
-		final Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		final ModelAndView model = new ModelAndView();
-		final User user = userDAO.findByUserNameLocalThread(auth.getName());
-		userDAO.delete(user);
 		model.setViewName("redirect:../");
 		return model;
 	}
@@ -134,26 +114,28 @@ public class AccountController
 		return view;
 	}
 
-	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String updateUserDetails(final User user)
+	@RequestMapping(value = "{username}", method = RequestMethod.PUT)
+	public String updateUserDetails(@PathVariable final String username,
+			@RequestBody final MultiValueMap<String, String> body)
 	{
-		final Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		final User userFromDB = userDAO.findByUserNameLocalThread(auth
-				.getName());
-		user.setPassword(userFromDB.getPassword());
-		user.setImageId(userFromDB.getImageId());
-		user.setEnabled(true);
-		user.setEvent(userFromDB.getEvent());
-		user.setUserRole(userFromDB.getUserRole());
-		user.setUsername(userFromDB.getUsername());
-		userDAO.update(user);
+		final User userFromDB = getCurrentUser();
+		if (!userFromDB.getUsername().equalsIgnoreCase(username))
+			return "";
+		userFromDB.setFname(body.getFirst("fname"));
+		userFromDB.setLname(body.getFirst("lname"));
+		userDAO.update(userFromDB);
 
 		return "redirect:///236369project//reports";
 	}
 
-	@RequestMapping(value = "own", method = RequestMethod.GET)
-	public ModelAndView userDetails()
+	@RequestMapping(value = "{username}", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
+	public User getUserJson(@PathVariable final String username)
+	{
+		return userDAO.findByUserNameLocalThread(username);
+	}
+
+	@RequestMapping(value = "{username}", method = RequestMethod.GET)
+	public ModelAndView userDetails(@PathVariable final String username)
 	{
 		final ModelAndView view = new ModelAndView();
 		final Authentication auth = SecurityContextHolder.getContext()
@@ -165,14 +147,15 @@ public class AccountController
 		return view;
 	}
 
-	@RequestMapping(value = "reset", method = RequestMethod.POST)
-	public ModelAndView resetPassword(@RequestParam final String oldpass,
+	@RequestMapping(value = "{username}/reset", method = RequestMethod.POST)
+	public ModelAndView resetPassword(@PathVariable final String username,
+			@RequestParam final String oldpass,
 			@RequestParam final String password)
 	{
+		final User userFromDB = getCurrentUser();
+		if (!username.equalsIgnoreCase(userFromDB.getUsername()))
+			return unauthorized();
 		final ModelAndView view = new ModelAndView();
-		final User userFromDB = userDAO
-				.findByUserNameLocalThread(SecurityContextHolder.getContext()
-						.getAuthentication().getName());
 		view.setViewName("own");
 		view.addObject("user", userFromDB);
 		if (userDAO.resetPassword(oldpass, password, userFromDB))
@@ -190,8 +173,8 @@ public class AccountController
 	}
 
 	@RequestMapping(value = "{username}/reports", consumes = "application/json", produces = "application/json")
-	public @ResponseBody List<Report> getReportsForUser(
-			@PathVariable final String username)
+	public @ResponseBody
+	List<Report> getReportsForUser(@PathVariable final String username)
 	{
 		return reportDao.getReportsForUser(userDAO
 				.findByUserNameLocalThread(username));
@@ -219,5 +202,4 @@ public class AccountController
 					userDAO.findByUserNameLocalThread(auth.getName()));
 		return model;
 	}
-
 }
