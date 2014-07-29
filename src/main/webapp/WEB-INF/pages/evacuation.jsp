@@ -27,10 +27,9 @@
 <script type="text/javascript">
 function addUser(eid,name){
 	$.ajax({
-		type : "GET",
-		url : "${evacuationURL}/joinUser",
+		type : "put",
+		url : "${evacuationURL}/id/"+eid+"/joinUser?${_csrf.parameterName}=${_csrf.token}",
 		data : {
-			id: eid,
 			username : name
 		}
 	}).done(function(data) {
@@ -41,14 +40,24 @@ function addUser(eid,name){
 }
 function leaveUser(_id,name){
 	$.ajax({
-		type : "GET",
-		url : "${evacuationURL}/leaveUser",
+		type : "put",
+		url : "${evacuationURL}/id/"+_id+"/leaveUser?${_csrf.parameterName}=${_csrf.token}",
 		data : {
-			id: _id,
 			username : name
 		}
 	}).done(function(data) {
 		$("#"+name).remove();
+	}).fail(function(err) {
+		alert(err);
+	});
+}
+function deleteEvent(id){
+	$.ajax({
+		type : "delete",
+		url : "${evacuationURL}/id/"+id+"?${_csrf.parameterName}=${_csrf.token}"
+		
+	}).done(function(data) {
+		document.url="${baseURL}";
 	}).fail(function(err) {
 		alert(err);
 	});
@@ -79,6 +88,10 @@ function leaveUser(_id,name){
 
 
 	<table id="details" class="zebra">
+		<tr>
+			<th>Delete this event</th>
+			<td><button onclick="deleteEvent(<%=id%>)">Delete</button></td>
+		</tr>
 		<tr>
 			<th>time</th>
 			<td><%=new SimpleDateFormat("dd/MMM/yy - hh:mm").format(event
