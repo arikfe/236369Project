@@ -258,7 +258,7 @@ function handleReportCreation(r, loggoedOnUser, i, length) {
 	else
 		setTimeout(function() {
 			updateMarker(new google.maps.LatLng(r.geolat, r.geolng), r.title,
-					r.id, '<img src="/236369Project/download/' + r.imageId
+					r.id, '<img src="' + ctx + '/download/' + r.imageId
 							+ '"  height="64" width="64"> ');
 		}, 500 + (i++ * 200));
 	msg = "<tr id='row"
