@@ -22,4 +22,6 @@ public interface EvacuationDAO
 
 	public EvacuationEvent getClosest(float lat, float lng);
 
+	public boolean delete(long id);
+
 }

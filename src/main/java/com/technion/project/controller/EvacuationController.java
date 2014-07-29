@@ -92,4 +92,10 @@ public class EvacuationController extends BaseController
 		view.addObject("users", userDao.getUserWithNoEvent());
 		return view;
 	}
+
+	@RequestMapping(value = "id/{id}", method = RequestMethod.DELETE)
+	public @ResponseBody boolean deleteEvent(@PathVariable final long id)
+	{
+		return evacuationDAO.delete(id);
+	}
 }

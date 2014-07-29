@@ -103,7 +103,8 @@ public class EvacuationEvent
 		this.capacity = capacity;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade =
+	{ CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.EAGER)
 	@JoinTable(name = "evacuation_user", joinColumns =
 	{ @JoinColumn(name = "id") }, inverseJoinColumns =
 	{ @JoinColumn(name = "username") })

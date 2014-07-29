@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.technion.project.dao.EvacuationDAO#getByID(java.lang.Long)
 	 */
 	@Override
@@ -64,7 +65,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.EvacuationDAO#addEvecuationEvent(com.technion
 	 * .project.model.EvacuationEvent)
@@ -133,4 +134,29 @@ public class EvacuationDAOImpl implements EvacuationDAO
 		return allEvents.isEmpty() ? null : allEvents.get(0);
 	}
 
+	@Override
+	public boolean delete(final long id)
+	{
+		final Session session = sessionFactory.openSession();
+
+		final org.hibernate.Transaction transaction = session.getTransaction();
+		transaction.begin();
+		try
+		{
+			final EvacuationEvent event = getByID(id);
+			for (final User u : event.getRegisteredUsers())
+			{
+				u.setEvent(null);
+				session.update(u);
+			}
+			session.delete(event);
+			transaction.commit();
+			session.flush();
+		} catch (final HibernateException e)
+		{
+			transaction.rollback();
+		}
+		session.close();
+		return true;
+	}
 }

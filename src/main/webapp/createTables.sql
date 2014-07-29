@@ -66,4 +66,5 @@ CREATE TABLE evacuation (
  
  create table evacuation_user (
  id bigint(11) references evacuation(id),
-username varchar(45) references users(username),primary key(id,username));
+username varchar(45) references users(username)on delete cascade
+,primary key(id,username));

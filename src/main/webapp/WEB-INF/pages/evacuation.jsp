@@ -51,6 +51,17 @@ function leaveUser(_id,name){
 		alert(err);
 	});
 }
+function deleteEvent(id){
+	$.ajax({
+		type : "delete",
+		url : "${evacuationURL}/id/"+id+"?${_csrf.parameterName}=${_csrf.token}"
+		
+	}).done(function(data) {
+		document.url="${baseURL}";
+	}).fail(function(err) {
+		alert(err);
+	});
+}
 </script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>
@@ -77,6 +88,10 @@ function leaveUser(_id,name){
 
 
 	<table id="details" class="zebra">
+		<tr>
+			<th>Delete this event</th>
+			<td><button onclick="deleteEvent(<%=id%>)">Delete</button></td>
+		</tr>
 		<tr>
 			<th>time</th>
 			<td><%=new SimpleDateFormat("dd/MMM/yy - hh:mm").format(event
