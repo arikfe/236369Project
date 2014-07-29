@@ -27,10 +27,9 @@
 <script type="text/javascript">
 function addUser(eid,name){
 	$.ajax({
-		type : "GET",
-		url : "${evacuationURL}/joinUser",
+		type : "put",
+		url : "${evacuationURL}/id/"+eid+"/joinUser?${_csrf.parameterName}=${_csrf.token}",
 		data : {
-			id: eid,
 			username : name
 		}
 	}).done(function(data) {
@@ -41,10 +40,9 @@ function addUser(eid,name){
 }
 function leaveUser(_id,name){
 	$.ajax({
-		type : "GET",
-		url : "${evacuationURL}/leaveUser",
+		type : "put",
+		url : "${evacuationURL}/id/"+_id+"/leaveUser?${_csrf.parameterName}=${_csrf.token}",
 		data : {
-			id: _id,
 			username : name
 		}
 	}).done(function(data) {
