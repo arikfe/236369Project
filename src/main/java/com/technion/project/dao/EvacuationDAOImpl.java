@@ -88,7 +88,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 	}
 
 	@Override
-	public void addUserToEvent(final User user, final long id)
+	public boolean addUserToEvent(final User user, final long id)
 	{
 
 		final Session session = sessionFactory.openSession();
@@ -98,6 +98,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 		session.update(evacuationEvent);
 		session.flush();
 		session.close();
+		return true;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -112,7 +113,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 	}
 
 	@Override
-	public void removeUserToEvent(final User user, final long id)
+	public boolean removeUserToEvent(final User user, final long id)
 	{
 		final Session session = sessionFactory.openSession();
 		final EvacuationEvent evacuationEvent = (EvacuationEvent) session.get(
@@ -121,7 +122,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 		session.update(evacuationEvent);
 		session.flush();
 		session.close();
-
+		return true;
 	}
 
 	@Override

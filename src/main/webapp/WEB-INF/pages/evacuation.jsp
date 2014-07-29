@@ -59,7 +59,7 @@ function leaveUser(_id,name){
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <script>
-	$.ajax("${accountURL}/menu").done(function(result) {
+	$.ajax("${baseURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res) {
 		alert(res);

@@ -18,7 +18,7 @@ function bounceClosest() {
 			
 			$.ajax({
 				type : "GET",
-				url : ctx+"/evacuation/closestEvent",
+				url : "/236369Project/evacuation/closestEvent",
 				data : {
 					lat : pos.lat(),
 					lng : pos.lng()
@@ -42,7 +42,7 @@ function bounceClosest() {
 function bounceMine() {
 	$.ajax({
 		type : "GET",
-		url : accountCtx+"/"+currentUser+"/event"
+		url : "/236369Project/evacuation/registeredEvent"
 	}).done(function(data) {
 		if (data != "") {
 			stopEventBounce(selectedEvent);
@@ -82,24 +82,28 @@ function stopBounce(marker) {
 }
 function unregisterToEvent(_id) {
 	$.ajax({
-		type : "PUT",
-		url :ctx+"/evacuation/id/" + _id + "/leave?"+csrfName+"="+csrfValue
-		
+		type : "GET",
+		url : "/236369Project/evacuation/leave",
+		data : {
+			id : _id
+		}
 	}).done(function(msg) {
 		// alert("Data Saved: " + msg);
 	}).fail(function(err) {
-		alert(err.statusText);
+		alert(err);
 	});
 }
 function registerToEvent(_id) {
 	$.ajax({
-		type : "PUT",
-		url : ctx+"/evacuation/id/" + _id + "/join?"+csrfName+"="+csrfValue
-		
+		type : "GET",
+		url : "/236369Project/evacuation/join",
+		data : {
+			id : _id
+		}
 	}).done(function(msg) {
 		// alert("Data Saved: " + msg);
 	}).fail(function(err) {
-		alert(err.statusText);
+		alert(err);
 	});
 }
 // middle man function for Marker event addition to map
@@ -186,22 +190,23 @@ function deleteMarkers() {
 function displayEventUsers(_id) {
 	$.ajax({
 		type : "GET",
-		url : ctx+"/evacuation/id/" + _id,
-		contentType : "application/json"
+		url : "/236369Project/evacuation/list",
+		data : {
+			id : _id
+		}
 	}).done(
-			function(event) {
+			function(users) {
 				var names = "";
-				var users= event.registeredUsers;
-				for ( var i in users) 
-				{
+				for ( var i in users) {
+
 					var name = users[i].fname;
-					names += "<a href='"+accountCtx+"/"
-							+ users[i].username + "/reports'>" + name + "</a><br>";
+					names += "<a href='/236369Project/reports/user/"
+							+ users[i].username + "'>" + name + "</a><br>";
 				}
 				$("#friend" + _id).html("<p>" + names + "</p>");
 
 			}).fail(function(err) {
-		alert(err.statusText);
+		alert(err);
 	});
 }
 function listReports(_str) {
@@ -211,10 +216,10 @@ function listReports(_str) {
 
 	}).done(function(reports) {
 
-		//for ( var i in reports) {
-		//	var id = reports[i].id;
-		//	var title = reports[i].title;
-		//}
+		for ( var i in reports) {
+			var id = reports[i].id;
+			var title = reports[i].title;
+		}
 	}).fail(function(err) {
 		alert(err);
 	});
@@ -249,7 +254,7 @@ $(document).ready(function() {
 function handleReportCreation(r, loggoedOnUser, i, length) {
 	var body = $("#table_body");
 
-	//var markerImg = "";
+	var markerImg = "";
 	if (r.imageId == "")
 		setTimeout(function() {
 			updateMarker(new google.maps.LatLng(r.geolat, r.geolng), r.title,
@@ -258,7 +263,7 @@ function handleReportCreation(r, loggoedOnUser, i, length) {
 	else
 		setTimeout(function() {
 			updateMarker(new google.maps.LatLng(r.geolat, r.geolng), r.title,
-					r.id, '<img src="' + ctx + '/download/' + r.imageId
+					r.id, '<img src="/236369Project/download/' + r.imageId
 							+ '"  height="64" width="64"> ');
 		}, 500 + (i++ * 200));
 	msg = "<tr id='row"
