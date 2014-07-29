@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.technion.project.dao.EvacuationDAO;
 import com.technion.project.dao.ReportDAO;
 import com.technion.project.dao.UserDao;
+import com.technion.project.model.EvacuationEvent;
 import com.technion.project.model.Report;
 import com.technion.project.model.User;
 import com.technion.project.model.UserRole;
@@ -57,7 +58,8 @@ public class AccountController extends BaseController
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
-	public @ResponseBody List<User> getUsersJson()
+	public @ResponseBody
+	List<User> getUsersJson()
 	{
 		return userDAO.getAll();
 	}
@@ -89,7 +91,8 @@ public class AccountController extends BaseController
 	}
 
 	@RequestMapping(value = "{username}", method = RequestMethod.DELETE)
-	public @ResponseBody boolean deleteUser(@PathVariable final String username)
+	public @ResponseBody
+	boolean deleteUser(@PathVariable final String username)
 	{
 		if (!canEditAccount(username))
 			return false;
@@ -162,6 +165,13 @@ public class AccountController extends BaseController
 				userDAO.findByUserNameLocalThread(username));
 	}
 
+	@RequestMapping(value = "{username}/event", method = RequestMethod.GET)
+	public @ResponseBody
+	EvacuationEvent registeredEvent()
+	{
+		return getCurrentUser().getEvent();
+	}
+
 	/**
 	 * used for json
 	 * 
@@ -169,8 +179,8 @@ public class AccountController extends BaseController
 	 * @return
 	 */
 	@RequestMapping(value = "{username}/reports", consumes = "application/json", produces = "application/json")
-	public @ResponseBody List<Report> getReportsForUser(
-			@PathVariable final String username)
+	public @ResponseBody
+	List<Report> getReportsForUser(@PathVariable final String username)
 	{
 		return reportDao.getReportsForUser(userDAO
 				.findByUserNameLocalThread(username));
@@ -190,6 +200,7 @@ public class AccountController extends BaseController
 		model.addObject("midLng", middleLng / allReports.size());
 		model.addObject("reports", allReports);
 		model.addObject("events", evacuationDAO.getAll());
+		model.addObject("subSite", "../accounts/" + username + "/reports");
 		model.setViewName("allReport");
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();

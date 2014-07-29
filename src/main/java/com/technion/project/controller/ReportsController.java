@@ -49,7 +49,8 @@ public class ReportsController
 	}
 
 	@RequestMapping(value = "", consumes = "application/json", produces = "application/json")
-	public @ResponseBody List<Report> getReportsJson()
+	public @ResponseBody
+	List<Report> getReportsJson()
 	{
 		return reportDao.getAllReports();
 	}
@@ -73,6 +74,7 @@ public class ReportsController
 		model.addObject("midLng", middleLng / allReports.size());
 		model.addObject("reports", allReports);
 		model.addObject("events", evacuationDAO.getAll());
+		model.addObject("reportScript", "allReports");
 		model.setViewName("allReport");
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
@@ -94,14 +96,15 @@ public class ReportsController
 	}
 
 	@RequestMapping(value = "search", method = RequestMethod.GET)
-	public @ResponseBody List<Report> getReportsInJSON(
-			@RequestParam final String q)
+	public @ResponseBody
+	List<Report> getReportsInJSON(@RequestParam final String q)
 	{
 		return reportDao.getAllReports(q);
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public @ResponseBody String delete(@PathVariable final long id)
+	public @ResponseBody
+	String delete(@PathVariable final long id)
 	{
 		reportDao.removeReport(id);
 		return String.valueOf(id);

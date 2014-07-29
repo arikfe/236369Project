@@ -40,7 +40,7 @@ $.ajax("${baseURL}/menu").done(function(result) {
 </head>
 <body>
 <div id="menu"></div>
-	<form action="${eventURL}?${_csrf.parameterName}=${_csrf.token}" method="post">
+	<form action="${eventURL}/?${_csrf.parameterName}=${_csrf.token}" method="post">
 		<input name='geolng' type='hidden' id='lon'> <input
 			name='geolat' type='hidden' id='lat'>
 		<table align="left">

@@ -24,7 +24,9 @@ html, body, #map-canvas {
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <script src="${pageContext.request.contextPath}/JS/menu.js"></script>
-<c:set var="baseURL" value="${pageContext.request.contextPath}" />
+<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
+<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
 <script>
 	$.ajax("${baseURL}/menu").done(function(result) {
 		$("#menu").html(result);
@@ -39,7 +41,7 @@ html, body, #map-canvas {
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
 			<div id="menu"></div>
 
-			<form name='add' action="?${_csrf.parameterName}=${_csrf.token}"
+			<form name='add' action="${reportURL}/?${_csrf.parameterName}=${_csrf.token}"
 				method="POST" enctype="multipart/form-data">
 				<input type='hidden' name='username'
 					value=${pageContext.request.userPrincipal.name}> <input

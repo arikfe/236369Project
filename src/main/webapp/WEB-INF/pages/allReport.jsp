@@ -15,6 +15,13 @@
 <c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
 <c:set var="evacuationURL" value="${pageContext.request.contextPath}/evacuation"/>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<script type="text/javascript">
+var ctx = "${pageContext.request.contextPath}";
+var accountCtx = ctx + "/accounts";
+var csrfName = "${_csrf.parameterName}";
+var csrfValue = "${_csrf.token}";
+var currentUser = "${pageContext.request.userPrincipal.name}";
+</script>
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="${baseURL}/JS/menu.js"></script>
 <script src="${baseURL}/JS/allReports.js"></script>
@@ -48,10 +55,7 @@ html, body {
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 <script>
-var ctx = "${pageContext.request.contextPath}";
-var csrfName = "${_csrf.parameterName}";
-var csrfValue = "${_csrf.token}";
-var currentUser = "${pageContext.request.userPrincipal.name}";
+
 function initialize() {
 	
 	$.ajax("${baseURL}/menu").done(function(result) {
@@ -86,7 +90,7 @@ var msg;
 
 $.ajax({
 	type : "GET",
-	url : "${reportURL}/",
+	url : "${reportURL}/${subSite}",
 	contentType : "application/json",
 }).done(function(reports) {
 	
@@ -132,9 +136,6 @@ $.ajax({
 <body>
 
 	<div id="menu"></div>
-	<button id="showClose" onclick="bounceClosest()" >show closest evacuation event</button>
-	<button onclick="stopEventBounce()">Stop bounce</button>
-	<button onclick="bounceMine()">Find my Event</button>
 	<c:if test="${not empty desiredUser}">
 
 		<table>
@@ -158,6 +159,9 @@ $.ajax({
 		</table>
 		<br />
 	</c:if>
+	<button id="showClose" onclick="bounceClosest()" >show closest evacuation event</button>
+	<button onclick="stopEventBounce()">Stop bounce</button>
+	<button onclick="bounceMine()">Find my Event</button>
 	<table id='reportsTbody' class="zebra" align="left">
 
 		<tbody >
