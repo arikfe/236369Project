@@ -11,7 +11,7 @@ import com.technion.project.Constants;
 
 @Entity
 @Table(name = "report", catalog = Constants.SCHEMA)
-public class Report
+public class Report implements BaseModel
 {
 	@Id
 	@GeneratedValue

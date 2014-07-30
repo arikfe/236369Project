@@ -3,11 +3,8 @@ package com.technion.project.dao;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -20,7 +17,7 @@ import com.technion.project.UserSecurityConfig;
 import com.technion.project.model.User;
 
 @Repository
-public class UserDaoImpl implements UserDao
+public class UserDaoImpl extends BaseDAO implements UserDao
 {
 
 	@Autowired
@@ -68,19 +65,18 @@ public class UserDaoImpl implements UserDao
 	@Override
 	public void add(final User user)
 	{
-		final Session currentSession = sessionFactory.openSession();
-		addUserForSession(user, currentSession);
-		currentSession.flush();
-		currentSession.close();
-	}
-
-	private void addUserForSession(final User user, final Session currentSession)
-	{
-		final UserSecurityConfig sc = new UserSecurityConfig();
-		final PasswordEncoder encoder = sc.passwordEncoder();
-		user.setEnabled(true);
-		user.setPassword(encoder.encode(user.getPassword()));
-		currentSession.saveOrUpdate(user);
+		executeQuery(new QueryRunner()
+		{
+			@Override
+			public void execueSafe(final Session session)
+			{
+				final UserSecurityConfig sc = new UserSecurityConfig();
+				final PasswordEncoder encoder = sc.passwordEncoder();
+				user.setEnabled(true);
+				user.setPassword(encoder.encode(user.getPassword()));
+				session.saveOrUpdate(user);
+			}
+		});
 	}
 
 	@SuppressWarnings("unchecked")
@@ -97,62 +93,68 @@ public class UserDaoImpl implements UserDao
 
 	}
 
-	// TODO add locks here
 	@Override
 	public void delete(final User user)
 	{
-		reportDao.removeReport(user);
-		final Session session = sessionFactory.openSession();
-		final Transaction transaction = session.getTransaction();
-		transaction.begin();
-		final Long imageId = user.getImageId();
-		session.delete(user);
-		transaction.commit();
-		session.flush();
-		session.close();
-		documentDao.remove(imageId);
+		executeQuery(new QueryRunner()
+		{
+			@Override
+			public void execueSafe(final Session session)
+			{
+				reportDao.removeReport(user, session);
+				final Long imageId = user.getImageId();
+				session.delete(user);
+				documentDao.remove(imageId, session);
+			}
+		});
 	}
 
 	@Override
 	public void toggleEnabled(final User user)
 	{
-		user.setEnabled(!user.isEnabled());
-		final Session session = sessionFactory.openSession();
-		final Transaction transaction = session.getTransaction();
-		transaction.begin();
-		session.update(user);
-		transaction.commit();
-		session.close();
+		executeQuery(new QueryRunner()
+		{
+			@Override
+			public void execueSafe(final Session session)
+			{
+				user.setEnabled(!user.isEnabled());
+				session.update(user);
+			}
+		});
 	}
 
 	@Override
 	public boolean add(final User user, final MultipartFile file)
 	{
-		final Session currentSession = sessionFactory.openSession();
-		if (!file.isEmpty())
-			user.setImageId(documentDao.save(file));
-		try
+		return executeQuery(new QueryRunner()
 		{
-			addUserForSession(user, currentSession);
-			currentSession.flush();
-			currentSession.close();
-		} catch (final Exception e)
-		{
-			JOptionPane.showMessageDialog(null,
-					"Fail to perform update. Try again", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		return true;
+
+			@Override
+			public void execueSafe(final Session session)
+			{
+				if (!file.isEmpty())
+					user.setImageId(documentDao.save(file));
+				final UserSecurityConfig sc = new UserSecurityConfig();
+				final PasswordEncoder encoder = sc.passwordEncoder();
+				user.setEnabled(true);
+				user.setPassword(encoder.encode(user.getPassword()));
+				session.saveOrUpdate(user);
+
+			}
+		});
 	}
 
 	@Override
 	public void update(final User user)
 	{
-		final Session currentSession = sessionFactory.openSession();
-		currentSession.update(user);
-		currentSession.flush();
-		currentSession.close();
+		executeQuery(new QueryRunner()
+		{
+			@Override
+			public void execueSafe(final Session session)
+			{
+				session.update(user);
+			}
+		});
 
 	}
 
@@ -162,12 +164,18 @@ public class UserDaoImpl implements UserDao
 	{
 		final UserSecurityConfig sc = new UserSecurityConfig();
 		final PasswordEncoder encoder = sc.passwordEncoder();
-
 		if (!encoder.matches(oldpass, user.getPassword()))
 			return false;
-		user.setPassword(encoder.encode(password));
-		update(user);
-		return true;
+		return executeQuery(new QueryRunner()
+		{
+
+			@Override
+			public void execueSafe(final Session session)
+			{
+				user.setPassword(encoder.encode(password));
+				session.update(user);
+			}
+		});
 
 	}
 
@@ -184,5 +192,11 @@ public class UserDaoImpl implements UserDao
 				return u.getEvent() == null;
 			}
 		});
+	}
+
+	@Override
+	protected Session getSession()
+	{
+		return sessionFactory.openSession();
 	}
 }

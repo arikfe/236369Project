@@ -4,10 +4,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +14,7 @@ import com.technion.project.model.EvacuationEvent;
 import com.technion.project.model.User;
 
 @Repository
-public class EvacuationDAOImpl implements EvacuationDAO
+public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 {
 	private final class DistanceComperator implements
 			Comparator<EvacuationEvent>
@@ -47,7 +45,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 	}
 
 	@Autowired
-	private SessionFactory sessionFactory;
+	SessionFactory sessionFactory;
 
 	/*
 	 * (non-Javadoc)
@@ -57,7 +55,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 	@Override
 	public EvacuationEvent getByID(final Long id)
 	{
-		final Session session = sessionFactory.openSession();
+		final Session session = getSession();
 		final EvacuationEvent evacuationEvent = (EvacuationEvent) session.get(
 				EvacuationEvent.class, id);
 		session.close();
@@ -74,33 +72,44 @@ public class EvacuationDAOImpl implements EvacuationDAO
 	@Override
 	public void addEvecuationEvent(final EvacuationEvent event)
 	{
-		final Session session = sessionFactory.openSession();
-		session.save(event);
-		session.flush();
-		session.close();
+		executeQuery(new QueryRunner()
+		{
+			@Override
+			public void execueSafe(final Session session)
+			{
+				session.save(event);
+			}
+		});
 	}
 
 	@Override
 	public void update(final EvacuationEvent event)
 	{
-		final Session session = sessionFactory.openSession();
-		session.update(event);
-		session.flush();
-		session.close();
+		executeQuery(new QueryRunner()
+		{
+			@Override
+			public void execueSafe(final Session session)
+			{
+				session.update(event);
+			}
+		});
 	}
 
 	@Override
 	public boolean addUserToEvent(final User user, final long id)
 	{
 
-		final Session session = sessionFactory.openSession();
-		final EvacuationEvent evacuationEvent = (EvacuationEvent) session.get(
-				EvacuationEvent.class, id);
-		evacuationEvent.addUser(user);
-		session.update(evacuationEvent);
-		session.flush();
-		session.close();
-		return true;
+		return executeQuery(new QueryRunner()
+		{
+			@Override
+			public void execueSafe(final Session session)
+			{
+				final EvacuationEvent evacuationEvent = (EvacuationEvent) session
+						.get(EvacuationEvent.class, id);
+				evacuationEvent.addUser(user);
+				session.update(evacuationEvent);
+			}
+		});
 	}
 
 	@SuppressWarnings("unchecked")
@@ -108,7 +117,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 	public List<EvacuationEvent> getAll()
 	{
 		List<EvacuationEvent> evacuationEvents = Lists.newArrayList();
-		final Session session = sessionFactory.openSession();
+		final Session session = getSession();
 		evacuationEvents = session.createQuery("from EvacuationEvent").list();
 		session.close();
 		return evacuationEvents;
@@ -117,14 +126,19 @@ public class EvacuationDAOImpl implements EvacuationDAO
 	@Override
 	public boolean removeUserToEvent(final User user, final long id)
 	{
-		final Session session = sessionFactory.openSession();
-		final EvacuationEvent evacuationEvent = (EvacuationEvent) session.get(
-				EvacuationEvent.class, id);
-		evacuationEvent.removeUser(user);
-		session.update(evacuationEvent);
-		session.flush();
-		session.close();
-		return true;
+		return executeQuery(new QueryRunner()
+		{
+
+			@Override
+			public void execueSafe(final Session session)
+			{
+				final EvacuationEvent evacuationEvent = (EvacuationEvent) session
+						.get(EvacuationEvent.class, id);
+				evacuationEvent.removeUser(user);
+				session.update(evacuationEvent);
+
+			}
+		});
 	}
 
 	@Override
@@ -138,26 +152,27 @@ public class EvacuationDAOImpl implements EvacuationDAO
 	@Override
 	public boolean delete(final long id)
 	{
-		final Session session = sessionFactory.openSession();
 
-		final Transaction transaction = session.getTransaction();
-		transaction.begin();
-		try
+		return executeQuery(new QueryRunner()
 		{
-			final EvacuationEvent event = getByID(id);
-			for (final User u : event.getRegisteredUsers())
+			@Override
+			public void execueSafe(final Session session)
 			{
-				u.setEvent(null);
-				session.update(u);
+				final EvacuationEvent event = getByID(id);
+				for (final User u : event.getRegisteredUsers())
+				{
+					u.setEvent(null);
+					session.update(u);
+				}
+				session.delete(event);
 			}
-			session.delete(event);
-			transaction.commit();
-			session.flush();
-		} catch (final HibernateException e)
-		{
-			transaction.rollback();
-		}
-		session.close();
-		return true;
+		});
 	}
+
+	@Override
+	protected Session getSession()
+	{
+		return sessionFactory.openSession();
+	}
+
 }

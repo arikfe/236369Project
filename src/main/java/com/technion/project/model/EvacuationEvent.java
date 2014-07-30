@@ -18,7 +18,7 @@ import com.technion.project.Constants;
 
 @Entity
 @Table(name = "evacuation", catalog = Constants.SCHEMA)
-public class EvacuationEvent
+public class EvacuationEvent implements BaseModel
 {
 
 	private long id;

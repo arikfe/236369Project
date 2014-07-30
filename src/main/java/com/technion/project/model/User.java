@@ -20,7 +20,7 @@ import com.technion.project.Constants;
 
 @Entity
 @Table(name = "users", catalog = Constants.SCHEMA)
-public class User
+public class User implements BaseModel
 {
 
 	private String username;

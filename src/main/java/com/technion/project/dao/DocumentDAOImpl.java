@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 import com.google.common.io.ByteStreams;
+import com.technion.project.model.BaseModel;
 import com.technion.project.model.Document;
 
 @Repository
@@ -70,11 +71,18 @@ public class DocumentDAOImpl implements DocumentDAO
 	{
 		if (id == null)
 			return;
-		final Document document = get(id);
+		final BaseModel document = get(id);
 		final Session session = sessionFactory.openSession();
 		session.delete(document);
 		session.flush();
 		session.close();
+
+	}
+
+	@Override
+	public void remove(final Long imageId, final Session session)
+	{
+		session.delete(get(imageId));
 
 	}
 

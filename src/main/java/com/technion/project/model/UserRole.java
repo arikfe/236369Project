@@ -15,18 +15,21 @@ import javax.persistence.UniqueConstraint;
 import com.technion.project.Constants;
 
 @Entity
-@Table(name = "user_roles", catalog = Constants.SCHEMA, uniqueConstraints = @UniqueConstraint(columnNames = {
-		"role", "username" }))
-public class UserRole {
+@Table(name = "user_roles", catalog = Constants.SCHEMA, uniqueConstraints = @UniqueConstraint(columnNames =
+{ "role", "username" }))
+public class UserRole implements BaseModel
+{
 
 	private int userRoleId;
 	private User user;
 	private String role;
 
-	public UserRole() {
+	public UserRole()
+	{
 	}
 
-	public UserRole(final User user, final String role) {
+	public UserRole(final User user, final String role)
+	{
 		this.user = user;
 		this.role = role;
 	}
@@ -34,30 +37,36 @@ public class UserRole {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "user_role_id", unique = true, nullable = false)
-	public int getUserRoleId() {
+	public int getUserRoleId()
+	{
 		return this.userRoleId;
 	}
 
-	public void setUserRoleId(final int userRoleId) {
+	public void setUserRoleId(final int userRoleId)
+	{
 		this.userRoleId = userRoleId;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "username", nullable = false)
-	public User getUser() {
+	public User getUser()
+	{
 		return this.user;
 	}
 
-	public void setUser(final User user) {
+	public void setUser(final User user)
+	{
 		this.user = user;
 	}
 
 	@Column(name = "role", nullable = false, length = 45)
-	public String getRole() {
+	public String getRole()
+	{
 		return this.role;
 	}
 
-	public void setRole(final String role) {
+	public void setRole(final String role)
+	{
 		this.role = role;
 	}
 

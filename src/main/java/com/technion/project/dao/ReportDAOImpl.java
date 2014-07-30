@@ -109,11 +109,11 @@ public class ReportDAOImpl implements ReportDAO
 	 * model.User)
 	 */
 	@Override
-	public void removeReport(final User user)
+	public void removeReport(final User user, final Session session)
 	{
 		final List<Report> reports = getReportsForUser(user);
 		for (final Report report : reports)
-			removeReport(report);
+			session.delete(report);
 	}
 
 	/*

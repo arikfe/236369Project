@@ -12,7 +12,7 @@ import com.technion.project.Constants;
 
 @Entity
 @Table(name = "document", catalog = Constants.SCHEMA)
-public class Document
+public class Document implements BaseModel
 {
 	@Id
 	@GeneratedValue

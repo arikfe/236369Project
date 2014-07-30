@@ -64,7 +64,7 @@
 				</tr>
 				<tr >
 					<td colspan='2' align="left" height="80px" ><input name="submit" type="submit"
-						value="Submit" style="height:40px;background:#4472b9; width:120px;font-weight:bold;color:white;font-family:arial;font-size:22px;border:5px solid #4472b9;border-radius:10px "/></td>
+						value="Login" style="height:40px;background:#4472b9; width:120px;font-weight:bold;color:white;font-family:arial;font-size:22px;border:5px solid #4472b9;border-radius:10px "/></td>
 				</tr>
 				<tr>
 				<td colspan='2'>Not a Member Yet? Registering is free and only takes few seconds.</td>
