@@ -19,7 +19,7 @@ CREATE  TABLE users (
   imageId int(11),
   enabled TINYINT NOT NULL DEFAULT 1 ,
   PRIMARY KEY (username),
-  foreign key (imageId) references document(id)
+  foreign key (imageId) references document(id) on delete cascade
   );
 
 
@@ -51,7 +51,7 @@ CREATE TABLE report (
   geolat decimal(10,6) default NULL,
   geolng decimal(10,6) default NULL,
   imageId int(11),
-  foreign key(imageId) references document(id),
+  foreign key(imageId) references document(id) on delete cascade,
   PRIMARY KEY (id),
   FOREIGN KEY (username) REFERENCES users (username));
 
@@ -66,4 +66,5 @@ CREATE TABLE evacuation (
  
  create table evacuation_user (
  id bigint(11) references evacuation(id),
-username varchar(45) references users(username),primary key(id,username));
+username varchar(45) references users(username)on delete cascade
+,primary key(id,username));

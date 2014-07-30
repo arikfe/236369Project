@@ -51,20 +51,14 @@ public class AccountController extends BaseController
 		hashSet.add(new UserRole(user, "ROLE_USER"));
 		user.setUserRole(hashSet);
 		user.setEnabled(true);
-		final boolean res = userDao.add(user, file);
-		if (res)
-			return "redirect:../login";
-		else
-			return "redirect:../register";
 
-	
+		userDAO.add(user, file);
 
-		
+		return "redirect:../login";
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
-	public @ResponseBody
-	List<User> getUsersJson()
+	public @ResponseBody List<User> getUsersJson()
 	{
 		return userDAO.getAll();
 	}
@@ -96,8 +90,7 @@ public class AccountController extends BaseController
 	}
 
 	@RequestMapping(value = "{username}", method = RequestMethod.DELETE)
-	public @ResponseBody
-	boolean deleteUser(@PathVariable final String username)
+	public @ResponseBody boolean deleteUser(@PathVariable final String username)
 	{
 		if (!canEditAccount(username))
 			return false;
@@ -171,8 +164,7 @@ public class AccountController extends BaseController
 	}
 
 	@RequestMapping(value = "{username}/event", method = RequestMethod.GET)
-	public @ResponseBody
-	EvacuationEvent registeredEvent()
+	public @ResponseBody EvacuationEvent registeredEvent()
 	{
 		return getCurrentUser().getEvent();
 	}
@@ -184,8 +176,8 @@ public class AccountController extends BaseController
 	 * @return
 	 */
 	@RequestMapping(value = "{username}/reports", consumes = "application/json", produces = "application/json")
-	public @ResponseBody
-	List<Report> getReportsForUser(@PathVariable final String username)
+	public @ResponseBody List<Report> getReportsForUser(
+			@PathVariable final String username)
 	{
 		return reportDao.getReportsForUser(userDAO
 				.findByUserNameLocalThread(username));

@@ -27,10 +27,11 @@ html, body, #map-canvas {
 <c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
 <c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
 <c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
-<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/> 
+<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
+<c:set var="eventURL" value="${pageContext.request.contextPath}/evacuation"/>  
 <script src="${baseURL}/JS/menu.js"></script>
 <script>
-$.ajax("../accounts/menu").done(function(result) {
+$.ajax("${baseURL}/menu").done(function(result) {
 	$("#menu").html(result);
 }).error(function(res){
 	alert(res);
@@ -39,7 +40,7 @@ $.ajax("../accounts/menu").done(function(result) {
 </head>
 <body>
 <div id="menu"></div>
-	<form action="../evacuation/add" method="get">
+	<form action="${eventURL}/?${_csrf.parameterName}=${_csrf.token}" method="post">
 		<input name='geolng' type='hidden' id='lon'> <input
 			name='geolat' type='hidden' id='lat'>
 		<table align="left">
