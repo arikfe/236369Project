@@ -27,11 +27,4 @@ public interface ReportDAO
 
 	public void addReport(Report report, MultipartFile file);
 
-	/**
-	 * use only in created Session - session is committed
-	 * 
-	 * @param user
-	 */
-	public void delete(User user);
-
 }

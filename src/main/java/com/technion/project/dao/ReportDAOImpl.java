@@ -13,7 +13,7 @@ import com.technion.project.model.Report;
 import com.technion.project.model.User;
 
 @Repository
-public class ReportDAOImpl implements ReportDAO
+public class ReportDAOImpl extends BaseDAO implements ReportDAO
 {
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -78,11 +78,15 @@ public class ReportDAOImpl implements ReportDAO
 	@Override
 	public void removeReport(final Long id)
 	{
-		final Session session = sessionFactory.openSession();
-		final Report report = (Report) session.get(Report.class, id);
-		session.delete(report);
-		session.flush();
-		session.close();
+		executeQuery(new QueryRunner()
+		{
+			@Override
+			public void execueSafe(final Session session)
+			{
+				final Report report = (Report) session.get(Report.class, id);
+				session.delete(report);
+			}
+		});
 	}
 
 	/*
@@ -95,10 +99,15 @@ public class ReportDAOImpl implements ReportDAO
 	@Override
 	public void removeReport(final Report report)
 	{
-		final Session session = sessionFactory.openSession();
-		session.delete(report);
-		session.flush();
-		session.close();
+		executeQuery(new QueryRunner()
+		{
+
+			@Override
+			public void execueSafe(final Session session)
+			{
+				session.delete(report);
+			}
+		});
 	}
 
 	/*
@@ -126,12 +135,16 @@ public class ReportDAOImpl implements ReportDAO
 	@Override
 	public void addReport(final Report report, final MultipartFile file)
 	{
-		final Session session = sessionFactory.openSession();
-		if (!file.isEmpty())
-			report.setImageId(documentDao.save(file));
-		session.saveOrUpdate(report);
-		session.flush();
-		session.close();
+		executeQuery(new QueryRunner()
+		{
+			@Override
+			public void execueSafe(final Session session)
+			{
+				if (!file.isEmpty())
+					report.setImageId(documentDao.save(file));
+				session.saveOrUpdate(report);
+			}
+		});
 	}
 
 	/*
@@ -141,14 +154,6 @@ public class ReportDAOImpl implements ReportDAO
 	 * com.technion.project.dao.ReportDAO#delete(com.technion.project.model.
 	 * User)
 	 */
-	@Override
-	public void delete(final User user)
-	{
-		final Session session = sessionFactory.getCurrentSession();
-		for (final Report report : getReportsForUser(user))
-			session.delete(report);
-
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -157,7 +162,7 @@ public class ReportDAOImpl implements ReportDAO
 		if (condition.isEmpty())
 			return getAllReports();
 		List<Report> reports = Lists.newArrayList();
-		final Session session = sessionFactory.openSession();
+		final Session session = getSession();
 		reports = session
 				.createQuery(
 						"from Report r where str(r.content) like :condition or lower(str(r.title)) like :condition ")
@@ -165,5 +170,11 @@ public class ReportDAOImpl implements ReportDAO
 				.list();
 		session.close();
 		return reports;
+	}
+
+	@Override
+	protected Session getSession()
+	{
+		return sessionFactory.openSession();
 	}
 }
