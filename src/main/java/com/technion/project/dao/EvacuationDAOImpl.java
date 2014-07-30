@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -50,7 +51,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.technion.project.dao.EvacuationDAO#getByID(java.lang.Long)
 	 */
 	@Override
@@ -65,7 +66,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.EvacuationDAO#addEvecuationEvent(com.technion
 	 * .project.model.EvacuationEvent)
@@ -139,7 +140,7 @@ public class EvacuationDAOImpl implements EvacuationDAO
 	{
 		final Session session = sessionFactory.openSession();
 
-		final org.hibernate.Transaction transaction = session.getTransaction();
+		final Transaction transaction = session.getTransaction();
 		transaction.begin();
 		try
 		{
