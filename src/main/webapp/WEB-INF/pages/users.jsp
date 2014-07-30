@@ -18,7 +18,7 @@
 	value="${pageContext.request.contextPath}/reports" />
 <c:set var="accountURL"
 	value="${pageContext.request.contextPath}/accounts" />
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script src="${baseURL}/JS/menu.js"></script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>

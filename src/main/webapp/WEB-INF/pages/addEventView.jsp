@@ -17,18 +17,18 @@ html, body, #map-canvas {
 }
 </style>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
-<link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/table.css"/>"></link>
-<link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
 <c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
 <c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
 <c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
 <c:set var="eventURL" value="${pageContext.request.contextPath}/evacuation"/>  
+
+<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/table.css"/>"></link>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <script src="${baseURL}/JS/menu.js"></script>
 <script>
 $.ajax("${baseURL}/menu").done(function(result) {

@@ -22,7 +22,7 @@
 	value="${pageContext.request.contextPath}/accounts" />
 	<c:set var="evacuationURL"
 	value="${pageContext.request.contextPath}/evacuation" />
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script src="${baseURL}/JS/menu.js"></script>
 <script type="text/javascript">
 function addUser(eid,name){

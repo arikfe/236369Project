@@ -12,8 +12,6 @@
 %>
 <head>
 
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="/236369Project/JS/menu.js"></script>
 <link type="text/css" rel="stylesheet" href="/CSS/table.css"></link>
 <link type="text/css" rel="stylesheet" href="/CSS/dropDownMenu.css"></link>
 <c:set var="baseURL" value="${pageContext.request.contextPath}" />
@@ -22,6 +20,8 @@
 	value="${pageContext.request.contextPath}/reports" />
 <c:set var="accountURL"
 	value="${pageContext.request.contextPath}/accounts" />
+<script src="${baseURL}/JS/menu.js"></script>
+<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script type="text/javascript">
 	function validateForm() {
 		var k = document.getElementById("password");

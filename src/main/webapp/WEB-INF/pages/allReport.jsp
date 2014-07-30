@@ -22,7 +22,7 @@ var csrfName = "${_csrf.parameterName}";
 var csrfValue = "${_csrf.token}";
 var currentUser = "${pageContext.request.userPrincipal.name}";
 </script>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script src="${baseURL}/JS/menu.js"></script>
 <script src="${baseURL}/JS/allReports.js"></script>
 <link type="text/css" rel="stylesheet"

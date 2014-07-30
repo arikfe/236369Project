@@ -15,18 +15,18 @@ html, body, #map-canvas {
 	padding: 0px
 }
 </style>
+<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
+<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <script src="${pageContext.request.contextPath}/JS/menu.js"></script>
-<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
-<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
-<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
 <script>
 	$.ajax("${baseURL}/menu").done(function(result) {
 		$("#menu").html(result);
