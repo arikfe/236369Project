@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.technion.project.Constants;
 
 @Entity
@@ -19,6 +21,7 @@ public class Report implements BaseModel
 	private String username;
 	private String title;
 	private String content;
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private Date expiration;
 	private float geolat;
 	private float geolng;

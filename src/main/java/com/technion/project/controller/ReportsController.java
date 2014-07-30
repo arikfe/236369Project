@@ -1,6 +1,5 @@
 package com.technion.project.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +31,6 @@ public class ReportsController
 
 	@Autowired
 	private EvacuationDAO evacuationDAO;
-
-	// TODO remove and check
-	@RequestMapping(value = "user/{username}", method = RequestMethod.GET)
-	public ModelAndView getReportsForUser(@PathVariable final String username)
-	{
-		return getAllReportsForUser(username).addObject("desiredUser",
-				userDAO.findByUserNameLocalThread(username));
-	}
 
 	@RequestMapping(value =
 	{ "" }, method = RequestMethod.GET)
@@ -88,9 +79,9 @@ public class ReportsController
 	{ "" }, method = RequestMethod.POST)
 	public String addReportToDB(final Report report,
 			@RequestParam("file") final MultipartFile file)
+
 	{
-		report.setExpiration(new Date(
-				System.currentTimeMillis() + 1000 * 60 * 60));
+
 		reportDao.addReport(report, file);
 		return "redirect:";
 	}

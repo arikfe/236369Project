@@ -26,7 +26,7 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter
 	static
 	{
 		roleByPath.put("/admin/**", ROLE_ADMIN);
-		roleByPath.put("/reports/addReport", ROLE_USER);
+		roleByPath.put("/addReport", ROLE_USER);
 		roleByPath.put("/evacuation/add", ROLE_ADMIN);
 		roleByPath.put("/accounts/", ROLE_USER);
 		roleByPath.put("/accounts/*/delete", ROLE_ADMIN);
