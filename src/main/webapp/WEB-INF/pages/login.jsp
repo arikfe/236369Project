@@ -11,7 +11,7 @@
 	border-radius: 4px;
 	color: #a94442;
 	background-color: #f2dede;
-	border-color: #ebccd1;
+	border-color: #a6aee0;
 }
 
 .msg {
@@ -19,29 +19,30 @@
 	margin-bottom: 20px;
 	border: 1px solid transparent;
 	border-radius: 4px;
-	color: #31708f;
-	background-color: #d9edf7;
-	border-color: #bce8f1;
+	color: #31418f;
+	background-color: #dfe2f4;
+	border-color: #a6aee0;
 }
 
 #login-box {
-	width: 300px;
+	width: 400px;
 	padding: 20px;
 	margin: 100px auto;
-	background: #fff;
+	background: #dfe2f4;
+	border-color: #4472b9;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
-	border: 1px solid #000;
+	border: 2px solid #4472b9;
 }
 </style>
 </head>
 <body onload='document.loginForm.username.focus();'>
 
-	<h1>Spring Security Login Form (Database + Hibernate Authentication)</h1>
+	<h1 align="center" line-height:15px style="font-family:arial;color:blue;weight:bold">Login Form</h1>
 
 	<div id="login-box">
 
-		<h3>Login with Username and Password</h3>
+		<h2 align="center" style="font-family:arial;color:green;font-size:26px;weight:bold ">User Login</h2>
 
 		<c:if test="${not empty error}">
 			<div class="error">${error}</div>
@@ -52,27 +53,36 @@
 
 		<form name='loginForm'
 			action="<c:url value='/login' />" method='POST'>
-
 			<table>
-				<tr>
-					<td>User:</td>
+				<tr style="font-weight: bold;font-size:18px">
+					<td >User:</td>
 					<td><input type='text' name='username'></td>
-				</tr>
-				<tr>
-					<td>Password:</td>
+				</tr >
+				<tr style="font-weight: bold;font-size:18px">
+					<td >Password:</td>
 					<td><input type='password' name='password' /></td>
 				</tr>
-				<tr>
-					<td colspan='2'><input name="submit" type="submit"
-						value="submit" /></td>
+				<tr >
+					<td colspan='2' align="left" height="80px" ><input name="submit" type="submit"
+						value="Submit" style="height:40px;background:#4472b9; width:120px;font-weight:bold;color:white;font-family:arial;font-size:22px;border:5px solid #4472b9;border-radius:10px "/></td>
 				</tr>
+				<tr>
+				<td colspan='2'>Not a Member Yet? Registering is free and only takes few seconds.</td>
+				</tr>
+				<tr >
+					<td colspan='2' align="left" height="80px" >
+						<a href="${pageContext.request.contextPath}/register">
+   							<input type="button" value="Register" style="height:40px;background:#4472b9; width:120px;font-weight:bold;color:white;font-family:arial;font-size:22px;border:5px solid #4472b9;border-radius:10px "/>
+   						</a>
+					 </td>
+				</tr>
+				
 			</table>
-
+				
 			<input type="hidden" name="${_csrf.parameterName}"
 				value="${_csrf.token}" />
 
 		</form>
-	<a href="${pageContext.request.contextPath}/register">Register</a>
 	</div>
 
 </body>

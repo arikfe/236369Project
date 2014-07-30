@@ -3,6 +3,8 @@ package com.technion.project.dao;
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -124,14 +126,24 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public void add(final User user, final MultipartFile file)
+	public boolean add(final User user, final MultipartFile file)
 	{
 		final Session currentSession = sessionFactory.openSession();
 		if (!file.isEmpty())
 			user.setImageId(documentDao.save(file));
-		addUserForSession(user, currentSession);
-		currentSession.flush();
-		currentSession.close();
+		try
+		{
+			addUserForSession(user, currentSession);
+			currentSession.flush();
+			currentSession.close();
+		} catch (final Exception e)
+		{
+			JOptionPane.showMessageDialog(null,
+					"Fail to perform update. Try again", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 
 	@Override
