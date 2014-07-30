@@ -2,11 +2,12 @@ package com.technion.project.controller;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,59 +26,53 @@ public class EvacuationController extends BaseController
 	private EvacuationDAO evacuationDAO;
 
 	@RequestMapping(value =
-	{ "add" }, method = RequestMethod.GET)
+	{ "" }, method = RequestMethod.POST)
 	public String add(final EvacuationEvent event)
 	{
 		final HashSet<User> hashSet = new HashSet<User>();
 		event.setRegisteredUsers(hashSet);
 		event.setEstimated(new Date());
 		evacuationDAO.addEvecuationEvent(event);
-		return "redirect:../admin";
+		return "redirect:../";
 	}
 
-	@RequestMapping(value = "join", method = RequestMethod.GET)
-	public String join(final long id)
+	@RequestMapping(value = "id/{id}/join", method = RequestMethod.PUT)
+	public @ResponseBody boolean join(@PathVariable final long id)
 	{
-		evacuationDAO.addUserToEvent(getCurrentUser(), id);
-		return "redirect:../login";
+		return evacuationDAO.addUserToEvent(getCurrentUser(), id);
 	}
 
-	@RequestMapping(value = "joinUser", method = RequestMethod.GET)
-	public String joinUser(final long id, final String username)
+	@RequestMapping(value = "id/{id}/joinUser", method = RequestMethod.PUT)
+	public @ResponseBody boolean joinUser(@PathVariable final long id,
+			@RequestBody final MultiValueMap<String, String> body)
 	{
-		evacuationDAO.addUserToEvent(
-				userDao.findByUserNameLocalThread(username), id);
-		return "redirect:../login";
-	}
-
-	@RequestMapping(value =
-	{ "leave" }, method = RequestMethod.GET)
-	public String leave(final long id)
-	{
-		evacuationDAO.removeUserToEvent(getCurrentUser(), id);
-		return "redirect:../login";
+		return evacuationDAO.addUserToEvent(
+				userDao.findByUserNameLocalThread(body.getFirst("username")),
+				id);
 	}
 
 	@RequestMapping(value =
-	{ "leaveUser" }, method = RequestMethod.GET)
-	public String leaveUser(final long id, final String username)
+	{ "id/{id}/leave" }, method = RequestMethod.PUT)
+	public @ResponseBody boolean leave(@PathVariable final long id)
 	{
-		evacuationDAO.removeUserToEvent(
-				userDao.findByUserNameLocalThread(username), id);
-		return "redirect:../login";
+		return evacuationDAO.removeUserToEvent(getCurrentUser(), id);
 	}
 
 	@RequestMapping(value =
-	{ "list" }, method = RequestMethod.GET)
-	public @ResponseBody Set<User> list(final long id)
+	{ "id/{id}/leaveUser" }, method = RequestMethod.PUT)
+	public @ResponseBody boolean leaveUser(@PathVariable final long id,
+			@RequestBody final MultiValueMap<String, String> body)
 	{
-		return evacuationDAO.getByID(id).getRegisteredUsers();
+		return evacuationDAO.removeUserToEvent(
+				userDao.findByUserNameLocalThread(body.getFirst("username")),
+				id);
 	}
 
-	@RequestMapping(value = "registeredEvent", method = RequestMethod.GET)
-	public @ResponseBody EvacuationEvent registeredEvent()
+	@RequestMapping(value =
+	{ "id/{id}" }, method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
+	public @ResponseBody EvacuationEvent list(@PathVariable final long id)
 	{
-		return getCurrentUser().getEvent();
+		return evacuationDAO.getByID(id);
 	}
 
 	@RequestMapping(value = "closestEvent", method = RequestMethod.GET)
@@ -96,5 +91,11 @@ public class EvacuationController extends BaseController
 		view.addObject("id", id);
 		view.addObject("users", userDao.getUserWithNoEvent());
 		return view;
+	}
+
+	@RequestMapping(value = "id/{id}", method = RequestMethod.DELETE)
+	public @ResponseBody boolean deleteEvent(@PathVariable final long id)
+	{
+		return evacuationDAO.delete(id);
 	}
 }

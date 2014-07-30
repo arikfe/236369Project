@@ -22,7 +22,7 @@ public interface UserDao
 
 	void toggleEnabled(User user);
 
-	void add(User user, MultipartFile file);
+	boolean add(User user, MultipartFile file);
 
 	void update(User user);
 

@@ -14,12 +14,14 @@ public interface EvacuationDAO
 
 	public void update(EvacuationEvent event);
 
-	public void addUserToEvent(User user, long id);
+	public boolean addUserToEvent(User user, long id);
 
-	public void removeUserToEvent(User user, long id);
+	public boolean removeUserToEvent(User user, long id);
 
 	public List<EvacuationEvent> getAll();
 
 	public EvacuationEvent getClosest(float lat, float lng);
+
+	public boolean delete(long id);
 
 }

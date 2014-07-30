@@ -13,4 +13,6 @@ public interface DocumentDAO
 	public Document get(long id);
 
 	public List<Document> list();
+
+	public void remove(Long id);
 }

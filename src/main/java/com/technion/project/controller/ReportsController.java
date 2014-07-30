@@ -33,6 +33,7 @@ public class ReportsController
 	@Autowired
 	private EvacuationDAO evacuationDAO;
 
+	// TODO remove and check
 	@RequestMapping(value = "user/{username}", method = RequestMethod.GET)
 	public ModelAndView getReportsForUser(@PathVariable final String username)
 	{
@@ -45,6 +46,13 @@ public class ReportsController
 	public ModelAndView defualtView()
 	{
 		return getAllReportsForUser("");
+	}
+
+	@RequestMapping(value = "", consumes = "application/json", produces = "application/json")
+	public @ResponseBody
+	List<Report> getReportsJson()
+	{
+		return reportDao.getAllReports();
 	}
 
 	private ModelAndView getAllReportsForUser(final String username)
@@ -66,6 +74,7 @@ public class ReportsController
 		model.addObject("midLng", middleLng / allReports.size());
 		model.addObject("reports", allReports);
 		model.addObject("events", evacuationDAO.getAll());
+		model.addObject("reportScript", "allReports");
 		model.setViewName("allReport");
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
@@ -76,29 +85,7 @@ public class ReportsController
 	}
 
 	@RequestMapping(value =
-	{ "addReport" }, method = RequestMethod.GET)
-	public ModelAndView addReport()
-	{
-		final Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		final ModelAndView model = new ModelAndView();
-		model.addObject("title", "Spring Security + Hibernate Example");
-		model.addObject("message", "This is default page!");
-		if (!"anonymousUser".equals(auth.getName()))
-		{
-			model.addObject("fname",
-					userDAO.findByUserNameLocalThread(auth.getName())
-							.getFname());
-			model.addObject("nname",
-					userDAO.findByUserNameLocalThread(auth.getName())
-							.getLname());
-		}
-		model.setViewName("addReport");
-		return model;
-	}
-
-	@RequestMapping(value =
-	{ "add" }, method = RequestMethod.POST)
+	{ "" }, method = RequestMethod.POST)
 	public String addReportToDB(final Report report,
 			@RequestParam("file") final MultipartFile file)
 	{
@@ -108,31 +95,16 @@ public class ReportsController
 		return "redirect:";
 	}
 
-	@RequestMapping(value = "json/id/{name}", method = RequestMethod.GET)
-	public @ResponseBody Report getReportInJSON(@PathVariable final String name)
+	@RequestMapping(value = "search", method = RequestMethod.GET)
+	public @ResponseBody
+	List<Report> getReportsInJSON(@RequestParam final String q)
 	{
-		final Report report = reportDao.getReportByID(Long.valueOf(name));
-		return report;
-
+		return reportDao.getAllReports(q);
 	}
 
-	@RequestMapping(value = "json/{str}", method = RequestMethod.GET)
-	public @ResponseBody List<Report> getReportsInJSON(
-			@PathVariable final String str)
-	{
-		return reportDao.getAllReports(str);
-
-	}
-
-	@RequestMapping(value = "json", method = RequestMethod.GET)
-	public @ResponseBody List<Report> getReportsInJSON()
-	{
-		return reportDao.getAllReports();
-
-	}
-
-	@RequestMapping(value = "delete", method = RequestMethod.GET)
-	public @ResponseBody String delete(final long id)
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	public @ResponseBody
+	String delete(@PathVariable final long id)
 	{
 		reportDao.removeReport(id);
 		return String.valueOf(id);
