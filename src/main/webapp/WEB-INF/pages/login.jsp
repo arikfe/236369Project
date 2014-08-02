@@ -63,7 +63,7 @@
 					<td><input type='password' name='password' /></td>
 				</tr>
 				<tr >
-					<td colspan='2' align="left" height="80px" ><input name="submit" type="submit"
+					<td colspan='2' align="left" height="80px" ><input name="submit" type="submit" id="submint"
 						value="Login" style="height:40px;background:#4472b9; width:120px;font-weight:bold;color:white;font-family:arial;font-size:22px;border:5px solid #4472b9;border-radius:10px "/></td>
 				</tr>
 				<tr>

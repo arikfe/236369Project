@@ -145,10 +145,16 @@ public class MainController
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
-	public ModelAndView register()
+	public ModelAndView register(
+			@RequestParam(value = "error", required = false) final String error,
+			final HttpServletRequest request)
 	{
 
 		final ModelAndView model = new ModelAndView();
+
+		if (error != null)
+			model.addObject("error",
+					getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
 
 		model.setViewName("register");
 		return model;
