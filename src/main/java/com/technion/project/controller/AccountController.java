@@ -44,22 +44,27 @@ public class AccountController extends BaseController
 
 	@RequestMapping(value =
 	{ "" }, method = RequestMethod.POST)
-	public String add(@ModelAttribute("User") final User user,
+	public ModelAndView add(@ModelAttribute("User") final User user,
 			@RequestParam("file") final MultipartFile file)
 	{
-
+		final ModelAndView view = new ModelAndView();
 		final HashSet<UserRole> hashSet = new HashSet<UserRole>();
 		hashSet.add(new UserRole(user, "ROLE_USER"));
 		user.setUserRole(hashSet);
 		user.setEnabled(true);
-		final boolean res = userDAO.add(user, file);
-		if (!res)
-			return "redirect:../register";
-		return "redirect:../login";
+		if (userDAO.add(user, file))
+			view.setViewName("login");
+		else
+		{
+			view.setViewName("register");
+			view.addObject("error", "user allready exists");
+		}
+		return view;
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
-	public @ResponseBody List<User> getUsersJson()
+	public @ResponseBody
+	List<User> getUsersJson()
 	{
 		return userDAO.getAll();
 	}
@@ -91,7 +96,8 @@ public class AccountController extends BaseController
 	}
 
 	@RequestMapping(value = "{username}", method = RequestMethod.DELETE)
-	public @ResponseBody boolean deleteUser(@PathVariable final String username)
+	public @ResponseBody
+	boolean deleteUser(@PathVariable final String username)
 	{
 		if (!canEditAccount(username))
 			return false;
@@ -165,20 +171,21 @@ public class AccountController extends BaseController
 	}
 
 	@RequestMapping(value = "{username}/event", method = RequestMethod.GET)
-	public @ResponseBody EvacuationEvent registeredEvent()
+	public @ResponseBody
+	EvacuationEvent registeredEvent()
 	{
 		return getCurrentUser().getEvent();
 	}
 
 	/**
 	 * used for json
-	 *
+	 * 
 	 * @param username
 	 * @return
 	 */
 	@RequestMapping(value = "{username}/reports", consumes = "application/json", produces = "application/json")
-	public @ResponseBody List<Report> getReportsForUser(
-			@PathVariable final String username)
+	public @ResponseBody
+	List<Report> getReportsForUser(@PathVariable final String username)
 	{
 		return reportDao.getReportsForUser(userDAO
 				.findByUserNameLocalThread(username));

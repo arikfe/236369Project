@@ -78,7 +78,7 @@ html,body,#map-canvas {
 
 
 </head>
-<body style="background:"white">
+<body >
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
 			<div id="menu"></div>

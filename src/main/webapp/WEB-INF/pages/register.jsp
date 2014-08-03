@@ -4,7 +4,11 @@
 <%@page session="true"%>
 <html>
 <head>
-
+<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
+<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
+<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
+<c:set var="evacuationURL" value="${pageContext.request.contextPath}/evacuation"/>
 
 <title>Register Page</title>
 
@@ -139,7 +143,7 @@
 		</c:if>
 
 
-		<form:form method="post" action="accounts/add?${_csrf.parameterName}=${_csrf.token}"
+		<form:form method="post" action="${accountURL}/?${_csrf.parameterName}=${_csrf.token}"
 			enctype="multipart/form-data">
 			<table>
 				<tr style="font-weight: bold;font-size:18px">
