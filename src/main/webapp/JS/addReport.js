@@ -19,7 +19,7 @@ function initialize() {
 
 	   
 	    smoothZoom(map, 12, map.getZoom()); // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
-	})
+	});
 	// Try HTML5 geolocation
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -55,14 +55,15 @@ function smoothZoom (map, max, cnt) {
             google.maps.event.removeListener(z);
             smoothZoom(map, max, cnt + 1);
         });
-        setTimeout(function(){map.setZoom(cnt)}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+        setTimeout(function(){map.setZoom(cnt);}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
     }
 }  
 function handleNoGeolocation(errorFlag) {
+	var content;
 	if (errorFlag) {
-		var content = 'Error: The Geolocation service failed.';
+		content = 'Error: The Geolocation service failed.';
 	} else {
-		var content = 'Error: Your browser doesn\'t support geolocation.';
+		 content = 'Error: Your browser doesn\'t support geolocation.';
 	}
 
 	var options = {
@@ -80,4 +81,4 @@ function updateFields(position) {
 	lat.value = position.lat();
 	lon.value = position.lng();
 }
-google.maps.event.addDomListener(window, 'load', initialize);
+

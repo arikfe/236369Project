@@ -50,18 +50,12 @@ html,body,#map-canvas {
 	value="${pageContext.request.contextPath}/reports" />
 
 <link rel="stylesheet"
-	href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-<link rel="stylesheet" type="text/css"
-	href="${baseURL}/CSS/jquery.datetimepicker.css" />
-<link rel="stylesheet" href="/resources/demos/style.css">
+	href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"></link>
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
-<link
-	href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css"
-	rel="stylesheet">
-<link rel="stylesheet" type="text/css" media="screen"
-	href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+
 
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
@@ -78,28 +72,9 @@ html,body,#map-canvas {
 	}).error(function(res) {
 		alert(res);
 	});
+	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 <title>Add report</title>
-
-
-<script type="text/javascript"
-     src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
-    </script> 
-    <script type="text/javascript"
-     src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
-    </script>
-    <script type="text/javascript"
-     src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
-    </script>
-    <script type="text/javascript"
-     src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js">
-    </script>
-    <script type="text/javascript">
-      $('#datetimepicker').datetimepicker({
-        format: 'dd/MM/yyyy hh:mm:ss',
-        language: 'pt-BR'
-      });
-    </script>
 
 
 </head>
@@ -112,7 +87,7 @@ html,body,#map-canvas {
 				action="${reportURL}/?${_csrf.parameterName}=${_csrf.token}"
 				method="POST" enctype="multipart/form-data">
 				<input type='hidden' name='username'
-					value=${pageContext.request.userPrincipal.name}> <input
+					value="${pageContext.request.userPrincipal.name}"> <input
 					name='geolng' type='hidden' id='lon'> <input name='geolat'
 					type='hidden' id='lat'>
 				<table align="left">
