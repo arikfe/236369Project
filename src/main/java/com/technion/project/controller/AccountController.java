@@ -47,19 +47,19 @@ public class AccountController extends BaseController
 	public String add(@ModelAttribute("User") final User user,
 			@RequestParam("file") final MultipartFile file)
 	{
+
 		final HashSet<UserRole> hashSet = new HashSet<UserRole>();
 		hashSet.add(new UserRole(user, "ROLE_USER"));
 		user.setUserRole(hashSet);
 		user.setEnabled(true);
-
-		userDAO.add(user, file);
-
+		final boolean res = userDAO.add(user, file);
+		if (!res)
+			return "redirect:../register";
 		return "redirect:../login";
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
-	public @ResponseBody
-	List<User> getUsersJson()
+	public @ResponseBody List<User> getUsersJson()
 	{
 		return userDAO.getAll();
 	}
@@ -91,8 +91,7 @@ public class AccountController extends BaseController
 	}
 
 	@RequestMapping(value = "{username}", method = RequestMethod.DELETE)
-	public @ResponseBody
-	boolean deleteUser(@PathVariable final String username)
+	public @ResponseBody boolean deleteUser(@PathVariable final String username)
 	{
 		if (!canEditAccount(username))
 			return false;
@@ -166,21 +165,20 @@ public class AccountController extends BaseController
 	}
 
 	@RequestMapping(value = "{username}/event", method = RequestMethod.GET)
-	public @ResponseBody
-	EvacuationEvent registeredEvent()
+	public @ResponseBody EvacuationEvent registeredEvent()
 	{
 		return getCurrentUser().getEvent();
 	}
 
 	/**
 	 * used for json
-	 * 
+	 *
 	 * @param username
 	 * @return
 	 */
 	@RequestMapping(value = "{username}/reports", consumes = "application/json", produces = "application/json")
-	public @ResponseBody
-	List<Report> getReportsForUser(@PathVariable final String username)
+	public @ResponseBody List<Report> getReportsForUser(
+			@PathVariable final String username)
 	{
 		return reportDao.getReportsForUser(userDAO
 				.findByUserNameLocalThread(username));

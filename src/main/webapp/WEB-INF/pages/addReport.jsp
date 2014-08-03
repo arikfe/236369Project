@@ -12,8 +12,36 @@
 html,body,#map-canvas {
 	height: 100%;
 	margin: 0px;
-	padding: 0px
+	padding: 10px
 }
+
+
+#submit,#cancel {
+    background-color: blue;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius:6px;
+    color: white;
+    font-family: 'Oswald';
+    font-size: 24px;
+    text-decoration: none;
+    cursor: poiner;
+     border:none;
+}
+
+#submit:hover {
+    border: none;
+    background:green;
+    box-shadow: 0px 0px 1px #777;
+}
+
+#cancel:hover {
+    border: none;
+    background:red;
+    paddig-left:10px;
+    box-shadow: 0px 0px 1px #777;
+}
+
 </style>
 
 <c:set var="baseURL" value="${pageContext.request.contextPath}" />
@@ -75,7 +103,7 @@ html,body,#map-canvas {
 
 
 </head>
-<body>
+<body style="background:"white">
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
 			<div id="menu"></div>

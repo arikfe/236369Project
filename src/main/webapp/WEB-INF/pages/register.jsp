@@ -7,6 +7,7 @@
 
 
 <title>Register Page</title>
+
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
 <script type="text/javascript">
@@ -81,6 +82,7 @@
 	function setMissing(id) {
 		var field = $("#" + id)[0];
 		if (field.value == "")
+
 			$("#" + id + "_miss")[0].innerHTML = "<font color='ff0000'>*</font>";
 		else
 			$("#" + id + "_miss")[0].innerHTML = "";
@@ -164,16 +166,18 @@
 					<td>Choose picture:</td>
 	 				<td><input type="file" name='file' id='file' /></td>
 				</tr>
-				<tr style="font-weight: bold;font-size:18px">
-					<td colspan='2'><input name="submit" type="submit" /></td>
-				</tr>
+
 				<tr >
 					<td colspan='2' align="left" height="80px" ><input name="submit1" value="register" type="submit" id="submit1" disabled
 						style="height:40px;background:#4472b9; width:120px;font-weight:bold;color:white;font-family:arial;font-size:22px;border:5px solid #4472b9;border-radius:10px "/></td>
 				</tr>
-			</table>
+
+				</table>
 		<div id="pwerror"></div>
 
+<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+				
 		</form:form>
 	</div>
 
