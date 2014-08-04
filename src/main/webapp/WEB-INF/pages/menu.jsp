@@ -9,6 +9,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 5.00 Transitional//EN" "http://www.w3.org/TR/html5/loose.dtd">
 <html>
 <head>
+<style>
+
+</style>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <link type="text/css" rel="stylesheet"
@@ -39,7 +42,8 @@
 			<li><img
 				src="<%=user.hasContainImage() ? request.getContextPath()+"/download/"
 							+ user.getImageId() : request.getContextPath()+"/IMG/images.jpg"%>"
-				align="middle" height="64" width="64"></li>
+				 height="64" width="64" >
+			</li>
 			<li><a href="#">${user.fname} ${user.lname}</a>
 				<ul>
 					<li><a href="javascript:formSubmit()"> Logout</a></li>
@@ -60,7 +64,7 @@
 			<%
 				}
 			%>
-			<li> <input type="text" id="strField" name="str" onKeyUp="search(this)"/></li>
+			<li  style="padding-top: 5px"> <input type="text" id="strField" name="str" onKeyUp="search(this)"></li>
 		</sec:authorize>
 
 		<%

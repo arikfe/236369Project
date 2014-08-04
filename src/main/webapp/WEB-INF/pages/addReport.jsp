@@ -3,6 +3,7 @@
 <%@taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,8 +14,29 @@ html,body,#map-canvas {
 	height: 100%;
 	margin: 0px;
 	padding: 10px
+	background-color: #6495ED;
 }
 
+textarea#content {
+	width: 250px;
+	height: 50px;
+	border: 3px solid #cccccc;
+	padding: 5px;
+	font-family: Tahoma, sans-serif;
+	background-position: bottom right;
+	background-repeat: no-repeat;
+	resize: none;
+}
+input#title ,#file, #expiration{
+	width: 250px;
+	height: 30px;
+	border: 3px solid #cccccc;
+	padding: 5px;
+	font-family: Tahoma, sans-serif;
+	background-position: bottom right;
+	background-repeat: no-repeat;
+	background: white;
+}
 
 #submit,#cancel {
     background-color: blue;
@@ -27,7 +49,16 @@ html,body,#map-canvas {
     text-decoration: none;
     cursor: poiner;
      border:none;
+     height: 50px;
+     width: 100px;
+     text-align: justify;
 }
+td 
+{
+    padding-top: .5em;
+    padding-bottom: .3em;
+}
+
 
 #submit:hover {
     border: none;
@@ -41,6 +72,10 @@ html,body,#map-canvas {
     paddig-left:10px;
     box-shadow: 0px 0px 1px #777;
 }
+#map-canvas {
+        width: 750px;
+        height: 600px;
+      }
 
 </style>
 
@@ -60,9 +95,6 @@ html,body,#map-canvas {
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
 
-
-<link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <script src="${baseURL}/JS/menu.js"></script>
@@ -73,6 +105,10 @@ html,body,#map-canvas {
 		alert(res);
 	});
 	google.maps.event.addDomListener(window, 'load', initialize);
+	
+</script>
+<script>
+	if (self != top) top.location.replace(self.location.href);
 </script>
 <title>Add report</title>
 
@@ -82,7 +118,6 @@ html,body,#map-canvas {
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
 			<div id="menu"></div>
-
 			<form name='add'
 				action="${reportURL}/?${_csrf.parameterName}=${_csrf.token}"
 				method="POST" enctype="multipart/form-data">
@@ -90,39 +125,41 @@ html,body,#map-canvas {
 					value="${pageContext.request.userPrincipal.name}"> <input
 					name='geolng' type='hidden' id='lon'> <input name='geolat'
 					type='hidden' id='lat'>
-				<table align="left">
-					<tr>
-						<td>Title:</td>
-						<td><input type='text' name='title'></td>
+					
+				<table align="left" style="width:450px;">
+					<tr >
+						<td width="150px">Title:</td>
+						<td width= "250px"><input type='text' name='title' id='title'></td>
 					</tr>
 					<tr>
-						<td>content:</td>
-						<td><textarea rows="4" cols="50" name="content"></textarea></td>
+						<td width="150px">Content:</td>
+						<td><textarea id="content" rows="4" cols="50" name="content"></textarea></td>
 					</tr>
 					<tr>
-						<td>expiration time</td>
-						<td>
-							<div id="datetimepicker" class="input-append date">
-								<input type="text" name="expiration"></input> <span class="add-on"> <i
-									data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-								</span>
+					<td width="150px">Expire time:</td>
+						<td >
+							<div id="datetimepicker" >
+								<input type="datetime-local" name="expiration">
 							</div>
 
 						</td>
 					</tr>
 					<tr>
-						<td>choose picture:</td>
-						<td><input type="file" name='file' id='file' /></td>
+						<td width="150px">Choose picture:</td>
+						<td width= "250px"><input type="file" name='file' id='file' /></td>
 					</tr>
 					<tr>
-						<td colspan='2'><input name="submit" type="submit"
+						<td><input name="submit" type="submit"
 							value="submit" disabled="disabled" id='submit' /></td>
+						<td><input name="cancel" type="submit"
+							value="cancel" id='cancel' /></td>
 					</tr>
 				</table>
-			</form>
-			<div id="status">locating Geo location</div>
-			<div id="map-canvas"></div>
-
+			</form >
+			
+				<div id="map-canvas"></div>
+			
+			
 		</c:if>
 	</sec:authorize>
 </body>

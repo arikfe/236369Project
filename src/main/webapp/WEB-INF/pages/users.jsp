@@ -63,7 +63,7 @@
 	});
 </script>
 </head>
-<body>
+<body  background="black">
 
 
 	<div id="menu"></div>

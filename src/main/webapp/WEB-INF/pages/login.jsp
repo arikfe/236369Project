@@ -4,6 +4,11 @@
 <head>
 <title>Login Page</title>
 <style>
+body 
+{
+		margin: 100px 40px 10px 70px;
+		background-color: #6495ED;
+}
 .error {
 	padding: 15px;
 	margin-bottom: 20px;
@@ -24,6 +29,18 @@
 	border-color: #a6aee0;
 }
 
+#register
+{
+  	height:40px;
+  	background:#4472b9; 
+  	width:120px;
+  	font-weight:bold;
+  	color:white;
+  	font-family:arial;
+  	font-size:22px;
+  	border:5px solid #4472b9;
+  	border-radius:10px;
+}
 #login-box {
 	width: 400px;
 	padding: 20px;
@@ -36,13 +53,11 @@
 }
 </style>
 </head>
-<body onload='document.loginForm.username.focus();'>
+<body onload='document.loginForm.username.focus();' >
 
-	<h1 align="center" line-height:15px style="font-family:arial;color:blue;weight:bold">Login Form</h1>
+	<h1 align="center"  style="font-family:arial;font-size:46px;color:blue;weight:bold; color:white">Login Form</h1>
 
 	<div id="login-box">
-
-		<h2 align="center" style="font-family:arial;color:green;font-size:26px;weight:bold ">User Login</h2>
 
 		<c:if test="${not empty error}">
 			<div class="error">${error}</div>
@@ -72,7 +87,7 @@
 				<tr >
 					<td colspan='2' align="left" height="80px" >
 						<a href="${pageContext.request.contextPath}/register">
-   							<input type="button" value="Register" style="height:40px;background:#4472b9; width:120px;font-weight:bold;color:white;font-family:arial;font-size:22px;border:5px solid #4472b9;border-radius:10px "/>
+   							<input type="button" value="Register" id="register"/>
    						</a>
 					 </td>
 				</tr>

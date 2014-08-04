@@ -94,6 +94,11 @@
 	}
 </script>
 <style>
+body 
+{
+		margin: 100px 40px 10px 70px;
+		background-color: #6495ED;
+}
 .error {
 	padding: 15px;
 	margin-bottom: 20px;
@@ -114,6 +119,16 @@
 	border-color: #bce8f1;
 }
 
+#submit1{
+	height:40px; 
+	width:120px;
+	font-weight:bold;
+	color:white;
+	font-family:arial;
+	font-size:22px;
+	border:5px solid #4472b9;
+	border-radius:10px;"
+}
 #login-box {
 	width: 400px;
 	height: 400px;
@@ -125,15 +140,20 @@
 	-moz-border-radius: 2px;
 	border: 2px solid #4472b9;
 }
+td 
+{
+    padding-top: .5em;
+    padding-bottom: .3em;
+}
+input[type=submit]:disabled { background: grey; }
+input[type=submit]:enabled { background: #4472b9; }
 </style>
 </head>
 <body onload='document.loginForm.username.focus();'>
 
-	<h1 align="center" line-height:15px style="font-family:arial;color:blue;weight:bold">New user Form</h1>
+	<h1 align="center"  style="font-family:arial;font-size:46px;color:blue;weight:bold; color:white">User registration</h1>
 
 	<div id="login-box">
-
-		<h2 align="center" style="font-family:arial;color:green;font-size:26px;weight:bold ">User registration</h2>
 
 		<c:if test="${not empty error}">
 			<div class="error">${error}</div>
@@ -145,37 +165,37 @@
 
 		<form:form method="post" action="${accountURL}/?${_csrf.parameterName}=${_csrf.token}"
 			enctype="multipart/form-data">
-			<table>
-				<tr style="font-weight: bold;font-size:18px">
+			<table style="font-weight: bold;font-size:18px">
+				<tr >
 					<td><div id="username_miss"></div>User:</td>
 					<td><input type='text' name='username' id='username'></td>
 				</tr>
-				<tr style="font-weight: bold;font-size:18px">
+				<tr >
 					<td><div id="name_miss"></div>First name:</td>
 					<td><input type='text' name='fname' id='fname'></td>
 				</tr>
-				<tr style="font-weight: bold;font-size:18px">
+				<tr >
 					<td><div id="name_miss"></div>Last name:</td>
 					<td><input type='text' name='lname' id='lname'></td>
 				</tr>
-				<tr style="font-weight: bold;font-size:18px">
+				<tr >
  					<td><div id="password_miss"></div>Password:</td>
 					<td><input type='password' name='password' id='password' /></td>
 				</tr>
-				<tr style="font-weight: bold;font-size:18px">
+				<tr >
 					<td>Confirm password:</td>
 					<td><input type='password' id='cpass' /></td>
 				</tr>
-				<tr style="font-weight: bold;font-size:18px">
+				<tr >
 					<td>Choose picture:</td>
 	 				<td><input type="file" name='file' id='file' /></td>
 				</tr>
 
 				<tr >
-					<td colspan='2' align="left" height="80px" ><input name="submit1" value="register" type="submit" id="submit1" disabled
-						style="height:40px;background:#4472b9; width:120px;font-weight:bold;color:white;font-family:arial;font-size:22px;border:5px solid #4472b9;border-radius:10px "/></td>
+					<td colspan='2' align="left" height="80px" >
+						<input name="submit1" value="Register" type="submit" id="submit1" disabled/>
+					</td>
 				</tr>
-
 				</table>
 		<div id="pwerror"></div>
 
