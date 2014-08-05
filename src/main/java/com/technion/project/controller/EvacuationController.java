@@ -2,6 +2,7 @@ package com.technion.project.controller;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,6 +57,13 @@ public class EvacuationController extends BaseController
 	public @ResponseBody boolean leave(@PathVariable final long id)
 	{
 		return evacuationDAO.removeUserToEvent(getCurrentUser(), id);
+	}
+
+	@RequestMapping(value =
+	{ "id/{id}/users" }, method = RequestMethod.GET)
+	public @ResponseBody Set<User> getUsers(@PathVariable final long id)
+	{
+		return evacuationDAO.getByID(id).getRegisteredUsers();
 	}
 
 	@RequestMapping(value =

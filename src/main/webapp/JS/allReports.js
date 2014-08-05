@@ -186,12 +186,12 @@ function deleteMarkers() {
 function displayEventUsers(_id) {
 	$.ajax({
 		type : "GET",
-		url : ctx+"/evacuation/id/" + _id,
+		url : ctx+"/evacuation/id/" + _id+"/users/",
 		contentType : "application/json"
 	}).done(
-			function(event) {
+			function(users) {
 				var names = "";
-				var users= event.registeredUsers;
+				
 				for ( var i in users) 
 				{
 					var name = users[i].fname;
