@@ -23,12 +23,14 @@ var csrfValue = "${_csrf.token}";
 var currentUser = "${pageContext.request.userPrincipal.name}";
 </script>
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
+<script src="${baseURL}/JS/lightbox.min.js"></script>
 <script src="${baseURL}/JS/menu.js"></script>
 <script src="${baseURL}/JS/allReports.js"></script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
+<link href="<c:url value="/CSS/lightbox.css"/>" rel="stylesheet" />
 <style>
 #map-canvas {
 	width: 50%;
