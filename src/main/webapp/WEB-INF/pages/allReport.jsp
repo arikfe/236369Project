@@ -51,6 +51,24 @@ html, body {
 	padding: 5px;
 	border: 1px solid #999;
 }
+button
+{
+  	height:40px;
+  	background:#4472b9; 
+  	width:320px;
+  	font-weight:bold;
+  	color:white;
+  	font-family:arial;
+  	font-size:18px;
+  	border:5px solid #4472b9;
+  	border-radius:10px;
+	margin-bottom: 5px;
+}
+button:hover {
+    border: none;
+    background:green;
+    box-shadow: 0px 0px 1px #777;
+}
 </style>
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
@@ -159,19 +177,19 @@ $.ajax({
 		</table>
 		<br />
 	</c:if>
-	<button id="showClose" onclick="bounceClosest()" >show closest evacuation event</button>
+	<button id="showClose" onclick="bounceClosest()" >Show closest evacuation event</button>
 	<button onclick="stopEventBounce()">Stop bounce</button>
 	<button onclick="bounceMine()">Find my Event</button>
+	<button onclick="bounceMine()">Create report file</button>
 	<table id='reportsTbody' class="zebra" align="left">
 
 		<tbody >
 			<tr id='table_body'>
-				<th>Title</th>
-				<th>content</th>
-				<th>user name</th>
-
-				<th>expire on</th>
-				<th>delete</th>
+				<th style="width:30%">Title</th>
+				<th style="width:30%">Content</th>
+				<th style="width:10%">User</th>
+				<th style="width:20%">Expire on</th>
+				<th style="width:10%">Action</th>
 			</tr>
 		</tbody>
 	</table>
