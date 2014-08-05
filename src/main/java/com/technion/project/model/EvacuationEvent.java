@@ -125,7 +125,8 @@ public class EvacuationEvent implements BaseModel
 
 	public void addUser(final User user)
 	{
-		registeredUsers.add(user);
+		if (registeredUsers.size() < capacity)
+			registeredUsers.add(user);
 	}
 
 	public void removeUser(final User user)
