@@ -27,7 +27,7 @@ textarea#content {
 	background-repeat: no-repeat;
 	resize: none;
 }
-input#title ,#file, #expiration{
+input#title ,#file, #expiration, #address{
 	width: 250px;
 	height: 30px;
 	border: 3px solid #cccccc;
@@ -134,6 +134,10 @@ td
 					<tr>
 						<td width="150px">Content:</td>
 						<td><textarea id="content" rows="4" cols="50" name="content"></textarea></td>
+					</tr>
+					<tr>
+						<td width="150px">address:</td>
+						<td width= "250px"><input type='text' name='address' id='address'></td>
 					</tr>
 					<tr>
 					<td width="150px">Expire time:</td>

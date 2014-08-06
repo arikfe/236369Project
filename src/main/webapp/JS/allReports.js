@@ -183,6 +183,7 @@ function deleteMarkers() {
 	markers = {};
 }
 
+
 function displayEventUsers(_id) {
 	$.ajax({
 		type : "GET",

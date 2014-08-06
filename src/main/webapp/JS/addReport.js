@@ -1,6 +1,14 @@
 var map;
 var pos;
 var marker;
+function findAddress(lat,lon){
+	$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lon, 
+			function( data ) {
+				var street = data.results[0].formatted_address;
+				document.getElementById("address").value=street;
+				
+		});
+}
 function initialize() {
 	var mapOptions = {
 		zoom : 6
@@ -34,6 +42,7 @@ function initialize() {
 
 			map.setCenter(pos);
 			updateFields(pos);
+			
 			$("#submit").removeAttr("disabled");
 			
 			$("#status").empty();
@@ -80,5 +89,6 @@ function updateFields(position) {
 	lon = document.getElementById("lon");
 	lat.value = position.lat();
 	lon.value = position.lng();
+	findAddress(position.lat(),position.lng());
 }
 

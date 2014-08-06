@@ -40,10 +40,15 @@ public class ReportsController
 	}
 
 	@RequestMapping(value = "", consumes = "application/json", produces = "application/json")
-	public @ResponseBody
-	List<Report> getReportsJson()
+	public @ResponseBody List<Report> getReportsJson()
 	{
 		return reportDao.getAllReports();
+	}
+
+	@RequestMapping(value = "{id}", consumes = "application/json", produces = "application/json")
+	public @ResponseBody Report getReportJson(@PathVariable final Long id)
+	{
+		return reportDao.getReportByID(id);
 	}
 
 	private ModelAndView getAllReportsForUser(final String username)
@@ -87,15 +92,14 @@ public class ReportsController
 	}
 
 	@RequestMapping(value = "search", method = RequestMethod.GET)
-	public @ResponseBody
-	List<Report> getReportsInJSON(@RequestParam final String q)
+	public @ResponseBody List<Report> getReportsInJSON(
+			@RequestParam final String q)
 	{
 		return reportDao.getAllReports(q);
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public @ResponseBody
-	String delete(@PathVariable final long id)
+	public @ResponseBody String delete(@PathVariable final long id)
 	{
 		reportDao.removeReport(id);
 		return String.valueOf(id);
