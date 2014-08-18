@@ -88,15 +88,27 @@ td
 	href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"></link>
 
 
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
 
 
-<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
 
-<link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css">
+	 <script>
+		$(function() {
+		$("#datetimepicker").datepicker();
+		});
+</script>
+
+
+	<!-- script src="${baseURL}/JS/jquery-1.11.1.min.js"></script-->
+	<script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
+
+<!-- >link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/dropDownMenu.css"/>"></link-->
 <script src="${baseURL}/JS/menu.js"></script>
 <script>
 	$.ajax("${baseURL}/menu").done(function(result) {
@@ -148,6 +160,7 @@ td
 
 						</td>
 					</tr>
+					
 					<tr>
 						<td width="150px">Choose picture:</td>
 						<td width= "250px"><input type="file" name='file' id='file' /></td>
@@ -159,10 +172,11 @@ td
 							value="cancel" id='cancel' /></td>
 					</tr>
 				</table>
+				
 			</form >
 			
 				<div id="map-canvas"></div>
-			
+
 			
 		</c:if>
 	</sec:authorize>

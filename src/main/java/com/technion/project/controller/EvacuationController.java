@@ -2,6 +2,7 @@ package com.technion.project.controller;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,12 @@ public class EvacuationController extends BaseController
 		return evacuationDAO.addUserToEvent(
 				userDao.findByUserNameLocalThread(body.getFirst("username")),
 				id);
+	}
+
+	@RequestMapping(value = "", consumes = "application/xml", produces = "application/xml")
+	public @ResponseBody List<EvacuationEvent> getEvacuationsXML()
+	{
+		return evacuationDAO.getAll();
 	}
 
 	@RequestMapping(value =

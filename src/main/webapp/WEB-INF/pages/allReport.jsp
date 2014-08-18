@@ -182,7 +182,7 @@ $.ajax({
 	<button id="showClose" onclick="bounceClosest()" >Show closest evacuation event</button>
 	<button onclick="stopEventBounce()">Stop bounce</button>
 	<button onclick="bounceMine()">Find my Event</button>
-	<button onclick="bounceMine()">Create report file</button>
+	<a href="${reportURL}/exportXml" ><button>Create report file</button></a>
 	<table id='reportsTbody' class="zebra" align="left">
 
 		<tbody >

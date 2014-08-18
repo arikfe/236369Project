@@ -10,9 +10,11 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.technion.project.Constants;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @Entity
 @Table(name = "report", catalog = Constants.SCHEMA)
+@XStreamAlias("report")
 public class Report implements BaseModel
 {
 	@Id

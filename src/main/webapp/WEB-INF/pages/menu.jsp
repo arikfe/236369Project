@@ -55,7 +55,14 @@
 					<li><a href="${reportURL}/">All reports</a></li>
 					<li><a href="${baseURL}/addReport">Add report</a></li>
 					<li><a href="${accountURL}/<%=user.getUsername()%>/reports">My reports</a></li>
-				</ul></li>
+				</ul>
+				</li>
+				<li><a>Save to file</a>
+				<ul>
+					<li><a href="${reportURL}/exportXml">Save XML</a></li>
+					<li><a href="${reportURL}/exportKml">Save KML</a></li>
+				</ul>
+				</li>
 			<li><a href="${accountURL}/">Show all Users</a></li>
 			<%
 				if (user.hasAdminPrevilige()) {
@@ -70,9 +77,6 @@
 		<%
 			} else {
 		%>
-
-
-
 		<li><a href="${baseURL}/login">Login</a></li>
 		<li><a href="${baseURL}/register">register</a></li>
 		<%
