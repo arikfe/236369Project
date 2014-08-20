@@ -15,10 +15,12 @@ import org.hibernate.search.annotations.Store;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.technion.project.Constants;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @Entity
 @Indexed
 @Table(name = "report", catalog = Constants.SCHEMA)
+@XStreamAlias("report")
 public class Report implements BaseModel
 {
 	@Id
