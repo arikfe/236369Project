@@ -228,12 +228,7 @@ function displayEventUsers(_id) {
 function listReports(_str) {
 	$.ajax({
 		type : "GET",
-<<<<<<< HEAD
-		url : ctx+"/reports/json/" + _str,
-=======
 		url : ctx + "/reports/json/" + _str,
->>>>>>> branch 'master' of https://github.com/arikfe/236369Project.git
-
 	}).done(function(reports) {
 
 		for ( var i in reports) {
