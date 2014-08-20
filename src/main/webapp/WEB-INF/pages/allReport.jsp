@@ -182,7 +182,11 @@ $.ajax({
 	<button id="showClose" onclick="bounceClosest()" >Show closest evacuation event</button>
 	<button onclick="stopEventBounce()">Stop bounce</button>
 	<button onclick="bounceMine()">Find my Event</button>
+<<<<<<< HEAD
 	<a href="${reportURL}/" type="application/xml"><button >Create report file</button></a>
+=======
+	<a href="${reportURL}/exportXml" ><button>Create report file</button></a>
+>>>>>>> branch 'master' of https://github.com/arikfe/236369Project.git
 	<table id='reportsTbody' class="zebra" align="left">
 
 		<tbody >

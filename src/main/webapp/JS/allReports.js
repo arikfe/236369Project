@@ -9,7 +9,6 @@ var image;
 var pos;
 
 
-
 function bounceClosest() {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -58,6 +57,27 @@ function stopEventBounce() {
 		selectedEvent.setAnimation(null);
 
 }
+
+function createReportBU() {
+//	$.ajax({
+//		type : "GET",
+//		url : ctx + "/reports/export"
+//		
+//
+//	}).done(function(reports) {
+//		alert(reports);
+//
+//	}).fail(function(err) {
+//		alert(err);
+//	});
+	windows.location = ctx + "/reports/export";
+	
+}
+function stopEventBounce() {
+	if (!(selectedEvent === undefined))
+		selectedEvent.setAnimation(null);
+}
+
 function deletePost(_id) {
 	if (confirm("Are you sure!") == true) {
 
@@ -208,7 +228,11 @@ function displayEventUsers(_id) {
 function listReports(_str) {
 	$.ajax({
 		type : "GET",
+<<<<<<< HEAD
 		url : ctx+"/reports/json/" + _str,
+=======
+		url : ctx + "/reports/json/" + _str,
+>>>>>>> branch 'master' of https://github.com/arikfe/236369Project.git
 
 	}).done(function(reports) {
 

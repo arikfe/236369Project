@@ -7,19 +7,29 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.technion.project.Constants;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @Entity
+@Indexed
 @Table(name = "report", catalog = Constants.SCHEMA)
+@XStreamAlias("report")
 public class Report implements BaseModel
 {
 	@Id
 	@GeneratedValue
 	private long id;
 	private String username;
+	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	private String title;
+	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	private String content;
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private Date expiration;
