@@ -46,6 +46,24 @@ public class DocumentDAOImpl implements DocumentDAO
 	}
 
 	@Override
+	public Long save(final byte[] byteArray, final String contentType,
+			final String name)
+	{
+		final Session session = sessionFactory.openSession();
+		final Transaction transaction = session.getTransaction();
+		final Document document = new Document();
+		document.setContentType(contentType);
+		document.setName(name);
+		document.setFile(Hibernate.getLobCreator(session).createBlob(byteArray));
+		transaction.begin();
+		session.saveOrUpdate(document);
+		transaction.commit();
+		session.close();
+		return document.getId();
+
+	}
+
+	@Override
 	public Document get(final long id)
 	{
 		final Session session = sessionFactory.openSession();

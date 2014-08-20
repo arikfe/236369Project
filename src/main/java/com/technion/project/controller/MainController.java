@@ -1,7 +1,19 @@
 package com.technion.project.controller;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ArrayNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,8 +25,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.common.collect.Maps;
+import com.google.common.io.ByteStreams;
+import com.technion.project.dao.DocumentDAO;
+import com.technion.project.dao.EvacuationDAO;
+import com.technion.project.dao.ReportDAO;
 import com.technion.project.dao.UserDao;
 import com.technion.project.model.User;
 
@@ -25,7 +43,13 @@ public class MainController
 	private UserDao userDao;
 
 	@Autowired
-	private UserDao userDAO;
+	private ReportDAO reportDAO;
+
+	@Autowired
+	private EvacuationDAO evacuationDAO;
+
+	@Autowired
+	private DocumentDAO documentDao;
 
 	@RequestMapping(value =
 	{ "/", "/welcome**" }, method = RequestMethod.GET)
@@ -47,10 +71,10 @@ public class MainController
 		if (!"anonymousUser".equals(auth.getName()))
 		{
 			model.addObject("fname",
-					userDAO.findByUserNameLocalThread(auth.getName())
+					userDao.findByUserNameLocalThread(auth.getName())
 							.getFname());
 			model.addObject("nname",
-					userDAO.findByUserNameLocalThread(auth.getName())
+					userDao.findByUserNameLocalThread(auth.getName())
 							.getLname());
 		}
 		model.setViewName("addReport");
@@ -75,7 +99,7 @@ public class MainController
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		final ModelAndView view = new ModelAndView();
-		final User user = userDAO.findByUserNameLocalThread(auth.getName());
+		final User user = userDao.findByUserNameLocalThread(auth.getName());
 		view.setViewName("menu");
 		view.addObject("user", user);
 		return view;
@@ -177,4 +201,64 @@ public class MainController
 		return model;
 	}
 
+	public String importData(@RequestParam("file") final MultipartFile file)
+	{
+		final StringWriter writer = new StringWriter();
+		try
+		{
+			IOUtils.copy(file.getInputStream(), writer, "UTF-8");
+		} catch (final IOException e)
+		{
+			e.printStackTrace();
+		}
+		final String theString = writer.toString();
+		final ObjectMapper mapper = new ObjectMapper();
+		try
+		{
+			final JsonNode actualObj = mapper.readTree(theString);
+			final ArrayNode users = (ArrayNode) actualObj.get("users");
+			userDao.clear();
+			final Map<String, Long> pathToImage = getImages(users);
+			for (int i = 0; i < users.size(); i++)
+			{
+				final User user = new User();
+				user.setEnabled(true);
+				user.setFname(users.get(i).get("name").getTextValue());
+				user.setUsername(users.get(i).get("username").getTextValue());
+				user.setPassword(users.get(i).get("password").getTextValue());
+				user.setImageId(pathToImage.get(users.get(i).get("picture")
+						.getTextValue()));
+			}
+
+		} catch (final JsonProcessingException e)
+		{
+			e.printStackTrace();
+		} catch (final IOException e)
+		{
+			e.printStackTrace();
+		}
+		return "redirect:";
+	}
+
+	private Map<String, Long> getImages(final ArrayNode users)
+			throws IOException
+	{
+		final Map<String, Long> pathToImage = Maps.newHashMap();
+		for (int i = 0; i < users.size(); i++)
+		{
+			URLConnection uCon = null;
+			final String path = users.get(i).get("picture").getTextValue();
+			if (pathToImage.containsKey(path))
+				continue;
+			final URL url = new URL(path);
+			uCon = url.openConnection();
+			uCon.getContentType();
+			pathToImage.put(path, documentDao.save(
+					ByteStreams.toByteArray(uCon.getInputStream()),
+					uCon.getContentType(),
+					FilenameUtils.getBaseName(users.get(i).get("password")
+							.getTextValue())));
+		}
+		return pathToImage;
+	}
 }

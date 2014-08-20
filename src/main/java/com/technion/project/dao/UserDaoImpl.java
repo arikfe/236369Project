@@ -8,7 +8,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -63,9 +62,9 @@ public class UserDaoImpl extends BaseDAO implements UserDao
 	}
 
 	@Override
-	public void add(final User user)
+	public boolean add(final User user)
 	{
-		executeQuery(new QueryRunner()
+		return executeQuery(new QueryRunner()
 		{
 			@Override
 			public void execueSafe(final Session session)
@@ -124,27 +123,6 @@ public class UserDaoImpl extends BaseDAO implements UserDao
 	}
 
 	@Override
-	public boolean add(final User user, final MultipartFile file)
-	{
-		return executeQuery(new QueryRunner()
-		{
-
-			@Override
-			public void execueSafe(final Session session)
-			{
-				if (!file.isEmpty())
-					user.setImageId(documentDao.save(file));
-				final UserSecurityConfig sc = new UserSecurityConfig();
-				final PasswordEncoder encoder = sc.passwordEncoder();
-				user.setEnabled(true);
-				user.setPassword(encoder.encode(user.getPassword()));
-				session.saveOrUpdate(user);
-
-			}
-		});
-	}
-
-	@Override
 	public void update(final User user)
 	{
 		executeQuery(new QueryRunner()
@@ -198,5 +176,13 @@ public class UserDaoImpl extends BaseDAO implements UserDao
 	protected Session getSession()
 	{
 		return sessionFactory.openSession();
+	}
+
+	@Override
+	public void clear()
+	{
+		for (final User user : getAll())
+			if (!user.hasAdminPrevilige())
+				delete(user);
 	}
 }

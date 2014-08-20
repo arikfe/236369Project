@@ -208,7 +208,7 @@ function displayEventUsers(_id) {
 function listReports(_str) {
 	$.ajax({
 		type : "GET",
-		url : "$/236369Project/reports/json/" + _str,
+		url : ctx+"/reports/json/" + _str,
 
 	}).done(function(reports) {
 
@@ -225,7 +225,7 @@ function search(text) {
 	clearMarkers();
 	$.ajax({
 		type : "GET",
-		url : "/236369Project/reports/search/" ,
+		url : ctx + "/reports/search/" ,
 		data:{
 			q : text.value
 		}

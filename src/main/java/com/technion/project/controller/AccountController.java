@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.technion.project.dao.DocumentDAO;
 import com.technion.project.dao.EvacuationDAO;
 import com.technion.project.dao.ReportDAO;
 import com.technion.project.dao.UserDao;
@@ -42,6 +43,9 @@ public class AccountController extends BaseController
 	@Autowired
 	private EvacuationDAO evacuationDAO;
 
+	@Autowired
+	private DocumentDAO documentDao;
+
 	@RequestMapping(value =
 	{ "" }, method = RequestMethod.POST)
 	public ModelAndView add(@ModelAttribute("User") final User user,
@@ -52,7 +56,9 @@ public class AccountController extends BaseController
 		hashSet.add(new UserRole(user, "ROLE_USER"));
 		user.setUserRole(hashSet);
 		user.setEnabled(true);
-		if (userDAO.add(user, file))
+		if (!file.isEmpty())
+			user.setImageId(documentDao.save(file));
+		if (userDAO.add(user))
 			view.setViewName("login");
 		else
 		{
@@ -63,7 +69,8 @@ public class AccountController extends BaseController
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
-	public @ResponseBody List<User> getUsersJson()
+	public @ResponseBody
+	List<User> getUsersJson()
 	{
 		return userDAO.getAll();
 	}
@@ -95,7 +102,8 @@ public class AccountController extends BaseController
 	}
 
 	@RequestMapping(value = "{username}", method = RequestMethod.DELETE)
-	public @ResponseBody boolean deleteUser(@PathVariable final String username)
+	public @ResponseBody
+	boolean deleteUser(@PathVariable final String username)
 	{
 		if (!canEditAccount(username))
 			return false;
@@ -169,20 +177,21 @@ public class AccountController extends BaseController
 	}
 
 	@RequestMapping(value = "{username}/event", method = RequestMethod.GET)
-	public @ResponseBody EvacuationEvent registeredEvent()
+	public @ResponseBody
+	EvacuationEvent registeredEvent()
 	{
 		return getCurrentUser().getEvent();
 	}
 
 	/**
 	 * used for json
-	 *
+	 * 
 	 * @param username
 	 * @return
 	 */
 	@RequestMapping(value = "{username}/reports", consumes = "application/json", produces = "application/json")
-	public @ResponseBody List<Report> getReportsForUser(
-			@PathVariable final String username)
+	public @ResponseBody
+	List<Report> getReportsForUser(@PathVariable final String username)
 	{
 		return reportDao.getReportsForUser(userDAO
 				.findByUserNameLocalThread(username));
