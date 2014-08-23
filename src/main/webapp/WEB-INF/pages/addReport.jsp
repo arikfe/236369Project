@@ -10,13 +10,19 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <meta charset="utf-8">
 <style>
-html,body,#map-canvas {
+
+html,body {	
 	height: 100%;
 	margin: 0px;
-	padding: 10px
-	background-color: #6495ED;
+	padding: 10px;
+	background-color: #E5E5E5;
 }
 
+#map-canvas {
+        width: 1000px;
+        height: 700px;
+      }
+      
 textarea#content {
 	width: 250px;
 	height: 50px;
@@ -37,7 +43,10 @@ input#title ,#file, #expiration, #address{
 	background-repeat: no-repeat;
 	background: white;
 }
-
+tr{
+	font-weight: bold;
+	font-size:18px;
+}
 #submit,#cancel {
     background-color: blue;
     -moz-border-radius: 5px;
@@ -72,11 +81,6 @@ td
     paddig-left:10px;
     box-shadow: 0px 0px 1px #777;
 }
-#map-canvas {
-        width: 750px;
-        height: 600px;
-      }
-
 </style>
 
 <c:set var="baseURL" value="${pageContext.request.contextPath}" />
@@ -96,19 +100,24 @@ td
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-<link rel="stylesheet" href="http://jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css">
 	 <script>
-		$(function() {
-		$("#datetimepicker").datepicker();
-		});
+	 $(function() {
+		 $( "#expiration" ).datepicker();
+		 });
 </script>
 
-
-	<!-- script src="${baseURL}/JS/jquery-1.11.1.min.js"></script-->
+<script>
+  $(function() {
+    $( "#number" )
+      .selectmenu()
+      .selectmenu( "menuWidget" )
+        .addClass( "overflow" );
+  });
+  </script>
+  
+  
 	<script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
 
-<!-- >link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/dropDownMenu.css"/>"></link-->
 <script src="${baseURL}/JS/menu.js"></script>
 <script>
 	$.ajax("${baseURL}/menu").done(function(result) {
@@ -129,7 +138,6 @@ td
 <body >
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
-			<div id="menu"></div>
 			<form name='add'
 				action="${reportURL}/?${_csrf.parameterName}=${_csrf.token}"
 				method="POST" enctype="multipart/form-data">
@@ -138,46 +146,65 @@ td
 					name='geolng' type='hidden' id='lon'> <input name='geolat'
 					type='hidden' id='lat'>
 					
-				<table align="left" style="width:450px;">
+	<div id="container" style="width:100%; height:610px;" >
+		<h1 align="center"  style="font-family:arial;font-size:46px;color:blue;weight:bold; color:blue">Add Report Form</h1>
+			<div id="menuTable" style="height:100%; width:30%;float:left;">
+				<table >
 					<tr >
-						<td width="150px">Title:</td>
-						<td width= "250px"><input type='text' name='title' id='title'></td>
+						<td width="30%">Title:</td>
+						<td width= "70%"><input type='text' name='title' id='title'></td>
 					</tr>
 					<tr>
-						<td width="150px">Content:</td>
-						<td><textarea id="content" rows="4" cols="50" name="content"></textarea></td>
+						<td width="30%">Content:</td>
+						<td width="70%"><textarea  id="content" rows="4" cols="40" name="content"></textarea></td>
 					</tr>
 					<tr>
-						<td width="150px">address:</td>
-						<td width= "250px"><input type='text' name='address' id='address'></td>
+						<td width="30%">address:</td>
+						<td width="70%"><input type='text' name='address' id='address'></td>
 					</tr>
 					<tr>
-					<td width="150px">Expire time:</td>
-						<td >
-							<div id="datetimepicker" >
-								<input type="datetime-local" name="expiration">
-							</div>
-
+					<td width="30%">Expire time:</td>
+						<td  width="70%">
+								<input type="text" name="expiration" id="expiration">
+							
 						</td>
 					</tr>
-					
 					<tr>
-						<td width="150px">Choose picture:</td>
-						<td width= "250px"><input type="file" name='file' id='file' /></td>
+						<td width="30%">Time:</td>
+						<td width="70%">
+							<fieldset style="width:200px ; align:center;">
+						  	  <select name="number"  id="number" style="width:150px;">
+						      <option>1:00</option>
+						      <option>5:00</option>
+						      <option>9:00</option>
+						      <option selected="selected">13:00</option>
+						      <option>17:00</option>
+						      <option>21:00</option>		
+							 </select>
+						  </fieldset>
+						  </td>
+						  </tr>
+					<tr>
+						<td width="30%">Choose picture:</td>
+						<td width="70%"><input type="file" name='file' id='file' /></td>
 					</tr>
 					<tr>
-						<td><input name="submit" type="submit"
-							value="submit" disabled="disabled" id='submit' /></td>
-						<td><input name="cancel" type="submit"
+						<td width="30%" align="center"><input name="submit" type="submit"
+							value="submit" disabled="disabled" id='submit'/></td>
+						<td width="70%" align="left"><input name="cancel" type="submit"
 							value="cancel" id='cancel' /></td>
 					</tr>
 				</table>
-				
-			</form >
+				</div>
 			
+			<div id="content" style="background-color:#EEEEEE;float:left;width:700px; height:700px;">
 				<div id="map-canvas"></div>
+			</div>
 
-			
+	</div>
+			<div id="footer" style="background-color:#FFA500;clear:both;text-align:center;">
+				Techion C236369</div>
+</form >
 		</c:if>
 	</sec:authorize>
 </body>
