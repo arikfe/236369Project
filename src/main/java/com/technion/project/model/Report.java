@@ -17,10 +17,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.technion.project.Constants;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+@XStreamAlias("report")
 @Entity
 @Indexed
 @Table(name = "report", catalog = Constants.SCHEMA)
-@XStreamAlias("report")
 public class Report implements BaseModel
 {
 	@Id
@@ -36,36 +36,6 @@ public class Report implements BaseModel
 	private float geolat;
 	private float geolng;
 	private Long imageId;
-
-	public Long getImageId()
-	{
-		return imageId;
-	}
-
-	public void setImageId(final Long imageId)
-	{
-		this.imageId = imageId;
-	}
-
-	public float getGeolat()
-	{
-		return geolat;
-	}
-
-	public void setGeolat(final float geolat)
-	{
-		this.geolat = geolat;
-	}
-
-	public float getGeolng()
-	{
-		return geolng;
-	}
-
-	public void setGeolng(final float geolng)
-	{
-		this.geolng = geolng;
-	}
 
 	public long getId()
 	{
@@ -116,4 +86,35 @@ public class Report implements BaseModel
 	{
 		this.expiration = expiration;
 	}
+
+	public float getGeolat()
+	{
+		return geolat;
+	}
+
+	public void setGeolat(final float geolat)
+	{
+		this.geolat = geolat;
+	}
+
+	public float getGeolng()
+	{
+		return geolng;
+	}
+
+	public void setGeolng(final float geolng)
+	{
+		this.geolng = geolng;
+	}
+
+	public Long getImageId()
+	{
+		return imageId;
+	}
+
+	public void setImageId(final Long imageId)
+	{
+		this.imageId = imageId;
+	}
+
 }

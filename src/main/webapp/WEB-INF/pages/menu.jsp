@@ -10,7 +10,6 @@
 <html>
 <head>
 <style>
-
 </style>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -18,10 +17,13 @@
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
-<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
-<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
-<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
-<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
+<c:set var="baseURL" value="${pageContext.request.contextPath}" />
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin" />
+<c:set var="reportURL"
+	value="${pageContext.request.contextPath}/reports" />
+<c:set var="accountURL"
+	value="${pageContext.request.contextPath}/accounts" />
+<script src="${baseURL}/JS/menu.js"></script>
 </head>
 <body>
 
@@ -40,38 +42,42 @@
 			</form>
 
 			<li><img
-				src="<%=user.hasContainImage() ? request.getContextPath()+"/download/"
-							+ user.getImageId() : request.getContextPath()+"/IMG/images.jpg"%>"
-				 height="64" width="64" >
-			</li>
+				src="<%=user.hasContainImage() ? request.getContextPath()
+							+ "/download/" + user.getImageId() : request
+							.getContextPath() + "/IMG/images.jpg"%>"
+				height="64" width="64"></li>
 			<li><a href="#">${user.fname} ${user.lname}</a>
 				<ul>
-					<li><a href="javascript:formSubmit()"> Logout</a></li>
 					<li><a href="${accountURL}/own"> My Account</a></li>
-					
+					<li><a href="javascript:formSubmit()"> Logout</a></li>
+
 				</ul></li>
 			<li><a>Reports</a>
 				<ul>
 					<li><a href="${reportURL}/">All reports</a></li>
 					<li><a href="${baseURL}/addReport">Add report</a></li>
-					<li><a href="${accountURL}/<%=user.getUsername()%>/reports">My reports</a></li>
-				</ul>
-				</li>
-				<li><a>Save to file</a>
+					<li><a href="${accountURL}/<%=user.getUsername()%>/reports">My
+							reports</a></li>
+				</ul></li>
+			<li><a>Save to file</a>
 				<ul>
 					<li><a href="${reportURL}/exportXml">Save XML</a></li>
 					<li><a href="${reportURL}/exportKml">Save KML</a></li>
-				</ul>
-				</li>
+				</ul></li>
 			<li><a href="${accountURL}/">Show all Users</a></li>
 			<%
 				if (user.hasAdminPrevilige()) {
 			%>
 			<li><a href='${adminURL}/addEventView'>Add evacuation</a></li>
+			<li><div class="upload">
+					<input type="file" accept=".json" name="file" id='file'
+						onchange="fileChanged(this)" />
+				</div></li>
 			<%
 				}
 			%>
-			<li  style="padding-top: 5px"> <input type="text" id="strField" name="str" onKeyUp="search(this)"></li>
+			<li style="padding-top: 5px"><input type="text" id="strField"
+				name="str" onKeyUp="search(this)"></li>
 		</sec:authorize>
 
 		<%

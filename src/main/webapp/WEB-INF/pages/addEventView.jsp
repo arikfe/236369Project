@@ -17,11 +17,22 @@ html, body, #map-canvas {
 }
 </style>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
-<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
-<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
-<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
-<c:set var="eventURL" value="${pageContext.request.contextPath}/evacuation"/>  
+<c:set var="baseURL" value="${pageContext.request.contextPath}" />
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin" />
+<c:set var="reportURL"
+	value="${pageContext.request.contextPath}/reports" />
+<c:set var="accountURL"
+	value="${pageContext.request.contextPath}/accounts" />
+<c:set var="eventURL"
+	value="${pageContext.request.contextPath}/evacuation" />
+<script type="text/javascript">
+	var ctx = "${pageContext.request.contextPath}";
+	var accountCtx = ctx + "/accounts";
+	var adminCtx = ctx + "/admin";
+	var csrfName = "${_csrf.parameterName}";
+	var csrfValue = "${_csrf.token}";
+	var currentUser = "${pageContext.request.userPrincipal.name}";
+</script>
 
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
@@ -31,16 +42,17 @@ html, body, #map-canvas {
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <script src="${baseURL}/JS/menu.js"></script>
 <script>
-$.ajax("${baseURL}/menu").done(function(result) {
-	$("#menu").html(result);
-}).error(function(res){
-	alert(res);
-});
+	$.ajax("${baseURL}/menu").done(function(result) {
+		$("#menu").html(result);
+	}).error(function(res) {
+		alert(res);
+	});
 </script>
 </head>
 <body>
-<div id="menu"></div>
-	<form action="${eventURL}/?${_csrf.parameterName}=${_csrf.token}" method="post">
+	<div id="menu"></div>
+	<form action="${eventURL}/?${_csrf.parameterName}=${_csrf.token}"
+		method="post">
 		<input name='geolng' type='hidden' id='lon'> <input
 			name='geolat' type='hidden' id='lat'>
 		<table align="left">

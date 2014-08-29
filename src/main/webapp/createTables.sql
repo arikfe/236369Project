@@ -59,7 +59,7 @@ CREATE TABLE evacuation (
  id int(11) NOT NULL AUTO_INCREMENT,
  estimated datetime NOT NULL,
  capacity INT default 0,
- means varchar(45) NOT NULL,
+ means varchar(1000) NOT NULL,
  geolat decimal(10,6) default NULL,
  geolng decimal(10,6) default NULL,
  primary key (id));

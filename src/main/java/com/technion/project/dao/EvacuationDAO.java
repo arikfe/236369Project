@@ -24,4 +24,6 @@ public interface EvacuationDAO
 
 	public boolean delete(long id);
 
+	public void clear();
+
 }

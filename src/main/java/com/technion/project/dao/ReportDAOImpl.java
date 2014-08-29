@@ -22,7 +22,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.technion.project.dao.ReportDAO#getAllReports()
 	 */
 	@SuppressWarnings("unchecked")
@@ -38,7 +38,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#getReportsForUser(com.technion.project
 	 * .model.User)
@@ -58,7 +58,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.technion.project.dao.ReportDAO#getReportByID(int)
 	 */
 	@Override
@@ -72,7 +72,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.technion.project.dao.ReportDAO#removeReport(int)
 	 */
 	@Override
@@ -91,7 +91,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#removeReport(com.technion.project.
 	 * model.Report)
@@ -112,7 +112,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#removeReport(com.technion.project.
 	 * model.User)
@@ -127,7 +127,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#addReport(com.technion.project.model
 	 * .Report)
@@ -140,7 +140,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 			@Override
 			public void execueSafe(final Session session)
 			{
-				if (!file.isEmpty())
+				if (file != null && !file.isEmpty())
 					report.setImageId(documentDao.save(file));
 				session.saveOrUpdate(report);
 			}
@@ -149,7 +149,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#delete(com.technion.project.model.
 	 * User)
@@ -176,5 +176,12 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 	protected Session getSession()
 	{
 		return sessionFactory.openSession();
+	}
+
+	@Override
+	public void clear()
+	{
+		for (final Report r : getAllReports())
+			removeReport(r);
 	}
 }

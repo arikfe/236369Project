@@ -20,6 +20,15 @@
 	value="${pageContext.request.contextPath}/reports" />
 <c:set var="accountURL"
 	value="${pageContext.request.contextPath}/accounts" />
+<script type="text/javascript">
+	var ctx = "${pageContext.request.contextPath}";
+	var accountCtx = ctx + "/accounts";
+	var adminCtx = ctx + "/admin";
+	var csrfName = "${_csrf.parameterName}";
+	var csrfValue = "${_csrf.token}";
+	var currentUser = "${pageContext.request.userPrincipal.name}";
+</script>
+
 <script src="${baseURL}/JS/menu.js"></script>
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script type="text/javascript">
@@ -34,28 +43,33 @@
 	}
 	function deleteAccount(_username) {
 		if (confirm("Are you sure!") == true) {
-			$.ajax({
-				type : "delete",
-				url : "${accountURL}/"+_username.value+"?${_csrf.parameterName}=${_csrf.token}"}).always(function() {
+			$.ajax(
+					{
+						type : "delete",
+						url : "${accountURL}/" + _username.value
+								+ "?${_csrf.parameterName}=${_csrf.token}"
+					}).always(function() {
 				document.getElementById("logoutForm").submit();
 			});
 		}
 	}
 	function update(_username, _fname, _lname) {
 
-		$.ajax({
-			type : "put",
-			url : "${accountURL}/"+_username.value+"?${_csrf.parameterName}=${_csrf.token}",
-			data : {
-				username :_username.value,
-				fname : _fname.value,
-				lname : _lname.value
-			}
-		}).error(function(err){
+		$.ajax(
+				{
+					type : "put",
+					url : "${accountURL}/" + _username.value
+							+ "?${_csrf.parameterName}=${_csrf.token}",
+					data : {
+						username : _username.value,
+						fname : _fname.value,
+						lname : _lname.value
+					}
+				}).error(function(err) {
 			alert(err);
 		});
 	}
-	
+
 	$.ajax("${baseURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res) {

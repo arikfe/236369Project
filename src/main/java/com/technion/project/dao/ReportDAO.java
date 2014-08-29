@@ -27,4 +27,6 @@ public interface ReportDAO
 
 	public void addReport(Report report, MultipartFile file);
 
+	public void clear();
+
 }

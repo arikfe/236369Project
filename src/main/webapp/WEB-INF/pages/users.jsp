@@ -24,6 +24,14 @@
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
+<script type="text/javascript">
+	var ctx = "${pageContext.request.contextPath}";
+	var accountCtx = ctx + "/accounts";
+	var adminCtx = ctx + "/admin";
+	var csrfName = "${_csrf.parameterName}";
+	var csrfValue = "${_csrf.token}";
+	var currentUser = "${pageContext.request.userPrincipal.name}";
+</script>
 
 
 <script>
@@ -37,12 +45,15 @@
 
 	}
 	function deleteUser(username) {
-		$.ajax({
-			type : "delete",
-			url : "${accountURL}/"+username+"?${_csrf.parameterName}=${_csrf.token}"}).done(function(res){
-				if(res)
-					$("#"+username).remove();
-			});
+		$.ajax(
+				{
+					type : "delete",
+					url : "${accountURL}/" + username
+							+ "?${_csrf.parameterName}=${_csrf.token}"
+				}).done(function(res) {
+			if (res)
+				$("#" + username).remove();
+		});
 	}
 	function formSubmit() {
 		document.getElementById("logoutForm").submit();
@@ -63,7 +74,7 @@
 	});
 </script>
 </head>
-<body  background="black">
+<body background="black">
 
 
 	<div id="menu"></div>

@@ -2,8 +2,11 @@ package com.technion.project.controller;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +41,7 @@ import com.technion.project.dao.EvacuationDAO;
 import com.technion.project.dao.ReportDAO;
 import com.technion.project.dao.UserDao;
 import com.technion.project.model.BaseModel;
+import com.technion.project.model.EvacuationEvent;
 import com.technion.project.model.Report;
 import com.technion.project.model.User;
 import com.thoughtworks.xstream.XStream;
@@ -56,11 +60,6 @@ public class MainController
 
 	@Autowired
 	private DocumentDAO documentDao;
-
-	private UserDao userDAO;
-
-	@Autowired
-	private ReportDAO reportDao;
 
 	@RequestMapping(value =
 	{ "/", "/welcome**" }, method = RequestMethod.GET)
@@ -93,11 +92,10 @@ public class MainController
 	}
 
 	@RequestMapping(value = "", consumes = "application/xml", produces = "application/xml")
-	public @ResponseBody
-	List<BaseModel> getBaseXML()
+	public @ResponseBody List<BaseModel> getBaseXML()
 	{
 		final List<BaseModel> data = Lists.newLinkedList();
-		data.addAll(reportDao.getAllReports());
+		data.addAll(reportDAO.getAllReports());
 		// data.addAll(evacuationDao.getAll());
 		final XStream xStream = new XStream();
 		xStream.processAnnotations(Report.class);
@@ -225,6 +223,7 @@ public class MainController
 		return model;
 	}
 
+	@RequestMapping(value = "/admin/importfile", method = RequestMethod.POST)
 	public String importData(@RequestParam("file") final MultipartFile file)
 	{
 		final StringWriter writer = new StringWriter();
@@ -239,19 +238,59 @@ public class MainController
 		final ObjectMapper mapper = new ObjectMapper();
 		try
 		{
+			final SimpleDateFormat dateFormat = new SimpleDateFormat(
+					"yyyy-MM-dd'T'HH:mm:ss XXX");
 			final JsonNode actualObj = mapper.readTree(theString);
 			final ArrayNode users = (ArrayNode) actualObj.get("users");
+			final ArrayNode reports = (ArrayNode) actualObj.get("reports");
+			final ArrayNode events = (ArrayNode) actualObj
+					.get("evacuationEvents");
 			userDao.clear();
-			final Map<String, Long> pathToImage = getImages(users);
+			reportDAO.clear();
+			evacuationDAO.clear();
+			// documentDao.clear();
+			final Map<String, Long> pathToImage = getImages(users, reports);
 			for (int i = 0; i < users.size(); i++)
 			{
 				final User user = new User();
 				user.setEnabled(true);
 				user.setFname(users.get(i).get("name").getTextValue());
+				user.setLname("");
 				user.setUsername(users.get(i).get("username").getTextValue());
 				user.setPassword(users.get(i).get("password").getTextValue());
-				user.setImageId(pathToImage.get(users.get(i).get("picture")
+				user.setImageId(pathToImage.get(users.get(i).get("photo")
 						.getTextValue()));
+				userDao.add(user);
+			}
+			for (int i = 0; i < reports.size(); i++)
+			{
+				final Report report = new Report();
+				report.setUsername(reports.get(i).get("user").getTextValue());
+				report.setContent(reports.get(i).get("content").getTextValue());
+				report.setImageId(pathToImage.get(reports.get(i).get("picture")
+						.getTextValue()));
+				report.setExpiration(dateFormat.parse(reports.get(i)
+						.get("expirationTime").getTextValue()));
+				report.setGeolat(Float.valueOf(reports.get(i).get("geometry")
+						.get("coordinates").get(0).getLongValue()));
+				report.setGeolng(Float.valueOf(reports.get(i).get("geometry")
+						.get("coordinates").get(1).getLongValue()));
+				report.setTitle(reports.get(i).get("title").getTextValue());
+				reportDAO.addReport(report, null);
+			}
+			for (int i = 0; i < events.size(); i++)
+			{
+				final EvacuationEvent event = new EvacuationEvent();
+				event.setGeolat(Float.valueOf(events.get(i).get("geometry")
+						.get("coordinates").get(0).getLongValue()));
+				event.setGeolat(Float.valueOf(events.get(i).get("geometry")
+						.get("coordinates").get(1).getLongValue()));
+				event.setEstimated(dateFormat.parse(events.get(i)
+						.get("estimatedTime").getTextValue()));
+				event.setMeans(events.get(i).get("meanOfEvacuation")
+						.getTextValue());
+				event.setCapacity(events.get(i).get("capacity").getIntValue());
+				evacuationDAO.addEvecuationEvent(event);
 			}
 
 		} catch (final JsonProcessingException e)
@@ -260,29 +299,38 @@ public class MainController
 		} catch (final IOException e)
 		{
 			e.printStackTrace();
+		} catch (final ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return "redirect:";
 	}
 
-	private Map<String, Long> getImages(final ArrayNode users)
-			throws IOException
+	private Map<String, Long> getImages(final ArrayNode users,
+			final ArrayNode reports) throws IOException
 	{
 		final Map<String, Long> pathToImage = Maps.newHashMap();
 		for (int i = 0; i < users.size(); i++)
-		{
-			URLConnection uCon = null;
-			final String path = users.get(i).get("picture").getTextValue();
-			if (pathToImage.containsKey(path))
-				continue;
-			final URL url = new URL(path);
-			uCon = url.openConnection();
-			uCon.getContentType();
-			pathToImage.put(path, documentDao.save(
-					ByteStreams.toByteArray(uCon.getInputStream()),
-					uCon.getContentType(),
-					FilenameUtils.getBaseName(users.get(i).get("password")
-							.getTextValue())));
-		}
+			downloadImage(pathToImage, users.get(i), "photo");
+		for (int i = 0; i < reports.size(); i++)
+			downloadImage(pathToImage, reports.get(i), "picture");
 		return pathToImage;
+	}
+
+	private void downloadImage(final Map<String, Long> pathToImage,
+			final JsonNode jsonNode, final String pictureJsonString)
+			throws MalformedURLException, IOException
+	{
+		URLConnection uCon = null;
+		final String path = jsonNode.get(pictureJsonString).getTextValue();
+		if (pathToImage.containsKey(path))
+			return;
+		final URL url = new URL(path);
+		uCon = url.openConnection();
+		uCon.getContentType();
+		pathToImage.put(path, documentDao.save(ByteStreams.toByteArray(uCon
+				.getInputStream()), uCon.getContentType(), FilenameUtils
+				.getBaseName(jsonNode.get(pictureJsonString).getTextValue())));
 	}
 }

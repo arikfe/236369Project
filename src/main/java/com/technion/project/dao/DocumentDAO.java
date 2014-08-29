@@ -20,4 +20,6 @@ public interface DocumentDAO
 	public void remove(Long imageId, Session session);
 
 	public Long save(byte[] byteArray, String contentType, String name);
+
+	public void clear();
 }

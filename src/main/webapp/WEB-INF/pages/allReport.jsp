@@ -18,6 +18,7 @@
 <script type="text/javascript">
 var ctx = "${pageContext.request.contextPath}";
 var accountCtx = ctx + "/accounts";
+var adminCtx = ctx + "/admin";
 var csrfName = "${_csrf.parameterName}";
 var csrfValue = "${_csrf.token}";
 var currentUser = "${pageContext.request.userPrincipal.name}";
@@ -182,11 +183,8 @@ $.ajax({
 	<button id="showClose" onclick="bounceClosest()" >Show closest evacuation event</button>
 	<button onclick="stopEventBounce()">Stop bounce</button>
 	<button onclick="bounceMine()">Find my Event</button>
-<<<<<<< HEAD
 	<a href="${reportURL}/" type="application/xml"><button >Create report file</button></a>
-=======
 	<a href="${reportURL}/exportXml" ><button>Create report file</button></a>
->>>>>>> branch 'master' of https://github.com/arikfe/236369Project.git
 	<table id='reportsTbody' class="zebra" align="left">
 
 		<tbody >

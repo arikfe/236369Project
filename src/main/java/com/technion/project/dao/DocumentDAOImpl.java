@@ -100,8 +100,16 @@ public class DocumentDAOImpl implements DocumentDAO
 	@Override
 	public void remove(final Long imageId, final Session session)
 	{
-		session.delete(get(imageId));
+		if (get(imageId) != null)
+			session.delete(get(imageId));
 
+	}
+
+	@Override
+	public void clear()
+	{
+		for (final Document d : list())
+			remove(d.getId());
 	}
 
 }
