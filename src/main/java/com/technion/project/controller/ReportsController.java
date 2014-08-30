@@ -1,5 +1,6 @@
 package com.technion.project.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -87,12 +88,23 @@ public class ReportsController
 		final XStream xStream = new XStream();
 		xStream.processAnnotations(Report.class);
 		final String xml = xStream.toXML(reportDao.getAllReports());
-
-		final Result output = new StreamResult(System.out);
+		response.setHeader("Content-Disposition",
+				"inline;filename=\"reports.kml\"");
+		response.setContentType("application/xml");
+		Result output = null;
 		try
 		{
-			final Source input = new StreamSource(new File(
-					"C:\\Users\\hagitz\\test\\report.xml"));
+			output = new StreamResult(response.getOutputStream());
+		} catch (final IOException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try
+		{
+			final Source input = new StreamSource(new ByteArrayInputStream(
+					xml.getBytes()));
 			final Source xsl = new StreamSource(new File(
 					"C:\\Users\\hagitz\\test\\report.xsl"));
 
@@ -104,7 +116,15 @@ public class ReportsController
 		{
 			System.out.println("Transformer exception: " + te.getMessage());
 		}
+		try
+		{
+			final OutputStream out = response.getOutputStream();
 
+		} catch (final IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "";
 	}
 
