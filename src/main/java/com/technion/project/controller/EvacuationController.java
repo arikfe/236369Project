@@ -1,9 +1,23 @@
 package com.technion.project.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.technion.project.dao.EvacuationDAO;
 import com.technion.project.model.EvacuationEvent;
 import com.technion.project.model.User;
+import com.thoughtworks.xstream.XStream;
 
 @Controller
 @RequestMapping("/evacuation/*")
@@ -112,5 +127,74 @@ public class EvacuationController extends BaseController
 	public @ResponseBody boolean deleteEvent(@PathVariable final long id)
 	{
 		return evacuationDAO.delete(id);
+	}
+
+	@RequestMapping(value = "exportEvacuationXml", method = RequestMethod.GET)
+	public @ResponseBody String getEvacuationXML(
+			final HttpServletResponse response)
+	{
+		try
+		{
+			response.setHeader("Content-Disposition",
+					"inline;filename=\"evacuation.xml\"");
+			response.setContentType("application/xml");
+			final XStream xStream = new XStream();
+			xStream.processAnnotations(EvacuationEvent.class);
+			final String xml = xStream.toXML(evacuationDAO.getAll());
+			final OutputStream out = response.getOutputStream();
+			out.write(xml.getBytes());
+			out.flush();
+			out.close();
+		} catch (final IOException e)
+		{
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	@RequestMapping(value = "exportEvacuationKml", method = RequestMethod.GET)
+	public @ResponseBody String getReportsKML(final HttpServletResponse response)
+	{
+		final XStream xStream = new XStream();
+		xStream.processAnnotations(EvacuationEvent.class);
+		final String xml = xStream.toXML(evacuationDAO.getAll());
+		response.setHeader("Content-Disposition",
+				"inline;filename=\"evacuation.kml\"");
+		response.setContentType("application/xml");
+		Result output = null;
+		try
+		{
+			output = new StreamResult(response.getOutputStream());
+		} catch (final IOException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try
+		{
+			final Source input = new StreamSource(new ByteArrayInputStream(
+					xml.getBytes()));
+			final Source xsl = new StreamSource(new File(
+					"C:\\Users\\hagitz\\test\\evacuation.xsl"));
+
+			final TransformerFactory factory = TransformerFactory.newInstance();
+			final Transformer transformer = factory.newTransformer(xsl);
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.transform(input, output);
+		} catch (final TransformerException te)
+		{
+			System.out.println("Transformer exception: " + te.getMessage());
+		}
+		try
+		{
+			final OutputStream out = response.getOutputStream();
+
+		} catch (final IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
 	}
 }
