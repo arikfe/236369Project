@@ -271,20 +271,20 @@ public class MainController
 						.getTextValue()));
 				report.setExpiration(dateFormat.parse(reports.get(i)
 						.get("expirationTime").getTextValue()));
-				report.setGeolat(Float.valueOf(reports.get(i).get("geometry")
-						.get("coordinates").get(0).getLongValue()));
-				report.setGeolng(Float.valueOf(reports.get(i).get("geometry")
-						.get("coordinates").get(1).getLongValue()));
+				report.setGeolat((float) reports.get(i).get("geometry")
+						.get("coordinates").get(0).getDoubleValue());
+				report.setGeolng((float) reports.get(i).get("geometry")
+						.get("coordinates").get(1).getDoubleValue());
 				report.setTitle(reports.get(i).get("title").getTextValue());
 				reportDAO.addReport(report, null);
 			}
 			for (int i = 0; i < events.size(); i++)
 			{
 				final EvacuationEvent event = new EvacuationEvent();
-				event.setGeolat(Float.valueOf(events.get(i).get("geometry")
-						.get("coordinates").get(0).getLongValue()));
-				event.setGeolat(Float.valueOf(events.get(i).get("geometry")
-						.get("coordinates").get(1).getLongValue()));
+				event.setGeolat((float) events.get(i).get("geometry")
+						.get("coordinates").get(0).getDoubleValue());
+				event.setGeolat((float) events.get(i).get("geometry")
+						.get("coordinates").get(1).getDoubleValue());
 				event.setEstimated(dateFormat.parse(events.get(i)
 						.get("estimatedTime").getTextValue()));
 				event.setMeans(events.get(i).get("meanOfEvacuation")
