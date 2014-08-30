@@ -21,6 +21,7 @@
 <c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
 <c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
 <c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
+<c:set var="evacuationURL" value="${pageContext.request.contextPath}/evacuation"/>
 <c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
 </head>
 <body>
@@ -61,6 +62,8 @@
 				<ul>
 					<li><a href="${reportURL}/exportXml">Save Report XML</a></li>
 					<li><a href="${reportURL}/exportKml">Save report KML</a></li>
+					<li><a href="${evacuationURL}/exportEvacuationXml">Save Evacuation XML</a></li>
+					<li><a href="${evacuationURL}/exportEvacuationKml">Save Evacuation KML</a></li>
 				</ul>
 				</li>
 			<li><a href="${accountURL}/">Show all Users</a></li>
