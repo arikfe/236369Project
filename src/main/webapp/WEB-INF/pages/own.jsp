@@ -9,6 +9,9 @@
 <%
 	User user = (User) request.getAttribute("user");
 	String result = (String) request.getAttribute("result");
+	if (result == null)
+		result =  "";
+	
 %>
 <head>
 
@@ -77,6 +80,29 @@
 	});
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<style>
+#update 
+{
+    background-color: blue;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius:6px;
+    color: white;
+    font-family: 'Oswald';
+    font-size: 24px;
+    text-decoration: none;
+    cursor: poiner;
+     border:none;
+     height: 50px;
+     width: 100px;
+     text-align: justify;
+}
+#update:hover {
+    border: none;
+    background:green;
+    box-shadow: 0px 0px 1px #777;
+}
+</style>
 <title><%=user.getFname() + " " + user.getLname()%></title>
 </head>
 <body>
@@ -104,7 +130,7 @@
 
 		</tbody>
 	</table>
-	<button onclick="update(username,fname,lname)">Update</button>
+	<button id="update"  onclick="update(username,fname,lname)">Update</button>
 
 	<form
 		action="${accountURL}/<%=user.getUsername() %>/reset?${_csrf.parameterName}=${_csrf.token}"

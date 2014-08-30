@@ -61,8 +61,8 @@
 				</ul></li>
 			<li><a>Save to file</a>
 				<ul>
-					<li><a href="${reportURL}/exportXml">Save XML</a></li>
-					<li><a href="${reportURL}/exportKml">Save KML</a></li>
+					<li><a href="${reportURL}/exportXml">Save Report XML</a></li>
+					<li><a href="${reportURL}/exportKml">Save report KML</a></li>
 				</ul></li>
 			<li><a href="${accountURL}/">Show all Users</a></li>
 			<%
