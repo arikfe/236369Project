@@ -1,10 +1,19 @@
 package com.technion.project.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -75,25 +84,27 @@ public class ReportsController
 	@RequestMapping(value = "exportKml", method = RequestMethod.GET)
 	public @ResponseBody String getReportsKML(final HttpServletResponse response)
 	{
+		final XStream xStream = new XStream();
+		xStream.processAnnotations(Report.class);
+		final String xml = xStream.toXML(reportDao.getAllReports());
+
+		final Result output = new StreamResult(System.out);
 		try
 		{
-			response.setHeader("Content-Disposition",
-					"inline;filename=\"reports.kml\"");
-			response.setContentType("application/kml");
-			final XStream xStream = new XStream();
-			xStream.processAnnotations(Report.class);
-			final String xml = xStream.toXML(reportDao.getAllReports());
+			final Source input = new StreamSource(new File(
+					"C:\\Users\\hagitz\\test\\report.xml"));
+			final Source xsl = new StreamSource(new File(
+					"C:\\Users\\hagitz\\test\\report.xsl"));
 
-			final OutputStream out = response.getOutputStream();
-
-			out.write(xml.getBytes());
-
-			out.flush();
-			out.close();
-		} catch (final IOException e)
+			final TransformerFactory factory = TransformerFactory.newInstance();
+			final Transformer transformer = factory.newTransformer(xsl);
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.transform(input, output);
+		} catch (final TransformerException te)
 		{
-			e.printStackTrace();
+			System.out.println("Transformer exception: " + te.getMessage());
 		}
+
 		return "";
 	}
 
