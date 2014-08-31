@@ -31,6 +31,8 @@ var currentUser = "${pageContext.request.userPrincipal.name}";
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
+	<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/expendableList.css"/>"></link>
 <link href="<c:url value="/CSS/lightbox.css"/>" rel="stylesheet" />
 <style>
 #map-canvas {
@@ -184,9 +186,8 @@ $.ajax({
 	<button id="showClose" onclick="bounceClosest()" >Show closest evacuation event</button>
 	<button onclick="stopEventBounce()">Stop bounce</button>
 	<button onclick="bounceMine()">Find my Event</button>
-	<a href="${reportURL}/" type="application/xml"><button >Create report file</button></a>
-	<a href="${reportURL}/exportXml" ><button>Create report file</button></a>
-		<table id='reportsTbody' class="zebra" align="left" >
+	
+		<!-- <table id='reportsTbody' class="zebra" align="left" >
 
 			<tbody>
 				<tr id='table_body'>
@@ -197,7 +198,9 @@ $.ajax({
 					<th style="width: 10%">Action</th>
 				</tr>
 			</tbody>
-		</table>
+		</table> -->
+		<nav id="reports" class="list">
+		</nav>
 	<div id="map-canvas" align="right"></div>
 
 

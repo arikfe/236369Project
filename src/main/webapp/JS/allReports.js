@@ -8,16 +8,15 @@ var selectedEvent;
 var image;
 var pos;
 
-
 function bounceClosest() {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			pos = new google.maps.LatLng(position.coords.latitude,
 					position.coords.longitude);
-			
+
 			$.ajax({
 				type : "GET",
-				url : ctx+"/evacuation/closestEvent",
+				url : ctx + "/evacuation/closestEvent",
 				data : {
 					lat : pos.lat(),
 					lng : pos.lng()
@@ -36,12 +35,12 @@ function bounceClosest() {
 		// Browser doesn't support Geolocation
 		handleNoGeolocation(false);
 	}
-	
+
 }
 function bounceMine() {
 	$.ajax({
 		type : "GET",
-		url : accountCtx+"/"+currentUser+"/event"
+		url : accountCtx + "/" + currentUser + "/event"
 	}).done(function(data) {
 		if (data != "") {
 			stopEventBounce(selectedEvent);
@@ -59,19 +58,19 @@ function stopEventBounce() {
 }
 
 function createReportBU() {
-//	$.ajax({
-//		type : "GET",
-//		url : ctx + "/reports/export"
-//		
-//
-//	}).done(function(reports) {
-//		alert(reports);
-//
-//	}).fail(function(err) {
-//		alert(err);
-//	});
+	// $.ajax({
+	// type : "GET",
+	// url : ctx + "/reports/export"
+	//		
+	//
+	// }).done(function(reports) {
+	// alert(reports);
+	//
+	// }).fail(function(err) {
+	// alert(err);
+	// });
 	windows.location = ctx + "/reports/export";
-	
+
 }
 function stopEventBounce() {
 	if (!(selectedEvent === undefined))
@@ -82,10 +81,10 @@ function deletePost(_id) {
 	if (confirm("Are you sure!") == true) {
 
 		markers[_id].setMap(null);
-		var path = ctx+"/reports/"+_id+"?"+csrfName+"="+csrfValue	;
+		var path = ctx + "/reports/" + _id + "?" + csrfName + "=" + csrfValue;
 		$.ajax({
 			type : "delete",
-			url : path			
+			url : path
 		}).done(function(msg) {
 			$("#row" + msg).remove();
 		}).fail(function(err) {
@@ -101,22 +100,26 @@ function stopBounce(marker) {
 	marker.setAnimation(null);
 }
 function unregisterToEvent(_id) {
-	$.ajax({
-		type : "PUT",
-		url :ctx+"/evacuation/id/" + _id + "/leave?"+csrfName+"="+csrfValue
-		
-	}).done(function(msg) {
+	$.ajax(
+			{
+				type : "PUT",
+				url : ctx + "/evacuation/id/" + _id + "/leave?" + csrfName
+						+ "=" + csrfValue
+
+			}).done(function(msg) {
 		// alert("Data Saved: " + msg);
 	}).fail(function(err) {
 		alert(err.statusText);
 	});
 }
 function registerToEvent(_id) {
-	$.ajax({
-		type : "PUT",
-		url : ctx+"/evacuation/id/" + _id + "/join?"+csrfName+"="+csrfValue
-		
-	}).done(function(msg) {
+	$.ajax(
+			{
+				type : "PUT",
+				url : ctx + "/evacuation/id/" + _id + "/join?" + csrfName + "="
+						+ csrfValue
+
+			}).done(function(msg) {
 		// alert("Data Saved: " + msg);
 	}).fail(function(err) {
 		alert(err.statusText);
@@ -203,21 +206,19 @@ function deleteMarkers() {
 	markers = {};
 }
 
-
 function displayEventUsers(_id) {
 	$.ajax({
 		type : "GET",
-		url : ctx+"/evacuation/id/" + _id+"/users/",
+		url : ctx + "/evacuation/id/" + _id + "/users/",
 		contentType : "application/json"
 	}).done(
 			function(users) {
 				var names = "";
-				
-				for ( var i in users) 
-				{
+
+				for ( var i in users) {
 					var name = users[i].fname;
-					names += "<a href='"+accountCtx+"/"
-							+ users[i].username + "/reports'>" + name + "</a><br>";
+					names += "<a href='" + accountCtx + "/" + users[i].username
+							+ "/reports'>" + name + "</a><br>";
 				}
 				$("#friend" + _id).html("<p>" + names + "</p>");
 
@@ -244,19 +245,16 @@ function search(text) {
 	clearMarkers();
 	$.ajax({
 		type : "GET",
-		url : ctx + "/reports/search/" ,
-		data:{
+		url : ctx + "/reports/search/",
+		data : {
 			q : text.value
 		}
-	}).done(
-			function(reports) {
+	}).done(function(reports) {
 
-				for ( var i in reports) {
-					handleReportCreation(reports[i],
-							currentUser, i,
-							reports.length);
-				}
-			}).fail(function(err) {
+		for ( var i in reports) {
+			handleReportCreation(reports[i], currentUser, i, reports.length);
+		}
+	}).fail(function(err) {
 		alert(err);
 	});
 }
@@ -267,9 +265,9 @@ $(document).ready(function() {
 });
 
 function handleReportCreation(r, loggoedOnUser, i, length) {
-	var body = $("#table_body");
+	var body = $("#reports");
 
-	//var markerImg = "";
+	// var markerImg = "";
 	if (r.imageId == "")
 		setTimeout(function() {
 			updateMarker(new google.maps.LatLng(r.geolat, r.geolng), r.title,
@@ -278,25 +276,39 @@ function handleReportCreation(r, loggoedOnUser, i, length) {
 	else
 		setTimeout(function() {
 			updateMarker(new google.maps.LatLng(r.geolat, r.geolng), r.title,
-					r.id, '<a href="'+ctx + '/download/' + r.imageId+'" data-lightbox="'+r.imageId+'" data-title="'+r.title+'"><img src="' + ctx + '/download/' + r.imageId
+					r.id, '<a href="' + ctx + '/download/' + r.imageId
+							+ '" data-lightbox="' + r.imageId
+							+ '" data-title="' + r.title + '"><img src="' + ctx
+							+ '/download/' + r.imageId
 							+ '"  height="64" width="64"> ');
 		}, 500 + (i++ * 200));
-	msg = "<tr id='row"
-			+ r.id
-			+ "'><td>"
-			+ r.title
-			+ "</td><td>"
-			+ r.content
-			+ " </td><td><a href='"+accountCtx +"/"
-			+ r.username
-			+ "/reports'>"
-			+ r.username
-			+ "</a></td><td>"
-			+ new Date(r.expiration).toLocaleFormat('%d/%m/%Y %H:%M')
-					.toString() + "</td>";
+	msg = "<div class='menu-item' id='row"+r.id+"'>" + "<h4><a href='#'>" + r.title
+			+ "</a></h4>" + " <ul > " + " <li>description: " + r.content
+			+ "</li>" +
+					"<li> " + "<a href='" + accountCtx + "/"
+			+ r.username + "/reports'>user:" + r.username + "</a></li>"
+			+ "<li>expire time: "
+			+ new Date(r.expiration).toLocaleFormat('%d/%m/%Y %H:%M') + "</li>";
 	if (loggoedOnUser == r.username || loggoedOnUser == 'admin')
-		msg += "<td><input type='button' class='styledButton' value='Delete' onclick='deletePost("
-				+ r.id + ")'></td>";
-	msg += "</tr>";
-	body.after(msg);
+		msg += "<li><input type='button' class='styledButton' value='Delete' onclick='deletePost("
+				+ r.id + ")'></li>";
+	msg += "</ul></div>";
+	// msg = "<tr id='row"
+	// + r.id
+	// + "'><td>"
+	// + r.title
+	// + "</td><td>"
+	// + r.content
+	// + " </td><td><a href='"+accountCtx +"/"
+	// + r.username
+	// + "/reports'>"
+	// + r.username
+	// + "</a></td><td>"
+	// + new Date(r.expiration).toLocaleFormat('%d/%m/%Y %H:%M')
+	// .toString() + "</td>";
+	// if (loggoedOnUser == r.username || loggoedOnUser == 'admin')
+	// msg += "<td><input type='button' class='styledButton' value='Delete'
+	// onclick='deletePost("+ r.id + ")'></td>";
+	// msg += "</tr>";
+	body.append(msg);
 }

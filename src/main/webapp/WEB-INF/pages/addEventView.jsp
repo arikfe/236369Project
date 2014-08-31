@@ -35,7 +35,7 @@ html, body, #map-canvas {
 </script>
 
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
+<%-- <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script> --%>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"

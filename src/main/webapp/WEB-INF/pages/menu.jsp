@@ -24,7 +24,7 @@
 <body id='menu'>
 
 	<nav>
-	<ul>
+	<ul class="menu">
 		<%
 			User user = (User) request.getAttribute("user");
 
@@ -43,20 +43,20 @@
 							.getContextPath() + "/IMG/images.jpg"%>"
 				height="64" width="64"></li>
 			<li><a href="#">${user.fname} ${user.lname}</a>
-				<ul>
+				<ul class="menu">
 					<li><a href="${accountURL}/own"> My Account</a></li>
 					<li><a href="javascript:formSubmit()"> Logout</a></li>
 
 				</ul></li>
 			<li><a>Reports</a>
-				<ul>
+				<ul class="menu">
 					<li><a href="${reportURL}/">All reports</a></li>
 					<li><a href="${baseURL}/addReport">Add report</a></li>
 					<li><a href="${accountURL}/<%=user.getUsername()%>/reports">My
 							reports</a></li>
 				</ul></li>
 			<li><a>Save to file</a>
-				<ul>
+				<ul class="menu">
 					<li><a href="${reportURL}/exportXml">Save Report XML</a></li>
 					<li><a href="${reportURL}/exportKml">Save report KML</a></li>
 					<li><a href="${evacuationURL}/exportEvacuationXml">Save Evacuation XML</a></li>
