@@ -17,6 +17,7 @@ img {
 nav {
 	margin: 10px auto; 
 	text-align: left;
+	width: 100%;
 }
 
 nav ul ul {
@@ -36,6 +37,7 @@ nav ul {
 	box-shadow: 0px 0px 9px rgba(0,0,0,0.15);
 	padding: 0 7px;
 	border-radius: 10px;  
+	width: 99%;
 	list-style: none;
 	position: relative;
 	display: inline-table;
@@ -66,6 +68,8 @@ nav ul {
 	nav ul ul {
 		background: #5f6975; border-radius: 0px; padding: 0;
 		position: absolute; top: 100%;
+		width : auto;
+		text-shadow:0px 1px 1px #2f6627;
 	}
 		nav ul ul li {
 			float: none; 

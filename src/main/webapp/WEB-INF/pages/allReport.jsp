@@ -58,7 +58,7 @@ button
 {
   	height:40px;
   	background:#4472b9; 
-  	width:320px;
+  	width:auto;
   	font-weight:bold;
   	color:white;
   	font-family:arial;
@@ -69,6 +69,7 @@ button
 }
 button:hover {
     border: none;
+    width:auto;
     background:green;
     box-shadow: 0px 0px 1px #777;
 }
@@ -185,18 +186,18 @@ $.ajax({
 	<button onclick="bounceMine()">Find my Event</button>
 	<a href="${reportURL}/" type="application/xml"><button >Create report file</button></a>
 	<a href="${reportURL}/exportXml" ><button>Create report file</button></a>
-	<table id='reportsTbody' class="zebra" align="left">
+		<table id='reportsTbody' class="zebra" align="left" >
 
-		<tbody >
-			<tr id='table_body'>
-				<th style="width:30%">Title</th>
-				<th style="width:30%">Content</th>
-				<th style="width:10%">User</th>
-				<th style="width:20%">Expire on</th>
-				<th style="width:10%">Action</th>
-			</tr>
-		</tbody>
-	</table>
+			<tbody>
+				<tr id='table_body'>
+					<th style="width: 30%">Title</th>
+					<th style="width: 30%">Content</th>
+					<th style="width: 10%">User</th>
+					<th style="width: 20%">Expire on</th>
+					<th style="width: 10%">Action</th>
+				</tr>
+			</tbody>
+		</table>
 	<div id="map-canvas" align="right"></div>
 
 

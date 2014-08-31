@@ -14,8 +14,6 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/table.css"/>"></link>
-<link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
 <c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
@@ -23,7 +21,7 @@
 <c:set var="evacuationURL" value="${pageContext.request.contextPath}/evacuation"/>
 <c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
 </head>
-<body>
+<body id='menu'>
 
 	<nav>
 	<ul>

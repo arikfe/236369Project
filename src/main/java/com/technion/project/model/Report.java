@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.technion.project.Constants;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -26,7 +27,7 @@ public class Report implements BaseModel
 	private String title;
 	// @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	private String content;
-	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	@DateTimeFormat(iso = ISO.DATE, pattern = "MM/dd/yyyy HH:mm")
 	private Date expiration;
 	private float geolat;
 	private float geolng;
