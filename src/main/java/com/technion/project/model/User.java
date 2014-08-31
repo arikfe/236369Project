@@ -31,6 +31,11 @@ public class User implements BaseModel
 	private String lname;
 	private Long imageId;
 
+	@JsonIgnore
+	private EvacuationEvent event;
+	@JsonIgnore
+	private Set<UserRole> userRole = new HashSet<UserRole>(0);
+
 	public boolean hasContainImage()
 	{
 		return imageId != null;
@@ -45,11 +50,6 @@ public class User implements BaseModel
 	{
 		this.imageId = imageId;
 	}
-
-	@JsonIgnore
-	private EvacuationEvent event;
-	@JsonIgnore
-	private Set<UserRole> userRole = new HashSet<UserRole>(0);
 
 	public User()
 	{

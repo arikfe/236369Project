@@ -6,12 +6,12 @@
 }
 
 nav.list {
-	float: left;
+	
 	font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
 	font-size: 13px;
 	line-height: 1.5;
 	margin: 50px auto;
-	width: 48%;
+	width: 100%;
 	-webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 	-moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);

@@ -174,7 +174,7 @@ public class AccountController extends BaseController
 				userDAO.findByUserNameLocalThread(username));
 	}
 
-	@RequestMapping(value = "{username}/event", method = RequestMethod.GET)
+	@RequestMapping(value = "{username}/event", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
 	public @ResponseBody EvacuationEvent registeredEvent()
 	{
 		return getCurrentUser().getEvent();

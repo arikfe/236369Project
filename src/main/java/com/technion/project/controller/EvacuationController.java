@@ -74,6 +74,12 @@ public class EvacuationController extends BaseController
 		return evacuationDAO.getAll();
 	}
 
+	@RequestMapping(value = "", consumes = "application/json", produces = "application/json")
+	public @ResponseBody List<EvacuationEvent> getEvacuationsJson()
+	{
+		return evacuationDAO.getAll();
+	}
+
 	@RequestMapping(value =
 	{ "id/{id}/leave" }, method = RequestMethod.PUT)
 	public @ResponseBody boolean leave(@PathVariable final long id)

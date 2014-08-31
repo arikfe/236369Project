@@ -41,12 +41,14 @@ html, body, #map-canvas {
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <script src="${baseURL}/JS/menu.js"></script>
+<script src="${baseURL}/JS/addEvent.js"></script>
 <script>
 	$.ajax("${baseURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res) {
 		alert(res);
 	});
+	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 </head>
 <body>
