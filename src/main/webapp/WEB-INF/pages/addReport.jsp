@@ -21,15 +21,12 @@
 
 <script type="text/javascript"
 	src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-
-
-
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
 
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
-	<link type="text/css" rel="stylesheet"
+<link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/addReport.css"/>"></link>
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
@@ -40,23 +37,8 @@
 <script src="${baseURL}/JS/menu.js"></script>
 <script>
 	$(function() {
-		$("#expiration").datepicker();
-	});
-	function sumbitForm() {
-		$("#expiration")[0].value = $("#expiration")[0].value + " "
-				+ $("#number")[0].value;
-		return true;
-	}
-</script>
-
-<script>
-	$(function() {
 		$("#number").selectmenu().selectmenu("menuWidget").addClass("overflow");
 	});
-</script>
-
-
-<script>
 	$.ajax("${baseURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res) {
@@ -76,78 +58,71 @@
 	<div id="menu"></div>
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
-			<div id="container" style="width: 100%; height: 610px;">
+			<div id=container>
+				<h1 align="center">Add Report Form</h1>
+				<div id="form">
+					<form name='add'
+						action='${reportURL}/?${_csrf.parameterName}=${_csrf.token}'
+						method="POST" enctype="multipart/form-data"
+						onsubmit='return sumbitForm()'>
+						<input type='hidden' name='username'
+							value="${pageContext.request.userPrincipal.name}"> <input
+							name='geolng' type='hidden' id='lon'> <input
+							name='geolat' type='hidden' id='lat'>
 
+						<table>
+							<tr>
+								<td width="30%">Title:</td>
+								<td width="70%"><input type='text' name='title' id='title'></td>
+							</tr>
+							<tr>
+								<td width="30%">Content:</td>
+								<td width="70%"><textarea id="content" rows="4" cols="40"
+										name="content"></textarea></td>
+							</tr>
+							<tr>
+								<td width="30%">address:</td>
+								<td width="70%"><input type='text' name='address'
+									id='address'></td>
+							</tr>
+							<tr>
+								<td width="30%">Expire time:</td>
+								<td width="70%"><input type="text" name="expiration"
+									id="expiration"></td>
+							</tr>
+							<tr>
+								<td width="30%">Time:</td>
+								<td width="70%">
+									<fieldset style="width: 200px; align: center;">
+										<select name="number" id="number" style="width: 150px;">
+											<option>1:00</option>
+											<option>5:00</option>
+											<option>9:00</option>
+											<option selected="selected">13:00</option>
+											<option>17:00</option>
+											<option>21:00</option>
+										</select>
+									</fieldset>
+								</td>
+							</tr>
+							<tr>
+								<td width="30%">Choose picture:</td>
+								<td width="70%"><input type="file" name='file' id='file' /></td>
+							</tr>
+							<tr>
+								<td width="30%" align="center"><input name="submit"
+									type="submit" value="submit" disabled="disabled" id='submit' /></td>
 
-				<form name='add'
-					action='${reportURL}/?${_csrf.parameterName}=${_csrf.token}'
-					method="POST" enctype="multipart/form-data" onsubmit='return sumbitForm()'>
-					<input type='hidden' name='username'
-						value="${pageContext.request.userPrincipal.name}"> <input
-						name='geolng' type='hidden' id='lon'> <input name='geolat'
-						type='hidden' id='lat'>
+							</tr>
+						</table>
+					</form>
 
-					<h1 align="center"
-						style="font-family: arial; font-size: 46px; color: blue; weight: bold; color: blue">Add
-						Report Form</h1>
-					<table>
-						<tr>
-							<td width="30%">Title:</td>
-							<td width="70%"><input type='text' name='title' id='title'></td>
-						</tr>
-						<tr>
-							<td width="30%">Content:</td>
-							<td width="70%"><textarea id="content" rows="4" cols="40"
-									name="content"></textarea></td>
-						</tr>
-						<tr>
-							<td width="30%">address:</td>
-							<td width="70%"><input type='text' name='address'
-								id='address'></td>
-						</tr>
-						<tr>
-							<td width="30%">Expire time:</td>
-							<td width="70%"><input type="text" name="expiration"
-								id="expiration"></td>
-						</tr>
-						<tr>
-							<td width="30%">Time:</td>
-							<td width="70%">
-								<fieldset style="width: 200px; align: center;">
-									<select name="number" id="number" style="width: 150px;">
-										<option>1:00</option>
-										<option>5:00</option>
-										<option>9:00</option>
-										<option selected="selected">13:00</option>
-										<option>17:00</option>
-										<option>21:00</option>
-									</select>
-								</fieldset>
-							</td>
-						</tr>
-						<tr>
-							<td width="30%">Choose picture:</td>
-							<td width="70%"><input type="file" name='file' id='file' /></td>
-						</tr>
-						<tr>
-							<td width="30%" align="center"><input name="submit"
-								type="submit" value="submit" disabled="disabled" id='submit'  /></td>
-							<td width="70%" align="left"><input name="cancel"
-								type="submit" value="cancel" id='cancel' /></td>
-						</tr>
-					</table>
-				</form>
-
-				<div id="content"
-					style="background-color: #EEEEEE; float: left; width: 600px; height: 600px;"
-					align="right">
+				</div>
+				<div id="content">
 					<div id="map-canvas"></div>
 				</div>
 			</div>
-
-			<div id="footer"
-				style="background-color: #FFA500; clear: both; text-align: center;">
-				Technion CS 236369</div>
+			<div id="footer">Technion CS 236369</div>
 
 		</c:if>
 	</sec:authorize>

@@ -1,13 +1,21 @@
 var map;
 var pos;
 var marker;
-function findAddress(lat,lon){
-	$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lon, 
-			function( data ) {
-				var street = data.results[0].formatted_address;
-				document.getElementById("address").value=street;
-				
-		});
+$(function() {
+	$("#expiration").datepicker();
+});
+function sumbitForm() {
+	$("#expiration")[0].value = $("#expiration")[0].value + " "
+			+ $("#number")[0].value;
+	return true;
+}
+function findAddress(lat, lon) {
+	$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat
+			+ "," + lon, function(data) {
+		var street = data.results[0].formatted_address;
+		document.getElementById("address").value = street;
+
+	});
 }
 function initialize() {
 	var mapOptions = {
@@ -22,11 +30,12 @@ function initialize() {
 		});
 		updateFields(event.latLng);
 	});
-	google.maps.event.addListener(map, 'dblclick', function(event){
-	    map = marker.getMap();
+	google.maps.event.addListener(map, 'dblclick', function(event) {
+		map = marker.getMap();
 
-	   
-	    smoothZoom(map, 12, map.getZoom()); // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+		smoothZoom(map, 12, map.getZoom()); // call smoothZoom, parameters map,
+											// final zoomLevel, and starting
+											// zoom level
 	});
 	// Try HTML5 geolocation
 	if (navigator.geolocation) {
@@ -42,9 +51,9 @@ function initialize() {
 
 			map.setCenter(pos);
 			updateFields(pos);
-			
+
 			$("#submit").removeAttr("disabled");
-			
+
 			$("#status").empty();
 		}, function() {
 			handleNoGeolocation(true);
@@ -54,25 +63,27 @@ function initialize() {
 		handleNoGeolocation(false);
 	}
 }
-//the smooth zoom function
-function smoothZoom (map, max, cnt) {
-    if (cnt >= max) {
-            return;
-        }
-    else {
-        z = google.maps.event.addListener(map, 'zoom_changed', function(event){
-            google.maps.event.removeListener(z);
-            smoothZoom(map, max, cnt + 1);
-        });
-        setTimeout(function(){map.setZoom(cnt);}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
-    }
-}  
+// the smooth zoom function
+function smoothZoom(map, max, cnt) {
+	if (cnt >= max) {
+		return;
+	} else {
+		z = google.maps.event.addListener(map, 'zoom_changed', function(event) {
+			google.maps.event.removeListener(z);
+			smoothZoom(map, max, cnt + 1);
+		});
+		setTimeout(function() {
+			map.setZoom(cnt);
+		}, 80); // 80ms is what I found to work well on my system -- it might
+				// not work well on all systems
+	}
+}
 function handleNoGeolocation(errorFlag) {
 	var content;
 	if (errorFlag) {
 		content = 'Error: The Geolocation service failed.';
 	} else {
-		 content = 'Error: Your browser doesn\'t support geolocation.';
+		content = 'Error: Your browser doesn\'t support geolocation.';
 	}
 
 	var options = {
@@ -89,6 +100,5 @@ function updateFields(position) {
 	lon = document.getElementById("lon");
 	lat.value = position.lat();
 	lon.value = position.lng();
-	findAddress(position.lat(),position.lng());
+	findAddress(position.lat(), position.lng());
 }
-
