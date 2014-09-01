@@ -70,29 +70,29 @@
 							name='geolng' type='hidden' id='lon'> <input
 							name='geolat' type='hidden' id='lat'>
 
-						<table>
+						<table >
 							<tr>
-								<td width="30%">Title:</td>
-								<td width="70%"><input type='text' name='title' id='title'></td>
+								<th >Title:</td>
+								<td ><input type='text' name='title' id='title'></td>
 							</tr>
 							<tr>
-								<td width="30%">Content:</td>
-								<td width="70%"><textarea id="content" rows="4" cols="40"
+								<th >Content:</td>
+								<td ><textarea id="content" rows="4" cols="40"
 										name="content"></textarea></td>
 							</tr>
 							<tr>
-								<td width="30%">address:</td>
-								<td width="70%"><input type='text' name='address'
+								<th ">address:</td>
+								<td ><input type='text' name='address'
 									id='address'></td>
 							</tr>
 							<tr>
-								<td width="30%">Expire time:</td>
-								<td width="70%"><input type="text" name="expiration"
+								<th >Expire time:</td>
+								<td ><input type="text" name="expiration"
 									id="expiration"></td>
 							</tr>
 							<tr>
-								<td width="30%">Time:</td>
-								<td width="70%">
+								<th >Time:</td>
+								<td >
 									<fieldset style="width: 200px; align: center;">
 										<select name="number" id="number" style="width: 150px;">
 											<option>1:00</option>
@@ -106,11 +106,11 @@
 								</td>
 							</tr>
 							<tr>
-								<td width="30%">Choose picture:</td>
-								<td width="70%"><input type="file" name='file' id='file' /></td>
+								<th >Choose picture:</td>
+								<td><input type="file" name='file' id='file' /></td>
 							</tr>
 							<tr>
-								<td width="30%" align="center"><input name="submit"
+								<td  align="center"><input name="submit"
 									type="submit" value="submit" disabled="disabled" id='submit' /></td>
 
 							</tr>

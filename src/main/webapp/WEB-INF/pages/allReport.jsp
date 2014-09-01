@@ -83,15 +83,17 @@
 		evacuation event</button>
 	<button onclick="stopEventBounce()">Stop bounce</button>
 	<button onclick="bounceMine()">Find my Event</button>
-
-	<div id='linesContainer'>
-		<h4>Reports</h4>
-		<nav id="reports" class="list"> </nav>
-		<h4>Evecuation events</h4>
-		<nav id="events" class="list"> </nav>
+	<div id='container'>
+		<div id='linesContainer'>
+			<h4>Reports</h4>
+			<nav id="reports" class="list"> </nav>
+			<h4>Evacuation events</h4>
+			<nav id="events" class="list"> </nav>
+		</div>
+		<div id='mapContainer'>
+			<div id="map-canvas" ></div>
+		</div>
 	</div>
-	<div id="map-canvas" align="right"></div>
-
 
 </body>
 </html>

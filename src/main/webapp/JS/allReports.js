@@ -25,7 +25,7 @@ function loadReports(user){
 				for ( var i in reports) {
 					handleReportCreation(
 							reports[i],
-							ctx,
+							currentUser,
 							i);
 				}
 			}).fail(function(err) {
@@ -55,11 +55,17 @@ function loadEvents(){
 								handleSingleEvent(events[e],event,e);
 							}
 						}).fail(function(err) {
-					alert(err.statusText);
+							if(err.status==404)
+							{
+							$("#events").append("log in to see evacuation events");
+							}
 				});
 				
 			}).fail(function(err) {
-		alert(err.statusText);
+				if(err.status==404)
+				{
+				$("#events").append("log in to see evacuation events");
+				}
 	});
 }
 function handleSingleEvent(e,event,i){
@@ -418,6 +424,7 @@ function handleReportCreation(r, loggoedOnUser, i, length) {
 	msg = "<div class='menu-item' id='row"+r.id+"'>" + "<h4><a href='#'>" + r.title
 			+ "</a></h4>" + " <ul > " + " <li>description: " + r.content
 			+ "</li>" +
+			"<li>address :"+ r.address + "</li>"+
 					"<li> " + "<a href='" + accountCtx + "/"
 			+ r.username + "/reports'>user:" + r.username + "</a></li>"
 			+ "<li>expire time: "

@@ -25,11 +25,23 @@ public class Report implements BaseModel
 	private String username;
 	// @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	private String title;
+	private String address;
 	// @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	private String content;
 	@DateTimeFormat(iso = ISO.DATE, pattern = "MM/dd/yyyy HH:mm")
 	private Date expiration;
 	private float geolat;
+
+	public String getAddress()
+	{
+		return address;
+	}
+
+	public void setAddress(final String address)
+	{
+		this.address = address;
+	}
+
 	private float geolng;
 	private Long imageId;
 

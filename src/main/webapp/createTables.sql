@@ -46,6 +46,7 @@ CREATE TABLE report (
   id int(11) NOT NULL AUTO_INCREMENT,
   username varchar(45) NOT NULL,
   title varchar(100) NOT NULL,
+  address varchar(200),
   content varchar(1000) NOT NULL,
   expiration datetime NOT NULL,
   geolat decimal(10,6) default NULL,
