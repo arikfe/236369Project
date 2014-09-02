@@ -61,6 +61,7 @@ CREATE TABLE evacuation (
  estimated datetime NOT NULL,
  capacity INT default 0,
  means varchar(1000) NOT NULL,
+ address varchar(200),
  geolat decimal(10,6) default NULL,
  geolng decimal(10,6) default NULL,
  primary key (id));

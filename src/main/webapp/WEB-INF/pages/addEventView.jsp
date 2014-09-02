@@ -63,6 +63,11 @@ html, body, #map-canvas {
 				<td><input type='text' name='means'></td>
 			</tr>
 			<tr>
+				<td>address:
+				</td>
+				<td><input type='text' name='address' id='address'></td>
+			</tr>
+			<tr>
 				<td>capacity:</td>
 				<td><input type="text" name="capacity"></input></td>
 			</tr>

@@ -100,9 +100,12 @@ function handleSingleEvent(e,event,i){
 	
 	setTimeout(updateEvent(contentStr, e.geolat, e.geolng,
 			e.id), 500 + (i * 200));
-	msg = "<div class='menu-item' id='row"+e.id+"'>" + "<h4><a href='#'>" +shorten(e.means)
+	msg = "<div class='menu-item' id='row"+e.id+"'>" + "<h4><a href='#'>" +shorten(e.address)
 	+ "</a></h4>" + " <ul > " + " <li>capacity: " + e.capacity
-	+ "</li>" + " <li>means: " + e.means
+	+ "</li>"
+	+ " <li>address: " + e.address
+	+ "</li>"
+	+ " <li>means: " + e.means
 	+ "</li>"
 	+ new Date(e.estimated).toLocaleFormat('%d/%m/%Y %H:%M') + "</li>";
 	var body = $("#events");
@@ -118,7 +121,8 @@ function shorten(string){
 function initialize() {
 
 	$.ajax(ctx+"/menu").done(function(result) {
-		$("#menu").html(result);
+		$("#menu")[0].innerHTML= result;
+	
 	}).error(function(res) {
 		alert(res);
 	});
