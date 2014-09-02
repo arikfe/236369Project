@@ -79,7 +79,7 @@
 		</table>
 		<br />
 	</c:if>
-	<button id="showClose" onclick="bounceClosest()">Show closest
+	<button id="showClose" onclick="bounceClosest()">Closest
 		evacuation event</button>
 	<button onclick="stopEventBounce()">Stop bounce</button>
 	<button onclick="bounceMine()">Find my Event</button>
