@@ -9,126 +9,95 @@ var image;
 var pos;
 $(document).ready(function() {
 	google.maps.event.addDomListener(window, 'load', initialize);
-	
+
 });
 
-function loadReports(user){
-	$
-	.ajax({
+function loadReports(user) {
+	$.ajax({
 		type : "GET",
 		url : reportCtx + "/" + user,
 		contentType : "application/json",
-	})
-	.done(
-			function(reports) {
+	}).done(function(reports) {
 
-				for ( var i in reports) {
-					handleReportCreation(
-							reports[i],
-							currentUser,
-							i);
-				}
-			}).fail(function(err) {
+		for ( var i in reports) {
+			handleReportCreation(reports[i], currentUser, i);
+		}
+	}).fail(function(err) {
 		alert(err.statusText);
 	});
 }
-function loadEvents(){
-	$
-	.ajax({
+function loadEvents() {
+	$.ajax({
 		type : "GET",
-		url : evacuationURL+"/",
+		url : evacuationURL + "/",
 		contentType : "application/json",
-	})
-	.done(
-			function(events) {
-				$
-				.ajax({
-					type : "GET",
-					url : accountCtx+"/"+currentUser+"/event",
-					contentType : "application/json",
-				})
-				.done(
-						function(event) {
-							
-							for ( var e in events) 
-							{
-								handleSingleEvent(events[e],event,e);
-							}
-						}).fail(function(err) {
-							if(err.status==404)
-							{
-							$("#events").append("log in to see evacuation events");
-							}
-				});
-				
-			}).fail(function(err) {
-				if(err.status==404)
-				{
+	}).done(function(events) {
+		$.ajax({
+			type : "GET",
+			url : accountCtx + "/" + currentUser + "/event",
+			contentType : "application/json",
+		}).done(function(event) {
+
+			for ( var e in events) {
+				handleSingleEvent(events[e], event, e);
+			}
+		}).fail(function(err) {
+			if (err.status == 404) {
 				$("#events").append("log in to see evacuation events");
-				}
+			}
+		});
+
+	}).fail(function(err) {
+		if (err.status == 404) {
+			$("#events").append("log in to see evacuation events");
+		}
 	});
 }
-function handleSingleEvent(e,event,i){
+function handleSingleEvent(e, event, i) {
 	var userRegistered = "";
 	var functionName = "registerToEvent";
 	var actionName = "register";
-//	var userRegistered = event != "";
-//
-	if ( event != "" && e.id == event.id) {
+	// var userRegistered = event != "";
+	//
+	if (event != "" && e.id == event.id) {
 		functionName = "un" + functionName;
 		userRegistered = "";
 		actionName = "unregister";
 	}
 	var totalcapacity = e.capacity - e.registeredUsers.length;
-	var contentStr = '<div id="friend'+e.id+'><input type="button" class="styledButton" onclick="'
-			+ functionName
-			+ '('
-			+ e.id
-			+ ')" '
-			+ userRegistered
-			+ 'value="'
-			+ actionName
-			+ '" />'
-			+ '<input type="button" class="styledButton" value="show users" onclick="displayEventUsers('+e.id+')"/>'
-			+ '<p>capacity left: '
-			+ totalcapacity
-			+ '</p>'
-			+ '<p>evacuation time: '
-			+ new Date( e.estimated).toLocaleFormat('%d/%m/%Y %H:%M')
-			+ '<p><a href="'+evacuationURL+'/id/'+e.id+'">show Event</a>'
-			+ '</p>';
-	
-	setTimeout(updateEvent(contentStr, e.geolat, e.geolng,
-			e.id), 500 + (i * 200));
-	msg = "<div class='menu-item' id='row"+e.id+"'>" + "<h4><a href='#'>" +shorten(e.address)
-	+ "</a></h4>" + " <ul > " + " <li>capacity: " + e.capacity
-	+ "</li>"
-	+ " <li>address: " + e.address
-	+ "</li>"
-	+ " <li>means: " + e.means
-	+ "</li>"
-	+ new Date(e.estimated).toLocaleFormat('%d/%m/%Y %H:%M') + "</li>";
+	var contentStr = '<p>capacity left: ' + totalcapacity
+	+ '<br>evacuation time: '
+			+ new Date(e.estimated).toLocaleFormat('%d/%m/%Y %H:%M') + "</p>"
+
+	setTimeout(updateEvent(contentStr, e.geolat, e.geolng, e.id),
+			500 + (i * 200));
+	msg = "<div class='menu-item' id='row" + e.id + "'>" + "<h4><a href='#'>"
+			+ shorten(e.address) + "</a></h4>" + " <ul > " + " <li>capacity: "
+			+ e.capacity + "</li>" + " <li>address: " + e.address + "</li>"
+			+ " <li>means: " + e.means + "</li>" + " <li><a href='"
+			+ evacuationURL + "/id/" + e.id + "/'>Open Event</a>" + "</li>"
+			+ new Date(e.estimated).toLocaleFormat('%d/%m/%Y %H:%M') + "</li>";
 	var body = $("#events");
 	body.append(msg);
 
 }
-function shorten(string){
-	if(string.length > 25) {
-	    string = string.substring(0,24)+"...";
+function shorten(string) {
+	if (string.length > 25) {
+		string = string.substring(0, 24) + "...";
 	}
 	return string;
 }
 function initialize() {
 
-	$.ajax(ctx+"/menu").done(function(result) {
-		$("#menu")[0].innerHTML= result;
-	
+	$.ajax(ctx + "/menu").done(function(result) {
+		$("#menu")[0].innerHTML = result;
+
 	}).error(function(res) {
 		alert(res);
 	});
 
 	image = {
-		url : ctx+'/IMG/car.png',
+		url : ctx + '/IMG/car.png',
 		// This marker is 20 pixels wide by 32 pixels tall.
 		size : new google.maps.Size(32, 37),
 		// The origin for this image is 0,0.
@@ -142,17 +111,16 @@ function initialize() {
 		zoom : 11,
 		center : haightAshbury
 	};
-	map = new google.maps.Map(document.getElementById('map-canvas'),
-			mapOptions);
+	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
 	var i = 0;
 	var body = $("#table_body");
 	var msg;
 	loadReports("");
 	loadEvents();
-//
-//	<c:forEach var="e" items="${events}">
-//	</c:forEach>
+	//
+	// <c:forEach var="e" items="${events}">
+	// </c:forEach>
 
 }
 function bounceClosest() {
@@ -259,19 +227,7 @@ function unregisterToEvent(_id) {
 		alert(err.statusText);
 	});
 }
-function registerToEvent(_id) {
-	$.ajax(
-			{
-				type : "PUT",
-				url : ctx + "/evacuation/id/" + _id + "/join?" + csrfName + "="
-						+ csrfValue
 
-			}).done(function(msg) {
-		// alert("Data Saved: " + msg);
-	}).fail(function(err) {
-		alert(err.statusText);
-	});
-}
 // middle man function for Marker event addition to map
 function updateMarker(location, title, id, contentStr) {
 	addMarker(location, title, id, contentStr);
@@ -406,7 +362,6 @@ function search(text) {
 	});
 }
 
-
 function handleReportCreation(r, loggoedOnUser, i, length) {
 	var body = $("#reports");
 
@@ -425,12 +380,11 @@ function handleReportCreation(r, loggoedOnUser, i, length) {
 							+ '/download/' + r.imageId
 							+ '"  height="64" width="64"> ');
 		}, 500 + (i++ * 200));
-	msg = "<div class='menu-item' id='row"+r.id+"'>" + "<h4><a href='#'>" + r.title
-			+ "</a></h4>" + " <ul > " + " <li>description: " + r.content
-			+ "</li>" +
-			"<li>address :"+ r.address + "</li>"+
-					"<li> " + "<a href='" + accountCtx + "/"
-			+ r.username + "/reports'>user:" + r.username + "</a></li>"
+	msg = "<div class='menu-item' id='row" + r.id + "'>" + "<h4><a href='#'>"
+			+ r.title + "</a></h4>" + " <ul > " + " <li>description: "
+			+ r.content + "</li>" + "<li>address :" + r.address + "</li>"
+			+ "<li> " + "<a href='" + accountCtx + "/" + r.username
+			+ "/reports'>user:" + r.username + "</a></li>"
 			+ "<li>expire time: "
 			+ new Date(r.expiration).toLocaleFormat('%d/%m/%Y %H:%M') + "</li>";
 	if (loggoedOnUser == r.username || loggoedOnUser == 'admin')

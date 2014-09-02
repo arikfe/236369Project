@@ -20,48 +20,23 @@
 	value="${pageContext.request.contextPath}/reports" />
 <c:set var="accountURL"
 	value="${pageContext.request.contextPath}/accounts" />
-	<c:set var="evacuationURL"
+<c:set var="evacuationURL"
 	value="${pageContext.request.contextPath}/evacuation" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<script type="text/javascript">
+	var ctx = "${pageContext.request.contextPath}";
+	var accountCtx = ctx + "/accounts";
+	var reportCtx = "${reportURL}"
+	var evacuationURL = "${evacuationURL}"
+	var csrfName = "${_csrf.parameterName}";
+	var csrfValue = "${_csrf.token}";
+	var currentUser = "${pageContext.request.userPrincipal.name}";
+</script>
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script src="${baseURL}/JS/menu.js"></script>
+<script src="${baseURL}/JS/evacuation.js"></script>
 <script type="text/javascript">
-function addUser(eid,name){
-	$.ajax({
-		type : "put",
-		url : "${evacuationURL}/id/"+eid+"/joinUser?${_csrf.parameterName}=${_csrf.token}",
-		data : {
-			username : name
-		}
-	}).done(function(data) {
-		
-	}).fail(function(err) {
-		alert(err);
-	});
-}
-function leaveUser(_id,name){
-	$.ajax({
-		type : "put",
-		url : "${evacuationURL}/id/"+_id+"/leaveUser?${_csrf.parameterName}=${_csrf.token}",
-		data : {
-			username : name
-		}
-	}).done(function(data) {
-		$("#"+name).remove();
-	}).fail(function(err) {
-		alert(err);
-	});
-}
-function deleteEvent(id){
-	$.ajax({
-		type : "delete",
-		url : "${evacuationURL}/id/"+id+"?${_csrf.parameterName}=${_csrf.token}"
-		
-	}).done(function(data) {
-		document.url="${baseURL}";
-	}).fail(function(err) {
-		alert(err);
-	});
-}
+
 </script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>
@@ -83,15 +58,11 @@ function deleteEvent(id){
 		Boolean isAdmin = (Boolean) request.getAttribute("adminRight");
 		EvacuationEvent event = (EvacuationEvent) request
 				.getAttribute("evacuation");
-		long id =  (Long)request.getAttribute("id");
+		long id = (Long) request.getAttribute("id");
 	%>
 
 
 	<table id="details" class="zebra">
-		<tr>
-			<th>Delete this event</th>
-			<td><button onclick="deleteEvent(<%=id%>)">Delete</button></td>
-		</tr>
 		<tr>
 			<th>time</th>
 			<td><%=new SimpleDateFormat("dd/MMM/yy - hh:mm").format(event
@@ -109,37 +80,57 @@ function deleteEvent(id){
 			<th>means of evacuation</th>
 			<td><%=event.getMeans()%></td>
 		</tr>
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<tr>
+				<th>Delete this event</th>
+				<td><button onclick="deleteEvent(<%=id%>)">Delete</button></td>
+			</tr>
+		</sec:authorize>
 		<%
-		for(User user : event.getRegisteredUsers())
-		{		
+			for (User user : event.getRegisteredUsers()) {
+		%>
+		<tr>
+			<th>name</th>
+			<td id="<%=user.getUsername()%>"><a href='${accountURL}/<%=user.getUsername()%>/reports'><%=user.getFname() + " " + user.getLname()%></a></td>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<td><a onClick="leaveUser(<%=id%>,'<%=user.getUsername()%>')"><img
+						src="${baseURL}/IMG/X.png" height="64" width="64"></a></td>
+			</sec:authorize>
+		</tr>
+		<%
+			}
+		%>
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<tr>
+				<td>add</td>
+				<td><input list="searchUser" id="newUser"> <datalist
+						id="searchUser"> <%
+ 	Collection<User> users = (Collection<User>) request
+ 				.getAttribute("users");
+ 		users.removeAll(event.getRegisteredUsers());
+ 		for (User user : users) {
+ %>
+					<option value="<%=user.getUsername()%>"><%=user.getFname() + " " + user.getLname()%></option>
+					<%
+						}
+					%> </datalist>
+					<button onClick="addUser(<%=id%>,newUser.value)">add</button></td>
+			</tr>
+		</sec:authorize>
+		<sec:authorize ifNotGranted="hasRole('ROLE_ADMIN')">
+			<%
+				String action = (((Boolean) request
+							.getAttribute("userRegistered")) ? "un" : "")
+							+ "registerToEvent(" + request.getAttribute("id") + ")";
+					String actionName = ((Boolean) request
+							.getAttribute("userRegistered")) ? "Leave" : "Join";
 			%>
 			<tr>
-			<th>name</th>
-			<td id="<%=user.getUsername() %>"><%=user.getFname() + " " + user.getLname()%></td>
-			
-			<td><a onClick="leaveUser(<%=id%>,'<%=user.getUsername()%>')"><img src="${baseURL}/IMG/X.png"  height="64" width="64"></a></td>
-		</tr>
-			<%
-		}
-			%>
-		<tr>
-		<td>add</td>
-		<td><input list="searchUser" id="newUser">
-		<datalist id="searchUser">
-		<%
-		Collection<User> users =(Collection<User>)request.getAttribute("users");
-		users.removeAll(event.getRegisteredUsers());
-		for(User user : users)
-		{
-			%>
-			 <option value="<%=user.getUsername() %>"><%=user.getFname()+" "+user.getLname() %></option>
-			<%
-		}
-		%>
-		</datalist>
-		<button onClick="addUser(<%=id%>,newUser.value)">add</button>
-		</td>
-		</tr>
+				<th><%=actionName%></th>
+				<td><input type="button" onclick='<%=action%>'
+					value='<%=actionName%>'></td>
+			</tr>
+		</sec:authorize>
 	</table>
 </body>
 </html>

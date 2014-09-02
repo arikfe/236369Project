@@ -122,9 +122,12 @@ public class EvacuationController extends BaseController
 	public ModelAndView getById(@PathVariable final long id)
 	{
 		final ModelAndView view = new ModelAndView();
-		view.addObject("evacuation", evacuationDAO.getByID(id));
+		final EvacuationEvent byID = evacuationDAO.getByID(id);
+		view.addObject("evacuation", byID);
 		view.setViewName("evacuation");
 		view.addObject("id", id);
+		view.addObject("userRegistered",
+				byID.getRegisteredUsers().contains(getCurrentUser()));
 		view.addObject("users", userDao.getUserWithNoEvent());
 		return view;
 	}
