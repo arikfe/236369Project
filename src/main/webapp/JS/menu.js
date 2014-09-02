@@ -16,7 +16,7 @@ function formSubmit() {
 	}
 	
 	function fileChanged(file) {
-		var r = confirm("Are you sure");
+		var r = confirm("Are you sure\n accepting will eraze everything before loading new data");
 		if (r == true)
 			upload();
 	}
