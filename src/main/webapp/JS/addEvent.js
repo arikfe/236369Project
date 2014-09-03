@@ -1,7 +1,6 @@
 /**
  * 
  */
-
 function updateFields(position) {
 	lat = document.getElementById("lat");
 	lon = document.getElementById("lon");

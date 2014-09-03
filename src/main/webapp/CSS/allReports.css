@@ -1,0 +1,28 @@
+@CHARSET "ISO-8859-1";
+
+#container {
+	width: 100%;
+	height: 100%;
+}
+
+#map-canvas {
+	width: 100%;
+	height: 100%;
+}
+
+#linesContainer {
+	border-style: solid;
+	border-width: 1px;
+	width: 48%;
+	float: left;
+	box-shadow: 5px 5px 5px #888888;
+}
+
+#mapContainer {
+	border-style: solid;
+	border-width: 1px;
+	width: 48%;
+	float: right;
+	height: 100%;
+	box-shadow: 5px 5px 5px #888888;
+}

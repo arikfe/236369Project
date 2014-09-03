@@ -30,7 +30,6 @@
 	var csrfValue = "${_csrf.token}";
 	var currentUser = "${pageContext.request.userPrincipal.name}";
 </script>
-<script src="${baseURL}/JS/menu.js"></script>
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script src="${baseURL}/JS/lightbox.min.js"></script>
 
@@ -38,7 +37,7 @@
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>
 <link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/containers.css"/>"></link>
+	href="<c:url value="/CSS/allReports.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/addReport.css"/>"></link>
 <link type="text/css" rel="stylesheet"
@@ -84,14 +83,14 @@
 		evacuation event</button>
 	<button onclick="stopEventBounce()">Stop bounce</button>
 	<button onclick="bounceMine()">Find my Event</button>
-	<div class='mainContainer'>
-		<div class='formContainer'>
+	<div id='container'>
+		<div id='linesContainer'>
 			<h4>Reports</h4>
 			<nav id="reports" class="list"> </nav>
 			<h4>Evacuation events</h4>
 			<nav id="events" class="list"> </nav>
 		</div>
-		<div class='mapContainer'>
+		<div id='mapContainer'>
 			<div id="map-canvas" ></div>
 		</div>
 	</div>

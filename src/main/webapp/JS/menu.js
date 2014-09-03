@@ -2,6 +2,22 @@
  * 
  */
 
+$(function() {
+	$("#dialog").dialog({
+		autoOpen : false,
+		show : {
+			effect : "fold",
+			duration : 1000
+		},
+		hide : {
+			effect : "explode",
+			duration : 1000
+		}
+	});
+	$("#opener").click(function() {
+		$("#dialog").dialog("open");
+	});
+});
 function formSubmit() {
 	document.getElementById("logoutForm").submit();
 }
