@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,7 @@ import com.technion.project.model.BaseModel;
 import com.technion.project.model.EvacuationEvent;
 import com.technion.project.model.Report;
 import com.technion.project.model.User;
+import com.technion.project.model.UserRole;
 import com.thoughtworks.xstream.XStream;
 
 @Controller
@@ -260,6 +262,9 @@ public class MainController
 				user.setPassword(users.get(i).get("password").getTextValue());
 				user.setImageId(pathToImage.get(users.get(i).get("photo")
 						.getTextValue()));
+				final HashSet<UserRole> hashSet = new HashSet<UserRole>();
+				hashSet.add(new UserRole(user, "ROLE_USER"));
+				user.setUserRole(hashSet);
 				userDao.add(user);
 			}
 			for (int i = 0; i < reports.size(); i++)

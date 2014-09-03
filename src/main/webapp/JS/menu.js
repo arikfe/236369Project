@@ -35,7 +35,7 @@ function formSubmit() {
 		    processData: false,
 		    type: 'POST',
 		    success: function(data){
-		        alert(data);
+		        location.url = ctx;
 		    }
 		});
 	

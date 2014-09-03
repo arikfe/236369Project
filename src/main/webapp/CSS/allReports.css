@@ -29,7 +29,7 @@ h4 {
 	border-style: groove;
 	border-width: 14px;
 	border-color: #b3bacc;
-	width: 48%;
+	width: 30%;
 	float: left;
 }
 
@@ -37,7 +37,7 @@ h4 {
 	border: 2px solid;
     border-color: #b3bacc;
 	border-width: 10px;
-	width: 48%;
+	width: 60%;
 	float: right;
 	height: 100%;
 }

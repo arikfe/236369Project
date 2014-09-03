@@ -24,6 +24,18 @@ public class EvacuationEvent implements BaseModel
 	private long id;
 	private Date estimated;
 	private String means;
+	private String address;
+
+	public String getAddress()
+	{
+		return address;
+	}
+
+	public void setAddress(final String address)
+	{
+		this.address = address;
+	}
+
 	private int capacity;
 	private float geolat;
 	private float geolng;

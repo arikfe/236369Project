@@ -137,14 +137,18 @@ td {
 }
 
 #content, #form {
+	border-style: groove;
+	border-width: 14px;
+	border-color: #b3bacc;
 	margin: 10px;
-	width: 48%;
+	width: 46%;
 	height: 100%;
-	border-style: solid;
-	border-width: 1px;
 }
 
 #content {
+	border-style: groove;
+	border-width: 14px;
+	border-color: #b3bacc;
 	float: right;
 }
 #form {

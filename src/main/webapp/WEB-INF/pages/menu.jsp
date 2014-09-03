@@ -41,7 +41,7 @@
 				src="<%=user.hasContainImage() ? request.getContextPath()
 							+ "/download/" + user.getImageId() : request
 							.getContextPath() + "/IMG/images.jpg"%>"
-				height="64" width="64"></li>
+				height="64" width="64" onclick="location.href = ${reportURL}/"></li>
 			<li><a href="#">${user.fname} ${user.lname}</a>
 				<ul class="menu">
 					<li><a href="${accountURL}/own"> My Account</a></li>
@@ -89,10 +89,5 @@
 
 	</ul>
 	</nav>
-
-
-
-
-
 </body>
 </html>

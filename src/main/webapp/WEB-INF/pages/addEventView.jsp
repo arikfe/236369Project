@@ -57,10 +57,16 @@ html, body, #map-canvas {
 		method="post">
 		<input name='geolng' type='hidden' id='lon'> <input
 			name='geolat' type='hidden' id='lat'>
-		<table align="left">
+			
+		<table align="left" >
 			<tr>
 				<td>Means of evacuation:</td>
 				<td><input type='text' name='means'></td>
+			</tr>
+			<tr>
+				<td>address:
+				</td>
+				<td><input type='text' name='address' id='address'></td>
 			</tr>
 			<tr>
 				<td>capacity:</td>
@@ -72,6 +78,7 @@ html, body, #map-canvas {
 			</tr>
 
 		</table>
+		
 	</form>
 	<div id="status">locating Geo location</div>
 	<div id="map-canvas"></div>

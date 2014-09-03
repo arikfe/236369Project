@@ -20,7 +20,7 @@ nav.list {
 
 .menu-item {
 	background: #fff;
-	width: 48%;
+	width: 78%;
 }
 
 /*Menu Header Styles*/
@@ -59,7 +59,7 @@ nav.list {
 	color: #757575;
 	display: block;
 	text-decoration: none;
-	width: 48%;
+	width: 68%;
 }
 
 /*ul Styles*/
@@ -88,12 +88,13 @@ nav.list {
 	text-decoration: none;
 	color: #aaa;
 	display: block;
-	width: 48%;
+	width: 68%;
 }
 
 /*li Styles*/
 .menu-item li {
 	border-bottom: 1px solid #eee;
+	
 }
 
 .menu-item li:hover {
@@ -104,6 +105,7 @@ nav.list {
 .alpha p {
 	padding: 8px 12px;
 	color: #aaa;
+
 }
 
 .alpha p a {
