@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
@@ -131,4 +132,12 @@ public class Report implements BaseModel
 		this.imageId = imageId;
 	}
 
+	@Transient
+	public float[] getCordinates()
+	{
+		final float[] coordinates = new float[2];
+		coordinates[0] = geolat;
+		coordinates[0] = geolng;
+		return coordinates;
+	}
 }

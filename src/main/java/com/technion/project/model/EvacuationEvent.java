@@ -14,17 +14,32 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+
 import com.technion.project.Constants;
 
 @Entity
+@Indexed
 @Table(name = "evacuation", catalog = Constants.SCHEMA)
 public class EvacuationEvent implements BaseModel
 {
-
+	@Id
+	@GeneratedValue
 	private long id;
 	private Date estimated;
+	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	private String means;
+	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	private String address;
+
+	private int capacity;
+	private float geolat;
+	private float geolng;
+	private Set<User> registeredUsers;
 
 	public String getAddress()
 	{
@@ -35,11 +50,6 @@ public class EvacuationEvent implements BaseModel
 	{
 		this.address = address;
 	}
-
-	private int capacity;
-	private float geolat;
-	private float geolng;
-	private Set<User> registeredUsers;
 
 	public float getGeolat()
 	{
@@ -150,5 +160,14 @@ public class EvacuationEvent implements BaseModel
 	public int getAmountLeft()
 	{
 		return capacity - registeredUsers.size();
+	}
+
+	@Transient
+	public float[] getCordinates()
+	{
+		final float[] coordinates = new float[2];
+		coordinates[0] = geolat;
+		coordinates[0] = geolng;
+		return coordinates;
 	}
 }

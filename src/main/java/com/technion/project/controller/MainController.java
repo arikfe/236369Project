@@ -40,6 +40,7 @@ import com.google.common.io.ByteStreams;
 import com.technion.project.dao.DocumentDAO;
 import com.technion.project.dao.EvacuationDAO;
 import com.technion.project.dao.ReportDAO;
+import com.technion.project.dao.SearchResult;
 import com.technion.project.dao.UserDao;
 import com.technion.project.model.BaseModel;
 import com.technion.project.model.EvacuationEvent;
@@ -64,10 +65,11 @@ public class MainController
 	private DocumentDAO documentDao;
 
 	@RequestMapping(value = "search", method = RequestMethod.GET)
-	public @ResponseBody List<Report> getReportsInJSON(
+	public @ResponseBody SearchResult getReportsInJSON(
 			@RequestParam final String q)
 	{
-		return reportDAO.searchReports(q);
+		return new SearchResult(reportDAO.searchReports(q),
+				evacuationDAO.searchEvents(q));
 	}
 
 	@RequestMapping(value =

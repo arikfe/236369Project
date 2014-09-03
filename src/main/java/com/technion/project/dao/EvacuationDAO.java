@@ -26,4 +26,6 @@ public interface EvacuationDAO
 
 	public void clear();
 
+	public List<EvacuationEvent> searchEvents(String q);
+
 }

@@ -23,6 +23,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import com.technion.project.model.EvacuationEvent;
+import com.technion.project.model.Report;
+
 @EnableWebMvc
 @Configuration
 @ComponentScan(
@@ -54,9 +57,11 @@ public class AppConfig extends WebMvcConfigurerAdapter
 				.getFullTextSession(openSession);
 		try
 		{
-			fullTextSession.createIndexer().startAndWait();
+			fullTextSession.createIndexer(Report.class).startAndWait();
+			fullTextSession.createIndexer(EvacuationEvent.class).startAndWait();
 		} catch (final InterruptedException e)
 		{
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		openSession.close();
@@ -88,7 +93,7 @@ public class AppConfig extends WebMvcConfigurerAdapter
 		prop.put("hibernate.search.default.directory_provider", "filesystem");
 		prop.put("hibernate.search.default.indexBase", "lucene/indexes/");
 		// prop.put("hibernate.search.default.indexBase",
-		// "D:\\Dropbox\\Eclipse\\Java-Web\\236369Project\\target\\index");
+		// "D:\\Dropbox\\Eclipse\\Java-Web\\236369Project\\index");
 		return prop;
 	}
 

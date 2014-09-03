@@ -121,10 +121,9 @@ public class EvacuationController extends BaseController
 	@RequestMapping(value = "id/{id}", method = RequestMethod.GET)
 	public ModelAndView getById(@PathVariable final long id)
 	{
-		final ModelAndView view = new ModelAndView();
+		final ModelAndView view = new ModelAndView("evacuation");
 		final EvacuationEvent byID = evacuationDAO.getByID(id);
 		view.addObject("evacuation", byID);
-		view.setViewName("evacuation");
 		view.addObject("id", id);
 		view.addObject("user", getCurrentUser());
 		view.addObject("users", userDao.getUserWithNoEvent());

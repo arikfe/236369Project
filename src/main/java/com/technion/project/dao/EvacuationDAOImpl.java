@@ -4,8 +4,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.lucene.search.Query;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -181,6 +186,39 @@ public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 		for (final EvacuationEvent e : getAll())
 			delete(e.getId());
 
+	}
+
+	@Override
+	public List<EvacuationEvent> searchEvents(final String q)
+	{
+		final List<EvacuationEvent> events = Lists.newArrayList();
+		final Session session = sessionFactory.openSession();
+		try
+		{
+			final FullTextSession fullTextSession = org.hibernate.search.Search
+					.getFullTextSession(session);
+			final Transaction tx = fullTextSession.beginTransaction();
+			final QueryBuilder qb = fullTextSession.getSearchFactory()
+					.buildQueryBuilder().forEntity(EvacuationEvent.class).get();
+			final Query query = qb.keyword().onFields("means", "address")
+					.matching(q).createQuery();
+			final org.hibernate.Query hibQuery = fullTextSession
+					.createFullTextQuery(query, EvacuationEvent.class);
+			final List result = hibQuery.list();
+			events.addAll(result);
+			tx.commit();
+		} catch (final HibernateException e)
+		{
+			e.printStackTrace();
+
+		} catch (final Exception e)
+		{
+			e.printStackTrace();
+		} finally
+		{
+			session.close();
+		}
+		return events;
 	}
 
 }
