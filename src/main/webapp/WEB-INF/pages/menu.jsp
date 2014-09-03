@@ -13,13 +13,22 @@
 </style>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+
+<script src="${baseURL}/JS/menu.js"></script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
-<c:set var="baseURL" value="${pageContext.request.contextPath}"/> 
-<c:set var="adminURL" value="${pageContext.request.contextPath}/admin"/> 
-<c:set var="reportURL" value="${pageContext.request.contextPath}/reports"/> 
-<c:set var="evacuationURL" value="${pageContext.request.contextPath}/evacuation"/>
-<c:set var="accountURL" value="${pageContext.request.contextPath}/accounts"/>
+<c:set var="baseURL" value="${pageContext.request.contextPath}" />
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin" />
+<c:set var="reportURL"
+	value="${pageContext.request.contextPath}/reports" />
+<c:set var="evacuationURL"
+	value="${pageContext.request.contextPath}/evacuation" />
+<c:set var="accountURL"
+	value="${pageContext.request.contextPath}/accounts" />
 </head>
 <body id='menu'>
 
@@ -55,17 +64,20 @@
 					<li><a href="${accountURL}/<%=user.getUsername()%>/reports">My
 							reports</a></li>
 				</ul></li>
-			<li><a>Save to file</a>
-				<ul class="menu">
-					<li><a href="${reportURL}/exportXml">Save Report XML</a></li>
-					<li><a href="${reportURL}/exportKml">Save report KML</a></li>
-					<li><a href="${evacuationURL}/exportEvacuationXml">Save Evacuation XML</a></li>
-					<li><a href="${evacuationURL}/exportEvacuationKml">Save Evacuation KML</a></li>
-				</ul></li>
+
 			<li><a href="${accountURL}/">Show all Users</a></li>
 			<%
 				if (user.hasAdminPrevilige()) {
 			%>
+			<li><a>Save to file</a>
+				<ul class="menu">
+					<li><a href="${reportURL}/exportXml">Save Report XML</a></li>
+					<li><a href="${reportURL}/exportKml">Save report KML</a></li>
+					<li><a href="${evacuationURL}/exportEvacuationXml">Save
+							Evacuation XML</a></li>
+					<li><a href="${evacuationURL}/exportEvacuationKml">Save
+							Evacuation KML</a></li>
+				</ul></li>
 			<li><a href='${adminURL}/addEventView'>Add evacuation</a></li>
 			<li><div class="upload">
 					<input type="file" accept=".json" name="file" id='file'
@@ -76,6 +88,7 @@
 			%>
 			<li style="padding-top: 5px"><input type="text" id="strField"
 				name="str" onKeyUp="search(this)"></li>
+
 		</sec:authorize>
 
 		<%

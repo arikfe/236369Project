@@ -20,7 +20,6 @@
 	</properties>
 
 	<dependencies>
-		
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -33,6 +32,15 @@
 			<artifactId>commons-dbcp</artifactId>
 			<version>${dbcp.version}</version>
 		</dependency>
+
+
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-search-orm</artifactId>
+			<version>4.2.0.Final</version>
+		</dependency>
+
 
 		<!-- Hibernate ORM -->
 		<dependency>

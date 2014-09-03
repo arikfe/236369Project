@@ -29,4 +29,6 @@ public interface ReportDAO
 
 	public void clear();
 
+	public List<Report> searchReports(String q);
+
 }

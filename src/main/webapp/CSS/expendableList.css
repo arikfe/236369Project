@@ -80,7 +80,7 @@ nav.list {
 }
 
 .menu-item:hover ul {
-	height: 170px;
+	height: auto;
 }
 
 .menu-item ul a {

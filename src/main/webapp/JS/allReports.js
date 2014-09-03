@@ -57,8 +57,6 @@ function handleSingleEvent(e, event, i) {
 	var userRegistered = "";
 	var functionName = "registerToEvent";
 	var actionName = "register";
-	// var userRegistered = event != "";
-	//
 	if (event != "" && e.id == event.id) {
 		functionName = "un" + functionName;
 		userRegistered = "";

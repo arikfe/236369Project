@@ -126,8 +126,8 @@
 							.getAttribute("userRegistered")) ? "Leave" : "Join";
 			%>
 			<tr>
-				<th><%=actionName%></th>
-				<td><input type="button" onclick='<%=action%>'
+				<th>Actions</th>
+				<td><input id='action' type="button" onclick='<%=action%>'
 					value='<%=actionName%>'></td>
 			</tr>
 		</sec:authorize>

@@ -2,8 +2,13 @@ package com.technion.project.dao;
 
 import java.util.List;
 
+import org.apache.lucene.search.Query;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +27,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.technion.project.dao.ReportDAO#getAllReports()
 	 */
 	@SuppressWarnings("unchecked")
@@ -31,6 +36,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 	{
 		List<Report> reports = Lists.newArrayList();
 		final Session session = sessionFactory.openSession();
+
 		reports = session.createQuery("from Report").list();
 		session.close();
 		return reports;
@@ -38,7 +44,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.ReportDAO#getReportsForUser(com.technion.project
 	 * .model.User)
@@ -58,7 +64,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.technion.project.dao.ReportDAO#getReportByID(int)
 	 */
 	@Override
@@ -72,7 +78,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.technion.project.dao.ReportDAO#removeReport(int)
 	 */
 	@Override
@@ -91,7 +97,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.ReportDAO#removeReport(com.technion.project.
 	 * model.Report)
@@ -112,7 +118,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.ReportDAO#removeReport(com.technion.project.
 	 * model.User)
@@ -127,7 +133,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.ReportDAO#addReport(com.technion.project.model
 	 * .Report)
@@ -149,7 +155,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.ReportDAO#delete(com.technion.project.model.
 	 * User)
@@ -183,5 +189,38 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 	{
 		for (final Report r : getAllReports())
 			removeReport(r);
+	}
+
+	@Override
+	public List<Report> searchReports(final String q)
+	{
+		final List<Report> reports = Lists.newArrayList();
+		final Session session = sessionFactory.openSession();
+		try
+		{
+			final FullTextSession fullTextSession = org.hibernate.search.Search
+					.getFullTextSession(session);
+			final Transaction tx = fullTextSession.beginTransaction();
+			final QueryBuilder qb = fullTextSession.getSearchFactory()
+					.buildQueryBuilder().forEntity(Report.class).get();
+			final Query query = qb.keyword().onFields("title", "address")
+					.matching(q).createQuery();
+			final org.hibernate.Query hibQuery = fullTextSession
+					.createFullTextQuery(query, Report.class);
+			final List result = hibQuery.list();
+			reports.addAll(result);
+			tx.commit();
+		} catch (final HibernateException e)
+		{
+			e.printStackTrace();
+
+		} catch (final Exception e)
+		{
+			e.printStackTrace();
+		} finally
+		{
+			session.close();
+		}
+		return reports;
 	}
 }

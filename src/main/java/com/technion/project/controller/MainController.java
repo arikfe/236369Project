@@ -63,6 +63,13 @@ public class MainController
 	@Autowired
 	private DocumentDAO documentDao;
 
+	@RequestMapping(value = "search", method = RequestMethod.GET)
+	public @ResponseBody List<Report> getReportsInJSON(
+			@RequestParam final String q)
+	{
+		return reportDAO.searchReports(q);
+	}
+
 	@RequestMapping(value =
 	{ "/", "/welcome**" }, method = RequestMethod.GET)
 	public String defaultPage()

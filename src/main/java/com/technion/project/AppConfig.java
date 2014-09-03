@@ -3,7 +3,10 @@ package com.technion.project;
 import java.util.Properties;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -46,18 +49,35 @@ public class AppConfig extends WebMvcConfigurerAdapter
 			final DefaultServletHandlerConfigurer configurer)
 	{
 		configurer.enable();
-
+		final Session openSession = sessionFactory().openSession();
+		final FullTextSession fullTextSession = Search
+				.getFullTextSession(openSession);
+		try
+		{
+			fullTextSession.createIndexer().startAndWait();
+		} catch (final InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		openSession.close();
 	}
 
 	@Bean
 	public SessionFactory sessionFactory()
 	{
-		final LocalSessionFactoryBuilder builder = new LocalSessionFactoryBuilder(
-				dataSource());
-		builder.scanPackages("com.technion.project.model").addProperties(
-				getHibernateProperties());
-
-		return builder.buildSessionFactory();
+		LocalSessionFactoryBuilder builder;
+		try
+		{
+			builder = new LocalSessionFactoryBuilder(dataSource());
+			builder.scanPackages("com.technion.project.model").addProperties(
+					getHibernateProperties());
+			return builder.buildSessionFactory();
+		} catch (final Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private Properties getHibernateProperties()
@@ -66,6 +86,10 @@ public class AppConfig extends WebMvcConfigurerAdapter
 		prop.put("hibernate.format_sql", "true");
 		prop.put("hibernate.show_sql", "true");
 		prop.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+		prop.put("hibernate.search.default.directory_provider", "filesystem");
+		prop.put("hibernate.search.default.indexBase", "lucene/indexes/");
+		// prop.put("hibernate.search.default.indexBase",
+		// "D:\\Dropbox\\Eclipse\\Java-Web\\236369Project\\target\\index");
 		return prop;
 	}
 

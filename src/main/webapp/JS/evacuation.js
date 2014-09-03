@@ -46,6 +46,8 @@ function registerToEvent(_id) {
 						+ csrfValue
 
 			}).done(function(msg) {
+//				$('input[type=button]')[0].click('unregisterToEvent('+_id+')');
+				$('input[type=button]')[0].value= 'Leave';
 	}).fail(function(err) {
 		alert(err.statusText);
 	});
@@ -58,7 +60,8 @@ function unregisterToEvent(_id) {
 						+ "=" + csrfValue
 
 			}).done(function(msg) {
-		// alert("Data Saved: " + msg);
+//				$('input[type=button]')[0].click('registerToEvent('+_id+')');
+				$('input[type=button]')[0].value= 'Join';
 	}).fail(function(err) {
 		alert(err.statusText);
 	});
