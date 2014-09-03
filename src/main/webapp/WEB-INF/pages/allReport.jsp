@@ -18,6 +18,18 @@
 <c:set var="evacuationURL"
 	value="${pageContext.request.contextPath}/evacuation" />
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/table.css"/>"></link>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/containers.css"/>"></link>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/addReport.css"/>"></link>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/expendableList.css"/>"></link>
+<link href="<c:url value="/CSS/lightbox.css"/>" rel="stylesheet" />
+
 <script type="text/javascript">
 	var ctx = "${pageContext.request.contextPath}";
 	var accountCtx = ctx + "/accounts";
@@ -34,22 +46,7 @@
 <script src="${baseURL}/JS/lightbox.min.js"></script>
 
 <script src="${baseURL}/JS/allReports.js"></script>
-<link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/table.css"/>"></link>
-<link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/allReports.css"/>"></link>
-<link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/addReport.css"/>"></link>
-<link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
-<link type="text/css" rel="stylesheet"
-	href="<c:url value="/CSS/expendableList.css"/>"></link>
-<link href="<c:url value="/CSS/lightbox.css"/>" rel="stylesheet" />
-
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-<script>
-	
-</script>
 
 <title>Reports</title>
 </head>
@@ -83,14 +80,14 @@
 		evacuation event</button>
 	<button onclick="stopEventBounce()">Stop bounce</button>
 	<button onclick="bounceMine()">Find my Event</button>
-	<div id='container'>
-		<div id='linesContainer'>
+	<div class='mainContainer'>
+		<div class='formContainer'>
 			<h4>Reports</h4>
 			<nav id="reports" class="list"> </nav>
 			<h4>Evacuation events</h4>
 			<nav id="events" class="list"> </nav>
 		</div>
-		<div id='mapContainer'>
+		<div class='mapContainer'>
 			<div id="map-canvas" ></div>
 		</div>
 	</div>

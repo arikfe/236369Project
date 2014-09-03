@@ -23,7 +23,8 @@
 	src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
-
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/containers.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <link type="text/css" rel="stylesheet"
@@ -58,9 +59,9 @@
 	<div id="menu"></div>
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
-			<div id=container>
+			<div class='mainContainer'>
 				<h1 align="center">Add Report Form</h1>
-				<div id="form">
+				<div class="formContainer">
 					<form name='add'
 						action='${reportURL}/?${_csrf.parameterName}=${_csrf.token}'
 						method="POST" enctype="multipart/form-data"
@@ -73,21 +74,21 @@
 						<table >
 							<tr>
 								<th >Title:</td>
-								<td ><input type='text' name='title' id='title'></td>
+								<td ><input class='form' type='text' name='title' id='title'></td>
 							</tr>
 							<tr>
 								<th >Content:</td>
-								<td ><textarea id="content" rows="4" cols="40"
+								<td ><textarea class='form' id="content" rows="4" cols="40"
 										name="content"></textarea></td>
 							</tr>
 							<tr>
 								<th ">address:</td>
-								<td ><input type='text' name='address'
+								<td ><input class='form' type='text' name='address'
 									id='address'></td>
 							</tr>
 							<tr>
 								<th >Expire time:</td>
-								<td ><input type="text" name="expiration"
+								<td ><input class='form' type="text" name="expiration"
 									id="expiration"></td>
 							</tr>
 							<tr>
@@ -118,7 +119,7 @@
 					</form>
 
 				</div>
-				<div id="content">
+				<div class="mapContainer">
 					<div id="map-canvas"></div>
 				</div>
 			</div>
