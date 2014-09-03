@@ -46,8 +46,7 @@ function registerToEvent(_id) {
 						+ csrfValue
 
 			}).done(function(msg) {
-//				$('input[type=button]')[0].click('unregisterToEvent('+_id+')');
-				$('input[type=button]')[0].value= 'Leave';
+				$("#action")[0].innerHTML = '<input type="button" onclick="unregisterToEvent('+_id+ ')" value="Leave">';
 	}).fail(function(err) {
 		alert(err.statusText);
 	});
@@ -60,8 +59,7 @@ function unregisterToEvent(_id) {
 						+ "=" + csrfValue
 
 			}).done(function(msg) {
-//				$('input[type=button]')[0].click('registerToEvent('+_id+')');
-				$('input[type=button]')[0].value= 'Join';
+				$("#action")[0].innerHTML= '<input type="button" onclick="registerToEvent('+_id+ ')" value="Join">';
 	}).fail(function(err) {
 		alert(err.statusText);
 	});

@@ -1,7 +1,6 @@
 package com.technion.project.controller;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
@@ -9,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -126,8 +126,7 @@ public class EvacuationController extends BaseController
 		view.addObject("evacuation", byID);
 		view.setViewName("evacuation");
 		view.addObject("id", id);
-		view.addObject("userRegistered",
-				byID.getRegisteredUsers().contains(getCurrentUser()));
+		view.addObject("user", getCurrentUser());
 		view.addObject("users", userDao.getUserWithNoEvent());
 		return view;
 	}
@@ -162,7 +161,8 @@ public class EvacuationController extends BaseController
 	}
 
 	@RequestMapping(value = "exportEvacuationKml", method = RequestMethod.GET)
-	public @ResponseBody String getReportsKML(final HttpServletResponse response)
+	public @ResponseBody String getEventsKML(
+			final HttpServletResponse response, final HttpServletRequest request)
 	{
 		final XStream xStream = new XStream();
 		xStream.processAnnotations(EvacuationEvent.class);
@@ -176,7 +176,6 @@ public class EvacuationController extends BaseController
 			output = new StreamResult(response.getOutputStream());
 		} catch (final IOException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -184,8 +183,8 @@ public class EvacuationController extends BaseController
 		{
 			final Source input = new StreamSource(new ByteArrayInputStream(
 					xml.getBytes()));
-			final Source xsl = new StreamSource(new File(
-					"C:\\Users\\hagitz\\test\\evacuation.xsl"));
+			final Source xsl = new StreamSource(request.getSession()
+					.getServletContext().getRealPath("/CSS/evacuation.xsl"));
 
 			final TransformerFactory factory = TransformerFactory.newInstance();
 			final Transformer transformer = factory.newTransformer(xsl);
@@ -195,15 +194,7 @@ public class EvacuationController extends BaseController
 		{
 			System.out.println("Transformer exception: " + te.getMessage());
 		}
-		try
-		{
-			final OutputStream out = response.getOutputStream();
 
-		} catch (final IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return "";
 	}
 }

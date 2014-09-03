@@ -27,4 +27,5 @@ public interface UserDao
 	Collection<User> getUserWithNoEvent();
 
 	void clear();
+
 }

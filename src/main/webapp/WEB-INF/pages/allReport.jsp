@@ -44,6 +44,7 @@
 </script>
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script src="${baseURL}/JS/lightbox.min.js"></script>
+<script src="${baseURL}/JS/menu.js"></script>
 
 <script src="${baseURL}/JS/allReports.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>

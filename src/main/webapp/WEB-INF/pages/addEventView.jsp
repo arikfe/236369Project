@@ -33,6 +33,14 @@
 	href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<c:set var="baseURL" value="${pageContext.request.contextPath}" />
+<c:set var="adminURL" value="${pageContext.request.contextPath}/admin" />
+<c:set var="reportURL"
+	value="${pageContext.request.contextPath}/reports" />
+<c:set var="accountURL"
+	value="${pageContext.request.contextPath}/accounts" />
+<c:set var="evacuationURL"
+	value="${pageContext.request.contextPath}/evacuation" />
 <script type="text/javascript">
 	var ctx = "${pageContext.request.contextPath}";
 	var accountCtx = ctx + "/accounts";
@@ -62,7 +70,7 @@
 	<div id="menu"></div>
 	<div class='mainContainer'>
 		<div class='formContainer'>
-			<form action="${eventURL}/?${_csrf.parameterName}=${_csrf.token}"
+			<form action="${evacuationURL}/?${_csrf.parameterName}=${_csrf.token}"
 				method="post">
 				<input name='geolng' type='hidden' id='lon'> <input
 					name='geolat' type='hidden' id='lat'>

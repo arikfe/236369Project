@@ -40,8 +40,6 @@ public class MyUserDetailsService implements UserDetailsService
 
 	}
 
-	// Converts com.mkyong.users.model.User user to
-	// org.springframework.security.core.userdetails.User
 	private User buildUserForAuthentication(
 			final com.technion.project.model.User user,
 			final List<GrantedAuthority> authorities)

@@ -186,4 +186,15 @@ public class User implements BaseModel
 		return false;
 	}
 
+	public void addRole(final UserRole role)
+	{
+		if (!userRole.contains(role))
+			userRole.add(role);
+	}
+
+	public void removeRole(final UserRole role)
+	{
+		if (userRole.contains(role))
+			userRole.remove(role);
+	}
 }

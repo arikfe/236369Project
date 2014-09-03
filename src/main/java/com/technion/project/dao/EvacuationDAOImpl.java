@@ -49,7 +49,7 @@ public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.technion.project.dao.EvacuationDAO#getByID(java.lang.Long)
 	 */
 	@Override
@@ -64,7 +64,7 @@ public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.EvacuationDAO#addEvecuationEvent(com.technion
 	 * .project.model.EvacuationEvent)
@@ -136,7 +136,6 @@ public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 						.get(EvacuationEvent.class, id);
 				evacuationEvent.removeUser(user);
 				session.update(evacuationEvent);
-
 			}
 		});
 	}

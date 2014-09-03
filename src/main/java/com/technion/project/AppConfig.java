@@ -57,7 +57,6 @@ public class AppConfig extends WebMvcConfigurerAdapter
 			fullTextSession.createIndexer().startAndWait();
 		} catch (final InterruptedException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		openSession.close();

@@ -91,7 +91,8 @@
 		%>
 		<tr>
 			<th>name</th>
-			<td id="<%=user.getUsername()%>"><a href='${accountURL}/<%=user.getUsername()%>/reports'><%=user.getFname() + " " + user.getLname()%></a></td>
+			<td id="<%=user.getUsername()%>"><a
+				href='${accountURL}/<%=user.getUsername()%>/reports'><%=user.getFname() + " " + user.getLname()%></a></td>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<td><a onClick="leaveUser(<%=id%>,'<%=user.getUsername()%>')"><img
 						src="${baseURL}/IMG/X.png" height="64" width="64"></a></td>
@@ -118,17 +119,33 @@
 			</tr>
 		</sec:authorize>
 		<sec:authorize ifNotGranted="hasRole('ROLE_ADMIN')">
-			<%
-				String action = (((Boolean) request
-							.getAttribute("userRegistered")) ? "un" : "")
-							+ "registerToEvent(" + request.getAttribute("id") + ")";
-					String actionName = ((Boolean) request
-							.getAttribute("userRegistered")) ? "Leave" : "Join";
-			%>
 			<tr>
 				<th>Actions</th>
-				<td><input id='action' type="button" onclick='<%=action%>'
-					value='<%=actionName%>'></td>
+				<td id='action'>
+			<%
+				User u = (User) request.getAttribute("user");
+				boolean isRegistered = u.getEvent() != null;
+				String action = (isRegistered ? "un" : "") + "registerToEvent("
+						+ request.getAttribute("id") + ")";
+				String actionName = isRegistered ? "Leave" : "Join";
+				if(isRegistered)
+				{
+					if(id==u.getEvent().getId()){
+						%>
+						<input type="button" onclick='unregisterToEvent(<%=id %>)' value='Leave'>
+						<%
+					}else{
+						%>
+						<h4>You are already registered to an event<br>unregister from <a href='${evacuationURL}/id/<%=u.getEvent().getId()%>'> event</a></h4>
+						<%
+				}}
+				else{
+					%>
+					<input type="button" onclick='registerToEvent(<%=id %>)' value='Join'>
+					<%
+				}
+			%>
+				</td>
 			</tr>
 		</sec:authorize>
 	</table>

@@ -1,11 +1,11 @@
 package com.technion.project.controller;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -55,15 +55,13 @@ public class ReportsController
 	}
 
 	@RequestMapping(value = "", consumes = "application/json", produces = "application/json")
-	public @ResponseBody
-	List<Report> getReportsJson()
+	public @ResponseBody List<Report> getReportsJson()
 	{
 		return reportDao.getAllReports();
 	}
 
 	@RequestMapping(value = "", consumes = "application/xml", produces = "application/xml")
-	public @ResponseBody
-	List<Report> getReportsXml()
+	public @ResponseBody List<Report> getReportsXml()
 	{
 		return reportDao.getAllReports();
 	}
@@ -91,7 +89,8 @@ public class ReportsController
 	}
 
 	@RequestMapping(value = "exportKml", method = RequestMethod.GET)
-	public @ResponseBody String getReportsKML(final HttpServletResponse response)
+	public @ResponseBody String getReportsKML(
+			final HttpServletResponse response, final HttpServletRequest request)
 	{
 		final XStream xStream = new XStream();
 		xStream.processAnnotations(Report.class);
@@ -113,8 +112,8 @@ public class ReportsController
 		{
 			final Source input = new StreamSource(new ByteArrayInputStream(
 					xml.getBytes()));
-			final Source xsl = new StreamSource(new File(
-					"C:\\Users\\hagitz\\test\\report.xsl"));
+			final Source xsl = new StreamSource(request.getSession()
+					.getServletContext().getRealPath("/CSS/ReportXsl.xsl"));
 
 			final TransformerFactory factory = TransformerFactory.newInstance();
 			final Transformer transformer = factory.newTransformer(xsl);
@@ -124,21 +123,12 @@ public class ReportsController
 		{
 			System.out.println("Transformer exception: " + te.getMessage());
 		}
-		try
-		{
-			final OutputStream out = response.getOutputStream();
 
-		} catch (final IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return "";
 	}
 
 	@RequestMapping(value = "{id}", consumes = "application/json", produces = "application/json")
-	public @ResponseBody
-	Report getReportJson(@PathVariable final Long id)
+	public @ResponseBody Report getReportJson(@PathVariable final Long id)
 	{
 		return reportDao.getReportByID(id);
 	}
@@ -183,15 +173,14 @@ public class ReportsController
 	}
 
 	@RequestMapping(value = "search", method = RequestMethod.GET)
-	public @ResponseBody
-	List<Report> getReportsInJSON(@RequestParam final String q)
+	public @ResponseBody List<Report> getReportsInJSON(
+			@RequestParam final String q)
 	{
 		return reportDao.getAllReports(q);
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public @ResponseBody
-	String delete(@PathVariable final long id)
+	public @ResponseBody String delete(@PathVariable final long id)
 	{
 		reportDao.removeReport(id);
 		return String.valueOf(id);
