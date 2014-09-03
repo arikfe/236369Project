@@ -54,7 +54,7 @@
 			<li><a href="#">${user.fname} ${user.lname}</a>
 				<ul class="menu">
 					<li><a href="${accountURL}/own"> My Account</a></li>
-					<li><a href="javascript:formSubmit()"> Logout</a></li>
+					<li><a onclick="javascript:formSubmit()"> Logout</a></li>
 
 				</ul></li>
 			<li><a>Reports</a>

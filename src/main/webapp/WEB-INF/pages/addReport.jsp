@@ -23,7 +23,9 @@
 	src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 <script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
-
+<script src="${baseURL}/JS/menu.js"></script>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value="/CSS/containers.css"/>"></link>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
 <link type="text/css" rel="stylesheet"
@@ -58,9 +60,9 @@
 	<div id="menu"></div>
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
-			<div id=container>
+			<div class='mainContainer'>
 				<h1 align="center">Add Report Form</h1>
-				<div id="form">
+				<div class="formContainer">
 					<form name='add'
 						action='${reportURL}/?${_csrf.parameterName}=${_csrf.token}'
 						method="POST" enctype="multipart/form-data"
@@ -118,7 +120,7 @@
 					</form>
 
 				</div>
-				<div id="content">
+				<div class='mapContainer' id="content">
 					<div id="map-canvas"></div>
 				</div>
 			</div>
