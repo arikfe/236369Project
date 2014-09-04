@@ -41,14 +41,9 @@ public class SearchResult
 		reports = Lists.newLinkedList();
 		evacuationEvents = Lists.newLinkedList();
 		for (final Report r : _reports)
-			reports.add(new ReportResult(r.getUsername(), r.getTitle(), r
-					.getContent(), format.format(r.getExpiration()),
-					new Geometry(r.getCordinates())));
+			reports.add(new ReportResult(r, format));
 		for (final EvacuationEvent e : events)
-			evacuationEvents.add(new EventResult(
-					new Geometry(e.getCordinates()), format.format(e
-							.getEstimated()), e.getMeans(), e.getCapacity(), e
-							.getAmountLeft()));
+			evacuationEvents.add(new EventResult(e, format));
 
 	}
 
@@ -66,6 +61,17 @@ public class SearchResult
 		private String content;
 		private String expirationTime;
 		private Geometry geometry;
+		private String address;
+
+		public String getAddress()
+		{
+			return address;
+		}
+
+		public void setAddress(final String address)
+		{
+			this.address = address;
+		}
 
 		public void setUser(final String user)
 		{
@@ -127,16 +133,15 @@ public class SearchResult
 			return expirationTime;
 		}
 
-		public ReportResult(final String user, final String title,
-				final String content, final String expirationTime,
-				final Geometry geometry)
+		public ReportResult(final Report r, final SimpleDateFormat format)
 		{
 			super();
-			this.user = user;
-			this.title = title;
-			this.content = content;
-			this.expirationTime = expirationTime;
-			this.geometry = geometry;
+			this.user = r.getUsername();
+			this.title = r.getTitle();
+			this.content = r.getContent();
+			this.expirationTime = format.format(r.getExpiration());
+			this.geometry = new Geometry(r.getCordinates());
+			this.address = r.getAddress();
 		}
 
 	}
@@ -204,17 +209,28 @@ public class SearchResult
 		}
 
 		private final int registrationCount;
+		private String address;
 
-		public EventResult(final Geometry geometry, final String estimatedTime,
-				final String meanOfEvacuation, final int capacity,
-				final int registrationCount)
+		public String getAddress()
+		{
+			return address;
+		}
+
+		public void setAddress(final String address)
+		{
+			this.address = address;
+		}
+
+		public EventResult(final EvacuationEvent e,
+				final SimpleDateFormat format)
 		{
 			super();
-			this.geometry = geometry;
-			this.estimatedTime = estimatedTime;
-			this.meanOfEvacuation = meanOfEvacuation;
-			this.capacity = capacity;
-			this.registrationCount = registrationCount;
+			this.geometry = new Geometry(e.getCordinates());
+			this.estimatedTime = format.format(e.getEstimated());
+			this.meanOfEvacuation = e.getMeans();
+			this.capacity = e.getCapacity();
+			this.registrationCount = e.getAmountLeft();
+			this.address = e.getAddress();
 		}
 	}
 

@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.lucene.search.Query;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.search.FullTextSession;
+import org.hibernate.search.query.dsl.BooleanJunction;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -54,7 +54,7 @@ public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.technion.project.dao.EvacuationDAO#getByID(java.lang.Long)
 	 */
 	@Override
@@ -69,7 +69,7 @@ public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.technion.project.dao.EvacuationDAO#addEvecuationEvent(com.technion
 	 * .project.model.EvacuationEvent)
@@ -200,10 +200,18 @@ public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 			final Transaction tx = fullTextSession.beginTransaction();
 			final QueryBuilder qb = fullTextSession.getSearchFactory()
 					.buildQueryBuilder().forEntity(EvacuationEvent.class).get();
-			final Query query = qb.keyword().onFields("means", "address")
-					.matching(q).createQuery();
+			final BooleanJunction<BooleanJunction> bool = qb.bool();
+			if (q.contains(" "))
+				for (final String keyword : q.split(" "))
+					bool.must(qb.keyword().fuzzy().withThreshold(0.8f)
+							.onFields("means", "address").matching(keyword)
+							.createQuery());
+			else
+				bool.must(qb.keyword().fuzzy().withThreshold(0.8f)
+						.onFields("means", "address").matching(q).createQuery());
 			final org.hibernate.Query hibQuery = fullTextSession
-					.createFullTextQuery(query, EvacuationEvent.class);
+					.createFullTextQuery(bool.createQuery(),
+							EvacuationEvent.class);
 			final List result = hibQuery.list();
 			events.addAll(result);
 			tx.commit();

@@ -2,12 +2,12 @@ package com.technion.project.dao;
 
 import java.util.List;
 
-import org.apache.lucene.search.Query;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.search.FullTextSession;
+import org.hibernate.search.query.dsl.BooleanJunction;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -203,10 +203,20 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 			final Transaction tx = fullTextSession.beginTransaction();
 			final QueryBuilder qb = fullTextSession.getSearchFactory()
 					.buildQueryBuilder().forEntity(Report.class).get();
-			final Query query = qb.keyword().onFields("title", "address")
-					.matching(q).createQuery();
+			final BooleanJunction<BooleanJunction> bool = qb.bool();
+			if (q.contains(" "))
+				for (final String keyword : q.split(" "))
+					bool.must(qb.keyword().fuzzy().withThreshold(0.8f)
+							.onFields("title", "address").matching(keyword)
+							.createQuery());
+			else
+				bool.must(qb.keyword().fuzzy().withThreshold(0.8f)
+						.onFields("title", "address").matching(q).createQuery());
+			// final Query query = qb.keyword().fuzzy().withThreshold(0.8f)
+			// .onFields("title", "address").matching(q.replace('+', ' '))
+			// .createQuery();
 			final org.hibernate.Query hibQuery = fullTextSession
-					.createFullTextQuery(query, Report.class);
+					.createFullTextQuery(bool.createQuery(), Report.class);
 			final List result = hibQuery.list();
 			reports.addAll(result);
 			tx.commit();

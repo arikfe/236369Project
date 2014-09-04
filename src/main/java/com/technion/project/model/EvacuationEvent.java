@@ -167,7 +167,7 @@ public class EvacuationEvent implements BaseModel
 	{
 		final float[] coordinates = new float[2];
 		coordinates[0] = geolat;
-		coordinates[0] = geolng;
+		coordinates[1] = geolng;
 		return coordinates;
 	}
 }
