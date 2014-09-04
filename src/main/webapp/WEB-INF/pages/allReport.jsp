@@ -77,10 +77,6 @@
 		</table>
 		<br />
 	</c:if>
-	<button id="showClose" onclick="bounceClosest()">Closest
-		evacuation event</button>
-	<button onclick="stopEventBounce()">Stop bounce</button>
-	<button onclick="bounceMine()">Find my Event</button>
 	<div class='mainContainer'>
 		<div class='formContainer'>
 			<h4>Reports</h4>
@@ -89,6 +85,10 @@
 			<nav id="events" class="list"> </nav>
 		</div>
 		<div class='mapContainer'>
+			<button id="showClose" onclick="bounceClosest()">Closest
+				evacuation event</button>
+			<button onclick="stopEventBounce()">Stop bounce</button>
+			<button onclick="bounceMine()">Find my Event</button>
 			<div id="map-canvas" ></div>
 		</div>
 	</div>
