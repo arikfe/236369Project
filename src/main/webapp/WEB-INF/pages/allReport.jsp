@@ -55,12 +55,17 @@
 
 	<div id="menu"></div>
 	<c:if test="${not empty desiredUser}">
-
+		<%
+		User desiredUser = (User)request.getAttribute("desiredUser");
+		%>
 		<table>
 			<tr>
 				<th>Profile Pic</th>
-				<td><img src="${baseURL}/download/${desiredUser.imageId}"
-					align="middle" height="64" width="64"></td>
+				<td><img
+				src="<%=desiredUser.hasContainImage() ? request.getContextPath()
+							+ "/download/" + desiredUser.getImageId() : request
+							.getContextPath() + "/IMG/images.jpg"%>"
+				height="64" width="64" onclick="location.href = ${reportURL}/"></td>
 			</tr>
 			<tr>
 				<th>User name</th>

@@ -347,4 +347,10 @@ public class MainController
 				.getInputStream()), uCon.getContentType(), FilenameUtils
 				.getBaseName(jsonNode.get(pictureJsonString).getTextValue())));
 	}
+
+	@RequestMapping("about")
+	public ModelAndView getAboutPage()
+	{
+		return new ModelAndView("about");
+	}
 }
