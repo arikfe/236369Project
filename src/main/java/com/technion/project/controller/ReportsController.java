@@ -176,7 +176,7 @@ public class ReportsController
 	public @ResponseBody List<Report> getReportsInJSON(
 			@RequestParam final String q)
 	{
-		return reportDao.getAllReports(q);
+		return reportDao.searchReports(q);
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)

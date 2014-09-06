@@ -27,7 +27,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.technion.project.dao.ReportDAO#getAllReports()
 	 */
 	@SuppressWarnings("unchecked")
@@ -44,7 +44,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#getReportsForUser(com.technion.project
 	 * .model.User)
@@ -64,7 +64,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.technion.project.dao.ReportDAO#getReportByID(int)
 	 */
 	@Override
@@ -78,7 +78,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.technion.project.dao.ReportDAO#removeReport(int)
 	 */
 	@Override
@@ -97,7 +97,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#removeReport(com.technion.project.
 	 * model.Report)
@@ -118,7 +118,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#removeReport(com.technion.project.
 	 * model.User)
@@ -133,7 +133,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#addReport(com.technion.project.model
 	 * .Report)
@@ -155,7 +155,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#delete(com.technion.project.model.
 	 * User)
@@ -191,6 +191,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 			removeReport(r);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Report> searchReports(final String q)
 	{
@@ -217,7 +218,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 			// .createQuery();
 			final org.hibernate.Query hibQuery = fullTextSession
 					.createFullTextQuery(bool.createQuery(), Report.class);
-			final List result = hibQuery.list();
+			final List<Report> result = hibQuery.list();
 			reports.addAll(result);
 			tx.commit();
 		} catch (final HibernateException e)
