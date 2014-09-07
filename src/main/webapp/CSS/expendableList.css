@@ -57,11 +57,12 @@ nav.list {
 }
 
 .menu-item h4 a {
-	color: #757575;
+	color: #12418d;
 	display: block;
 	text-decoration: none;
 	width: 99%;
-	
+	height: 30px;
+	background: #a0c4fe;
 }
 
 /*ul Styles*/
