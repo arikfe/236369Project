@@ -21,16 +21,18 @@ nav.list {
 .menu-item {
 	background: #fff;
 	width: 48%;
+	width: 100%;
 }
 
 /*Menu Header Styles*/
 .menu-item h4 {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 	border-top: 1px solid rgba(255, 255, 255, 0.2);
-	color: #fff;
-	font-size: 15px;
+	color: #008040;
+	width: 100%;
+	font-size: 18px;
 	font-weight: 500;
-	padding: 7px 12px;
+	padding: 7px 2px;
 	/*Gradient*/
 	background: #a90329; /* Old browsers */
 	background: linear-gradient(top, #efefef 0%, #bbbbbb 100%); background
@@ -59,7 +61,8 @@ nav.list {
 	color: #757575;
 	display: block;
 	text-decoration: none;
-	width: 48%;
+	width: 100%;
+	
 }
 
 /*ul Styles*/
