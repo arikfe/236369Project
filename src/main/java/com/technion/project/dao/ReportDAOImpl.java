@@ -1,7 +1,5 @@
 package com.technion.project.dao;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -29,7 +27,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.technion.project.dao.ReportDAO#getAllReports()
 	 */
 	@SuppressWarnings("unchecked")
@@ -46,7 +44,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#getReportsForUser(com.technion.project
 	 * .model.User)
@@ -55,20 +53,17 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 	@Override
 	public List<Report> getReportsForUser(final User user)
 	{
-
-		List<Report> reports = Lists.newArrayList();
 		final Session session = sessionFactory.openSession();
-
-		reports = session.createQuery("from Report where username=?")
+		final List<Report> reports = session
+				.createQuery("from Report where username=?")
 				.setParameter(0, user.getUsername()).list();
-		final ArrayList<Report> reportsDis = new ArrayList(new HashSet(reports));
 		session.close();
-		return reportsDis;
+		return reports;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.technion.project.dao.ReportDAO#getReportByID(int)
 	 */
 	@Override
@@ -82,7 +77,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.technion.project.dao.ReportDAO#removeReport(int)
 	 */
 	@Override
@@ -101,7 +96,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#removeReport(com.technion.project.
 	 * model.Report)
@@ -122,7 +117,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#removeReport(com.technion.project.
 	 * model.User)
@@ -137,7 +132,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#addReport(com.technion.project.model
 	 * .Report)
@@ -159,7 +154,7 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.ReportDAO#delete(com.technion.project.model.
 	 * User)
@@ -171,16 +166,14 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 	{
 		if (condition.isEmpty())
 			return getAllReports();
-		List<Report> reports = Lists.newArrayList();
 		final Session session = getSession();
-		reports = session
+		final List<Report> reports = session
 				.createQuery(
 						"from Report r where str(r.content) like :condition or lower(str(r.title)) like :condition ")
 				.setParameter("condition", "%" + condition.toLowerCase() + "%")
 				.list();
-		final ArrayList<Report> reportsDis = new ArrayList(new HashSet(reports));
 		session.close();
-		return reportsDis;
+		return reports;
 	}
 
 	@Override

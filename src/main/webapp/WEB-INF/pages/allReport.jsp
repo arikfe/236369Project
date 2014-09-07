@@ -31,6 +31,7 @@
 <link href="<c:url value="/CSS/lightbox.css"/>" rel="stylesheet" />
 
 <script type="text/javascript">
+	var userPath = "${userPath}";
 	var ctx = "${pageContext.request.contextPath}";
 	var accountCtx = ctx + "/accounts";
 	var reportCtx = "${reportURL}"

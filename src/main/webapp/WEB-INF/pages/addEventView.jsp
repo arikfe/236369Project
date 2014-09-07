@@ -18,11 +18,6 @@
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"></link>
 
-
-<script type="text/javascript"
-	src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="<c:url value="/JS/addEvent.js"/>"></script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/containers.css"/>"></link>
 <link type="text/css" rel="stylesheet"
@@ -31,8 +26,7 @@
 	href="<c:url value="/CSS/addReport.css"/>"></link>
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+
 <c:set var="baseURL" value="${pageContext.request.contextPath}" />
 <c:set var="adminURL" value="${pageContext.request.contextPath}/admin" />
 <c:set var="reportURL"
@@ -41,6 +35,14 @@
 	value="${pageContext.request.contextPath}/accounts" />
 <c:set var="evacuationURL"
 	value="${pageContext.request.contextPath}/evacuation" />
+
+<script type="text/javascript"
+	src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<script src="${baseURL}/JS/addEvent.js"></script>
+<script src="${baseURL}/JS/menu.js"></script>
 <script type="text/javascript">
 	var ctx = "${pageContext.request.contextPath}";
 	var accountCtx = ctx + "/accounts";
@@ -50,14 +52,14 @@
 	var currentUser = "${pageContext.request.userPrincipal.name}";
 </script>
 
-<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
-<%-- <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script> --%>
 
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
-<script src="${baseURL}/JS/menu.js"></script>
-<script src="${baseURL}/JS/addEvent.js"></script>
+
 <script>
+	$(function() {
+		$("#number").selectmenu().selectmenu("menuWidget").addClass("overflow");
+	});
 	$.ajax("${baseURL}/menu").done(function(result) {
 		$("#menu").html(result);
 	}).error(function(res) {
@@ -70,8 +72,9 @@
 	<div id="menu"></div>
 	<div class='mainContainer'>
 		<div class='formContainer'>
-			<form action="${evacuationURL}/?${_csrf.parameterName}=${_csrf.token}"
-				method="post">
+			<form
+				action="${evacuationURL}/?${_csrf.parameterName}=${_csrf.token}"
+				method="post" onsubmit='return sumbitForm()'>
 				<input name='geolng' type='hidden' id='lon'> <input
 					name='geolat' type='hidden' id='lat'>
 				<table align="left">
@@ -81,11 +84,32 @@
 					</tr>
 					<tr>
 						<td>address:</td>
-						<td><input class='form' type='text' name='address' id='address'></td>
+						<td><input class='form' type='text' name='address'
+							id='address'></td>
 					</tr>
 					<tr>
 						<td>capacity:</td>
 						<td><input class='form' type="text" name="capacity"></input></td>
+					</tr>
+					<tr>
+						<td>Expire time:</td>
+						<td><input class='form' type="text" name="estimated"
+							id="estimated"></td>
+					</tr>
+					<tr>
+						<td>Time:</td>
+						<td>
+							<fieldset style="width: 200px; align: center;">
+								<select name="number" id="number" style="width: 150px;">
+									<option>1:00</option>
+									<option>5:00</option>
+									<option>9:00</option>
+									<option selected="selected">13:00</option>
+									<option>17:00</option>
+									<option>21:00</option>
+								</select>
+							</fieldset>
+						</td>
 					</tr>
 					<tr>
 						<td colspan='2'><input name="submit" type="submit"

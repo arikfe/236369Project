@@ -5,6 +5,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.List"%>
+<%@ page import="java.util.Date"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="com.technion.project.model.User"%>
 <%@ page import="java.text.SimpleDateFormat"%>
@@ -61,7 +62,13 @@
 		long id = (Long) request.getAttribute("id");
 	%>
 
-
+	<%
+		if (event.getEstimated().before(new Date())) {
+	%>
+	<font color="red">event is expired</font>
+	<%
+		}
+	%>
 	<table id="details" class="zebra">
 		<tr>
 			<th>time</th>
@@ -115,36 +122,39 @@
 					<%
 						}
 					%> </datalist>
-					<button onClick="addUser(<%=id%>,newUser.value)">add</button></td>
+					<button <%=event.getEstimated().before(new Date()) ? "disabled"
+						: ""%>
+						onClick="addUser(<%=id%>,newUser.value)">add</button></td>
 			</tr>
 		</sec:authorize>
 		<sec:authorize ifNotGranted="hasRole('ROLE_ADMIN')">
 			<tr>
 				<th>Actions</th>
 				<td id='action'>
-			<%
-				User u = (User) request.getAttribute("user");
-				boolean isRegistered = u.getEvent() != null;
-				String action = (isRegistered ? "un" : "") + "registerToEvent("
-						+ request.getAttribute("id") + ")";
-				String actionName = isRegistered ? "Leave" : "Join";
-				if(isRegistered)
-				{
-					if(id==u.getEvent().getId()){
-						%>
-						<input type="button" onclick='unregisterToEvent(<%=id %>)' value='Leave'>
-						<%
-					}else{
-						%>
-						<h4>You are already registered to an event<br>unregister from <a href='${evacuationURL}/id/<%=u.getEvent().getId()%>'> event</a></h4>
-						<%
-				}}
-				else{
-					%>
-					<input type="button" onclick='registerToEvent(<%=id %>)' value='Join'>
 					<%
-				}
-			%>
+						User u = (User) request.getAttribute("user");
+							boolean isRegistered = u.getEvent() != null;
+							String action = (isRegistered ? "un" : "") + "registerToEvent("
+									+ request.getAttribute("id") + ")";
+							String actionName = isRegistered ? "Leave" : "Join";
+							if (isRegistered) {
+								if (id == u.getEvent().getId()) {
+					%> <input type="button" onclick='unregisterToEvent(<%=id%>)'
+					value='Leave'> <%
+ 	} else {
+ %>
+					<h4>
+						You are already registered to an event<br>unregister from <a
+							href='${evacuationURL}/id/<%=u.getEvent().getId()%>'> event</a>
+					</h4> <%
+ 	}
+ 		} else {
+ %> <input type="button"
+					<%=event.getEstimated().before(new Date()) ? "disabled"
+							: ""%>
+					onclick='registerToEvent(<%=id%>)' value='Join'> <%
+ 	}
+ %>
 				</td>
 			</tr>
 		</sec:authorize>

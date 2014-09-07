@@ -102,14 +102,6 @@ public class ReportsController
 		try
 		{
 			output = new StreamResult(response.getOutputStream());
-		} catch (final IOException e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		try
-		{
 			final Source input = new StreamSource(new ByteArrayInputStream(
 					xml.getBytes()));
 			final Source xsl = new StreamSource(request.getSession()
@@ -119,7 +111,7 @@ public class ReportsController
 			final Transformer transformer = factory.newTransformer(xsl);
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.transform(input, output);
-		} catch (final TransformerException te)
+		} catch (final TransformerException | IOException te)
 		{
 			System.out.println("Transformer exception: " + te.getMessage());
 		}
@@ -184,6 +176,20 @@ public class ReportsController
 	{
 		reportDao.removeReport(id);
 		return String.valueOf(id);
+	}
+
+	/**
+	 * used for json
+	 *
+	 * @param username
+	 * @return
+	 */
+	@RequestMapping(value = "user/{username}", consumes = "application/json", produces = "application/json")
+	public @ResponseBody List<Report> getReportsForUser(
+			@PathVariable final String username)
+	{
+		return reportDao.getReportsForUser(userDAO
+				.findByUserNameLocalThread(username));
 	}
 
 }

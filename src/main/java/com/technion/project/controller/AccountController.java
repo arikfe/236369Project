@@ -209,6 +209,7 @@ public class AccountController extends BaseController
 		model.addObject("reports", allReports);
 		model.addObject("events", evacuationDAO.getAll());
 		model.addObject("subSite", "../accounts/" + username + "/reports");
+		model.addObject("userPath", "user/" + username);
 		model.setViewName("allReport");
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();

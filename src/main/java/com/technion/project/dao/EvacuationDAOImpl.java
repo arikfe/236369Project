@@ -2,6 +2,7 @@ package com.technion.project.dao;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -112,6 +113,8 @@ public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 			{
 				final EvacuationEvent evacuationEvent = (EvacuationEvent) session
 						.get(EvacuationEvent.class, id);
+				if (evacuationEvent.getEstimated().compareTo(new Date()) > 0)
+					return;
 				evacuationEvent.addUser(user);
 				session.update(evacuationEvent);
 			}

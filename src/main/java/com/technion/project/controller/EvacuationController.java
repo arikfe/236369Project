@@ -3,7 +3,6 @@ package com.technion.project.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +47,6 @@ public class EvacuationController extends BaseController
 	{
 		final HashSet<User> hashSet = new HashSet<User>();
 		event.setRegisteredUsers(hashSet);
-		event.setEstimated(new Date());
 		evacuationDAO.addEvecuationEvent(event);
 		return "redirect:../";
 	}

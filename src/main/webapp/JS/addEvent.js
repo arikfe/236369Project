@@ -1,6 +1,14 @@
 /**
  * 
  */
+$(function() {
+	$("#estimated").datepicker();
+});
+function sumbitForm() {
+	$("#estimated")[0].value = $("#estimated")[0].value + " "
+			+ $("#number")[0].value;
+	return true;
+}
 function updateFields(position) {
 	lat = document.getElementById("lat");
 	lon = document.getElementById("lon");

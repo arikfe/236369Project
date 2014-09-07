@@ -19,6 +19,8 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.technion.project.Constants;
 
@@ -30,6 +32,7 @@ public class EvacuationEvent implements BaseModel
 	@Id
 	@GeneratedValue
 	private long id;
+	@DateTimeFormat(iso = ISO.DATE, pattern = "MM/dd/yyyy HH:mm")
 	private Date estimated;
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	private String means;

@@ -114,7 +114,7 @@ function initialize() {
 	var i = 0;
 	var body = $("#table_body");
 	var msg;
-	loadReports("");
+	loadReports(userPath);
 	loadEvents();
 	//
 	// <c:forEach var="e" items="${events}">
@@ -153,6 +153,7 @@ function bounceClosest() {
 function bounceMine() {
 	$.ajax({
 		type : "GET",
+		contentType : "application/json",
 		url : accountCtx + "/" + currentUser + "/event"
 	}).done(function(data) {
 		if (data != "") {
@@ -160,6 +161,8 @@ function bounceMine() {
 			selectedEvent = markers["e" + data.id];
 			selectedEvent.setAnimation(google.maps.Animation.BOUNCE);
 		}
+		else
+			alert("you are not registered to an event");
 	}).fail(function(err) {
 		alert(err);
 	});
@@ -378,13 +381,14 @@ function handleReportCreation(r, loggoedOnUser, i, length) {
 							+ '/download/' + r.imageId
 							+ '"  height="64" width="64"> ');
 		}, 500 + (i++ * 200));
+	var expired = (new Date()).getTime() > r.expiration ? "<font color='red'> - expired </font>":"";
 	msg = "<div class='menu-item' id='row" + r.id + "'>" + "<h4><a href='#'>"
 			+ r.title + "</a></h4>" + " <ul > " + " <li>Description: "
 			+ r.content + "</li>" + "<li>Address:" + r.address + "</li>"
 			+ "<li> " + "<a href='" + accountCtx + "/" + r.username
 			+ "/reports'>User:" + r.username + "</a></li>"
 			+ "<li>Expire time: "
-			+ new Date(r.expiration).toLocaleFormat('%d/%m/%Y %H:%M') + "</li>";
+			+ new Date(r.expiration).toLocaleFormat('%d/%m/%Y %H:%M') +expired+ "</li>";
 	if (loggoedOnUser == r.username || loggoedOnUser == 'admin')
 		msg += "<li><input type='button' class='styledButton' value='Delete' onclick='deletePost("
 				+ r.id + ")'></li>";

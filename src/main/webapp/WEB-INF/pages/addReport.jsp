@@ -17,12 +17,6 @@
 
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"></link>
-
-
-<script type="text/javascript"
-	src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/containers.css"/>"></link>
 <link type="text/css" rel="stylesheet"
@@ -31,6 +25,10 @@
 	href="<c:url value="/CSS/addReport.css"/>"></link>
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+
+<script type="text/javascript"
+	src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+<script src="${baseURL}/JS/jquery-1.11.1.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 <script type="text/javascript" src="<c:url value="/JS/addReport.js"/>"></script>
@@ -73,26 +71,26 @@
 
 						<table >
 							<tr>
-								<th >Title:</td>
+								<td >Title:</td>
 								<td ><input class='form' type='text' name='title' id='title'></td>
 							</tr>
 							<tr>
-								<th >Content:</td>
+								<td >Content:</td>
 								<td ><textarea class='form' id="content" rows="4" cols="40"
 										name="content"></textarea></td>
 							</tr>
 							<tr>
-								<th ">address:</td>
+								<td>address:</td>
 								<td ><input class='form' type='text' name='address'
 									id='address'></td>
 							</tr>
 							<tr>
-								<th >Expire time:</td>
+								<td >Expire time:</td>
 								<td ><input class='form' type="text" name="expiration"
 									id="expiration"></td>
 							</tr>
 							<tr>
-								<th >Time:</td>
+								<td >Time:</td>
 								<td >
 									<fieldset style="width: 200px; align: center;">
 										<select name="number" id="number" style="width: 150px;">
@@ -107,7 +105,7 @@
 								</td>
 							</tr>
 							<tr>
-								<th >Choose picture:</td>
+								<td >Choose picture:</td>
 								<td><input type="file" name='file' id='file' /></td>
 							</tr>
 							<tr>
