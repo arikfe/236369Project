@@ -72,18 +72,18 @@ function handleSingleEvent(e, event, i) {
 	setTimeout(updateEvent(contentStr, e.geolat, e.geolng, e.id),
 			500 + (i * 200));
 	msg = "<div class='menu-item' id='row" + e.id + "'>" + "<h4><a href='#'>"
-			+ shorten(e.address) + "</a></h4>" + " <ul > " + " <li>capacity: "
-			+ e.capacity + "</li>" + " <li>address: " + e.address + "</li>"
-			+ " <li>means: " + e.means + "</li>" + " <li><a href='"
-			+ evacuationURL + "/id/" + e.id + "/'>Open Event</a>" + "</li>"
+			+ shorten(e.address) + "</a></h4>" + " <ul > " + " <li>Capacity: "
+			+ e.capacity + "</li>" + " <li>Address: " + e.address + "</li>"
+			+ " <li>Means: " + e.means + "</li>" + " <li><a href='"
+			+ evacuationURL + "/id/" + e.id + "/'>Open Event</a>" + "</li>" + "<li>Expire time: "
 			+ new Date(e.estimated).toLocaleFormat('%d/%m/%Y %H:%M') + "</li>";
 	var body = $("#events");
 	body.append(msg);
 
 }
 function shorten(string) {
-	if (string.length > 25) {
-		string = string.substring(0, 24) + "...";
+	if (string.length > 51) {
+		string = string.substring(0, 50) + "...";
 	}
 	return string;
 }
@@ -381,11 +381,11 @@ function handleReportCreation(r, loggoedOnUser, i, length) {
 							+ '"  height="64" width="64"> ');
 		}, 500 + (i++ * 200));
 	msg = "<div class='menu-item' id='row" + r.id + "'>" + "<h4><a href='#'>"
-			+ r.title + "</a></h4>" + " <ul > " + " <li>description: "
-			+ r.content + "</li>" + "<li>address :" + r.address + "</li>"
+			+ r.title + "</a></h4>" + " <ul > " + " <li>Description: "
+			+ r.content + "</li>" + "<li>Address:" + r.address + "</li>"
 			+ "<li> " + "<a href='" + accountCtx + "/" + r.username
-			+ "/reports'>user:" + r.username + "</a></li>"
-			+ "<li>expire time: "
+			+ "/reports'>User:" + r.username + "</a></li>"
+			+ "<li>Expire time: "
 			+ new Date(r.expiration).toLocaleFormat('%d/%m/%Y %H:%M') + "</li>";
 	if (loggoedOnUser == r.username || loggoedOnUser == 'admin')
 		msg += "<li><input type='button' class='styledButton' value='Delete' onclick='deletePost("
