@@ -2,6 +2,7 @@ package com.technion.project.dao;
 
 import java.util.List;
 
+import org.apache.lucene.search.Query;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -193,6 +194,8 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 	@Override
 	public List<Report> searchReports(final String q)
 	{
+		if (q.isEmpty())
+			return getAllReports();
 		final List<Report> reports = Lists.newArrayList();
 		final Session session = sessionFactory.openSession();
 		try
@@ -211,14 +214,13 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 			else
 				bool.must(qb.keyword().fuzzy().withThreshold(0.8f)
 						.onFields("title", "address").matching(q).createQuery());
-			// final Query query = qb.keyword().fuzzy().withThreshold(0.8f)
-			// .onFields("title", "address").matching(q.replace('+', ' '))
-			// .createQuery();
 			final org.hibernate.Query hibQuery = fullTextSession
 					.createFullTextQuery(bool.createQuery(), Report.class);
-			final List<Report> result = hibQuery.list();
-			reports.addAll(result);
+			final List<Report> result = Lists.newLinkedList(hibQuery.list());
+			if (result.isEmpty() && !q.contains(" "))
+				result.addAll(getReportsAsWildcard(q, session));
 			tx.commit();
+			reports.addAll(result);
 		} catch (final HibernateException e)
 		{
 			e.printStackTrace();
@@ -231,5 +233,19 @@ public class ReportDAOImpl extends BaseDAO implements ReportDAO
 			session.close();
 		}
 		return reports;
+	}
+
+	private List<Report> getReportsAsWildcard(final String q,
+			final Session session)
+	{
+		final FullTextSession fullTextSession = org.hibernate.search.Search
+				.getFullTextSession(session);
+		final QueryBuilder qb = fullTextSession.getSearchFactory()
+				.buildQueryBuilder().forEntity(Report.class).get();
+		final Query rawQuery = qb.keyword().wildcard().onField("title")
+				.andField("address").matching("*" + q + "*").createQuery();
+		final org.hibernate.Query hibQuery = fullTextSession
+				.createFullTextQuery(rawQuery, Report.class);
+		return Lists.newArrayList(hibQuery.list());
 	}
 }

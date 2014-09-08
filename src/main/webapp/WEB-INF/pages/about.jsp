@@ -39,7 +39,7 @@
 
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/dropDownMenu.css"/>"></link>
-	<link type="text/css" rel="stylesheet"
+<link type="text/css" rel="stylesheet"
 	href="<c:url value="/CSS/table.css"/>"></link>
 <script src="${baseURL}/JS/menu.js"></script>
 <script src="${baseURL}/JS/addEvent.js"></script>
@@ -52,34 +52,48 @@
 	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 </head>
-<body>
-<div id='menu'></div>
-	<table class='zebra'>
-		<tr class='zebra'>
-			<td class='zebra'>submitters</td>
-			<td >Ariel Felzenstien <br>039948765 <br>4ortik@gmail.com
-			</td>
-			<td >Hagit Cohen <br> <br>hagitc@gmail.com
-			</td>
-		</tr>
-		<tr class='zebra'>
-			<td class='zebra'>Advanced features</td>
-			<td >keyword search web service</td>
-			<td >visible <a href="${baseURL }/search/">here</a></td>
-		</tr>
-		<tr class='zebra'>
-			<td></td>
-			<td class='zebra'>Produce XML storage of the reports and evacuation events. <br>Transform
-				the messages to KML format ,<br> using XSLT and support the
-				presentation of KML on a map
-			</td>
-			<td >visible using Admin user from the menu</td>
-		</tr>
-		<tr class='zebra'>
-			<td> DB management system</td>
-			<td >MySql 6.1</td><td></td>
-		</tr>
+<body style="background: linear-gradient(orange, yellow)">
 
-	</table>
-</body>
+	<p align="center"
+		style="font-family: Times, serif; color: blue; font-size: 40px; font-weight: 900;">
+		Crowdsourcing Application for Evacuation from</br> a Disaster Area
+	</p>
+	<p style="font-family: arial; color: black; font-size: 20px;"
+		align="center">
+		</br> <strong>Usage:</strong> a web application for managing location-based
+		reports related to a disaster area.</br> This system support leveraging the
+		crowd for collecting information about the disaster area.</br> Also,
+		facilitate publishing information about evacuation events, where and
+		when people</br> can be evacuated from the area. </br>
+		</br> Users all over the world provide information about hazards they
+		encounter in specific locations, </br> by sending geo-tagged reports –
+		reports that a location is attached to them.</br> Rescue team can insert
+		evacuation events. The evacuation events associated with a specific
+		location,</br> planned evacuation time and the maximal number of people
+		that can be evacuated at this time. </br>
+		</br> <strong>Advanced features:</strong> All reports can be export to file
+		in XML & KML format.</br> Also, user can search events with Keyword-search.</br>
+		</br> <strong>Technology:</strong> Login to system secured. Your password
+		is stored in MySQL database after encryption.</br> Nobody else except the
+		you can access or modify it. </br>
+		</br>
+	<p style="font-family: arial; color: green; font-size: 20px;"
+		align="center">
+		<strong>For any suggestion or issue, please contact us.</strong>
+	</p>
+	<p style="font-family: arial; color: gray; font-size: 18px;"
+		align="center">
+		<em>
+			<p style="font-family: arial; color: blue; font-size: 20px;"
+				align="center">
+				<strong>Arik Felznshtien: </strong><a
+					href="mailto:4ortik@gmail.com?subject=Mail%20from%20user%20">4ortik@gmail.com</a>
+			</p>
+			<p style="font-family: arial; color: blue; font-size: 20px;"
+				align="center">
+				<strong>Hagit Cohen: </strong><a
+					href="mailto:hagitc999@gmail.com?subject=Mail%20from%20user%20">hagitc999@gmail.com</a>
+			</p>
+	</p>
+	</p>
 </html>

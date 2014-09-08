@@ -55,7 +55,7 @@ public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.technion.project.dao.EvacuationDAO#getByID(java.lang.Long)
 	 */
 	@Override
@@ -70,7 +70,7 @@ public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.technion.project.dao.EvacuationDAO#addEvecuationEvent(com.technion
 	 * .project.model.EvacuationEvent)
@@ -113,7 +113,7 @@ public class EvacuationDAOImpl extends BaseDAO implements EvacuationDAO
 			{
 				final EvacuationEvent evacuationEvent = (EvacuationEvent) session
 						.get(EvacuationEvent.class, id);
-				if (evacuationEvent.getEstimated().compareTo(new Date()) > 0)
+				if (evacuationEvent.getEstimated().before(new Date()))
 					return;
 				evacuationEvent.addUser(user);
 				session.update(evacuationEvent);

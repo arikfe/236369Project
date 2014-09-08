@@ -81,7 +81,7 @@
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <style>
-#update 
+button,input.button 
 {
     background-color: blue;
     -moz-border-radius: 5px;
@@ -94,10 +94,10 @@
     cursor: poiner;
      border:none;
      height: 50px;
-     width: 100px;
+     width: auto;
      text-align: justify;
 }
-#update:hover {
+button:hover,input.button:hover  {
     border: none;
     background:green;
     box-shadow: 0px 0px 1px #777;
@@ -155,10 +155,10 @@
 
 			</tbody>
 		</table>
-		<input type="submit" id="resetPassword" value="Change password"
+		<input class='button' type="submit" id="resetPassword" value="Change password"
 			disabled />
 	</form>
 	<div id='result'><%=result%></div>
-	<input type="button" value="delete" onclick="deleteAccount(username)">
+	<button   onclick="deleteAccount(username)">Delete</button>
 </body>
 </html>

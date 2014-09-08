@@ -69,12 +69,13 @@ function handleSingleEvent(e, event, i) {
 
 	setTimeout(updateEvent(contentStr, e.geolat, e.geolng, e.id),
 			500 + (i * 200));
+	var expired = (new Date()).getTime() > e.estimated ? "<font color='red'> - expired </font>":"";
 	msg = "<div class='menu-item' id='row" + e.id + "'>" + "<h4><a href='#'>"
 			+ shorten(e.address) + "</a></h4>" + " <ul > " + " <li>Capacity: "
 			+ e.capacity + "</li>" + " <li>Address: " + e.address + "</li>"
 			+ " <li>Means: " + e.means + "</li>" + " <li><a href='"
 			+ evacuationURL + "/id/" + e.id + "/'>Open Event</a>" + "</li>" + "<li>Expire time: "
-			+ new Date(e.estimated).toLocaleFormat('%d/%m/%Y %H:%M') + "</li>";
+			+ new Date(e.estimated).toLocaleFormat('%d/%m/%Y %H:%M') + expired+ "</li>";
 	var body = $("#events");
 	body.append(msg);
 
