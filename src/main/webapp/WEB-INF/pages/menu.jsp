@@ -86,6 +86,7 @@
 			<%
 				}
 			%>
+			<li><a href='${baseURL}/about'>About</a></li>
 			<li style="padding-top: 5px"><input type="text" id="strField"
 				name="str" onKeyUp="search(this)"></li>
 

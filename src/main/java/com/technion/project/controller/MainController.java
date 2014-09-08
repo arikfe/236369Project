@@ -348,7 +348,8 @@ public class MainController
 				.getBaseName(jsonNode.get(pictureJsonString).getTextValue())));
 	}
 
-	@RequestMapping("about")
+	@RequestMapping(value =
+	{ "about", "about.html", "about.htm", "about.jsp" })
 	public ModelAndView getAboutPage()
 	{
 		return new ModelAndView("about");

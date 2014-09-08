@@ -52,13 +52,13 @@
 	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 </head>
-<body style="background: linear-gradient(orange, yellow)">
+<body style="background: linear-gradient(#000055, #0000aa)">
 
 	<p align="center"
-		style="font-family: Times, serif; color: blue; font-size: 40px; font-weight: 900;">
+		style="font-family: Times, serif; color: black; font-size: 35px; font-weight: 900;">
 		Crowdsourcing Application for Evacuation from</br> a Disaster Area
 	</p>
-	<p style="font-family: arial; color: black; font-size: 20px;"
+	<p style="font-family: arial; color: #cecece; font-size: 20px;"
 		align="center">
 		</br> <strong>Usage:</strong> a web application for managing location-based
 		reports related to a disaster area.</br> This system support leveraging the
@@ -84,12 +84,12 @@
 	<p style="font-family: arial; color: gray; font-size: 18px;"
 		align="center">
 		<em>
-			<p style="font-family: arial; color: blue; font-size: 20px;"
+			<p style="font-family: arial; color: black; font-size: 20px;"
 				align="center">
 				<strong>Arik Felznshtien: </strong><a
 					href="mailto:4ortik@gmail.com?subject=Mail%20from%20user%20">4ortik@gmail.com</a>
 			</p>
-			<p style="font-family: arial; color: blue; font-size: 20px;"
+			<p style="font-family: arial; color: black; font-size: 20px;"
 				align="center">
 				<strong>Hagit Cohen: </strong><a
 					href="mailto:hagitc999@gmail.com?subject=Mail%20from%20user%20">hagitc999@gmail.com</a>
