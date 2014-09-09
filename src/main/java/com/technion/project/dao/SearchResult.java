@@ -56,6 +56,18 @@ public class SearchResult
 
 	public class ReportResult
 	{
+		private long id;
+
+		public long getId()
+		{
+			return id;
+		}
+
+		public void setId(final long id)
+		{
+			this.id = id;
+		}
+
 		private String user;
 		private String title;
 		private String content;
@@ -106,6 +118,7 @@ public class SearchResult
 		public ReportResult()
 		{
 			super();
+			this.id = 0;
 			this.user = "";
 			this.title = "";
 			this.content = "";
@@ -142,12 +155,25 @@ public class SearchResult
 			this.expirationTime = format.format(r.getExpiration());
 			this.geometry = new Geometry(r.getCordinates());
 			this.address = r.getAddress();
+			this.id = r.getId();
 		}
 
 	}
 
 	public class EventResult
 	{
+		private long id;
+
+		public long getId()
+		{
+			return id;
+		}
+
+		public void setId(final long id)
+		{
+			this.id = id;
+		}
+
 		private Geometry geometry;
 		private String estimatedTime;
 		private String meanOfEvacuation;
@@ -181,6 +207,7 @@ public class SearchResult
 			this.meanOfEvacuation = "";
 			this.capacity = 0;
 			this.registrationCount = 0;
+			this.id = 0;
 		}
 
 		public Geometry getGeometry()
@@ -231,6 +258,7 @@ public class SearchResult
 			this.capacity = e.getCapacity();
 			this.registrationCount = e.getAmountLeft();
 			this.address = e.getAddress();
+			this.id = e.getId();
 		}
 	}
 
